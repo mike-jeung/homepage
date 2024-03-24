@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { FC } from 'react';
 import Background from '../../components/CW01/CW01';
-export default function Home() {
+
+
+const Home: FC = function() {
 
     return (
         <section className="app-home">
           <div className="app-home-w0">
-            <Background />
+          <Background />
           </div>
         </section>
     );
 }
+export default Home;

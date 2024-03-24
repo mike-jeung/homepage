@@ -2,7 +2,7 @@
   "name": "portfolio",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.tsx",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack serve --mode development",
@@ -12,10 +12,19 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/preset-typescript": "^7.24.1",
+    "@gsap/react": "^2.1.0",
+    "@types/gsap": "^3.0.0",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.30",
+    "@types/react": "^18.2.67",
+    "@types/react-dom": "^18.2.22",
+    "gsap": "^3.12.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router": "^6.22.3",
-    "styled-components": "^6.1.8"
+    "styled-components": "^6.1.8",
+    "typescript": "^5.4.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.23.9",

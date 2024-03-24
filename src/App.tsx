@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { FC } from 'react';
 import Home from './pages/Home/Home';
 
 
-export default function App() {
+const App: FC = () => {
 
     return (
         <div className="app">
@@ -10,3 +10,5 @@ export default function App() {
         </div>
     );
 }
+
+export default App;
