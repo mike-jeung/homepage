@@ -1,9 +1,10 @@
+$strokeColor: #cee0f7;
+// #cee0f7;
 .ct01 {
     overflow: visible;
     line, polyline {
         fill: none;
-        // stroke: #b6cce7;
-        stroke: #9eb8d7;
+        stroke: $strokeColor;
         stroke-width: 1;
         stroke-miterlimit: 10;
     }

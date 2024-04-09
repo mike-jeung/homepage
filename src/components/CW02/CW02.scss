@@ -1,0 +1,138 @@
+$colorOuterRing: #b6cce7;
+$colorInnerRing: #b6cce7;
+$ringBGColor: #FFF;
+$outlineBGColor: #FFF;
+$arrowFill: #b6cce7;
+$circleBorderColor: #b6cce7;
+
+
+.cw02 {
+    width: 100%;
+    text-align: center;
+
+    svg {
+        overflow: visible;
+    }
+    .cw02w0 {
+        width: 33%;
+        padding-bottom: 33%;
+        margin: 4.8% auto 0;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 0;
+    }
+    .cw02w1,
+    .cw02w2 {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    }
+    .cw02w1 {
+        z-index: 1;
+        svg {
+            position: relative;
+            z-index:1;
+        }
+        &:after {
+            width: 100%;
+            content:"";
+            background: $ringBGColor;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 50%;
+            z-index: 0;
+        }
+    }
+    .cw02w2 {
+        width: 83.7526725084298%;
+        height: 0;
+        padding-bottom: 83.7526725084298%;
+        margin: auto;
+        z-index: 2;
+    }
+    .cw02w2 svg {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    }
+    .cw02w3 {
+        position: absolute;
+        z-index: -1;
+        width: 34.6%;
+        margin: 4% auto 0;
+        left: 0;
+        right: 0;
+        top: 0;
+    }
+    .outer-ring {
+        .ticks {
+            fill: none;
+            stroke: $colorOuterRing;
+            stroke-miterlimit: 10;
+        }
+        .outer-circ {
+            fill: $colorOuterRing;
+            stroke-width: 0px;
+        }
+        .inner-circ {
+            fill: $colorOuterRing;
+            stroke-width: 0px;
+        }
+        .pointers path {
+            fill: $colorOuterRing;
+            stroke-width: 0px;
+        }
+    }
+    .inner-ring {
+        .cls-1{stroke-linejoin:round;}
+        .cls-1,.cls-2,.cls-3,.cls-4{stroke:$colorInnerRing;}
+        .cls-1,.cls-3,.cls-4{fill:none;}
+        .cls-2,.cls-3,.cls-4{stroke-miterlimit:10;}
+        .cls-2,.cls-5{fill:$colorInnerRing;}
+        .cls-2,.cls-4{stroke-width:.5px;}
+        .cls-5{stroke-width:0px;}
+    }
+    .cls-1,
+    .nl1,
+    .nl2,
+    .oe1,
+    .oe2,
+    .oe3,
+    .oe4 {
+        fill: none;
+        stroke: $circleBorderColor;
+        stroke-miterlimit: 10;
+    }
+    .ar1a,
+    .ar1b,
+    .ar2a,
+    .ar2b,
+    .ar3a,
+    .ar3b,
+    .cls-2 {
+        fill: $arrowFill;
+        stroke-width: 0px;
+    }
+    .obg,
+    .bgcircle,
+    .neck,
+    .links-polygon,
+    .link-tris {
+        fill:$outlineBGColor;
+        stroke-width:0;
+    }
+    .out-outline-left,
+    .out-outline-right {
+        stroke: $circleBorderColor;
+        stroke-miterlimit: 10;
+    }
+}

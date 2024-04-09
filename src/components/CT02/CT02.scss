@@ -1,0 +1,106 @@
+$strokeColor1: #000;
+$activeLightColor: #00ff06;
+$grillColor: #898989;
+$lightRobotColor: #b7dbea;
+$darkRobotColor:#96b2bf;
+$nodeColor: #c0f0ff;
+$edgeColor: #3cf;
+$frameColor: #036;
+$strokeWidthStandard: 1;
+$strokeWidthLg: 6;
+$strokeWidthXl: 9;
+
+
+.ct02 {
+    position:relative;
+
+    .arm-lt-top .outline,
+    .arm-rt-top .outline,
+    .arm-lt-fore .outline,
+    .arm-rt-fore .outline,
+    .shoulder-rt-outline,
+    .shoulder-lt-outline,
+    .torso-cropped .outline,
+    .neck-outline,
+    .headshape-outline {
+        stroke-miterlimit: 10;
+        stroke: $strokeColor1;
+        stroke-width: $strokeWidthLg;
+        fill:none;
+    }
+    .arm-lt-fore .p1,
+    .arm-lt-fore .p2,
+    .arm-rt-fore .p1,
+    .arm-rt-fore .p2,
+    .arm-lt-top .arm,
+    .arm-rt-top .arm,
+    .digit-lt-bot,
+    .digit-rt-bot,
+    .digit-lt-top,
+    .digit-rt-top,
+    .torso-outer,
+    .headshape,
+    .ear-left > *,
+    .ear-right > * {
+        fill: $lightRobotColor;
+        stroke-width: $strokeWidthStandard;
+        stroke: $strokeColor1;
+    }
+    .l1,
+    .l2,
+    .l3,
+    .l4,
+    .l5 {
+        stroke: $strokeColor1;
+        fill: $activeLightColor;
+        stroke-miterlimit: 10;
+    }
+
+    .mouth .hole,
+    .r1, .r2, .r3, .r4 {
+        stroke:none;
+        fill:#000;
+    }
+    .torso-grill rect {
+        stroke: $strokeColor1;
+        fill: $grillColor;
+        stroke-miterlimit: 10;
+    }
+
+    .eye {
+        fill: url(#ct02-g1);
+        stroke: $strokeColor1;
+    }
+    .n1, .n2, .n3,
+    .torso-inner,
+    .eye-outer {
+        fill: $darkRobotColor;
+        stroke: $strokeColor1;
+        stroke-miterlimit: 10;
+    }
+    .nn {
+        fill: $nodeColor;
+        stroke: $edgeColor;
+        stroke-width: $strokeWidthXl;
+    }
+    .ee {
+        fill: none;
+        stroke: $edgeColor;
+        stroke-width: $strokeWidthXl;
+    }
+    .circle-frame {
+        fill: $frameColor;
+        stroke-width: 0px;
+    }
+    .circle-frame-bg {
+        fill: url(#ct02-g0);
+    }
+    
+    .mouth .line1 {
+        stroke: $strokeColor1;
+        stroke-miterlimit: 10;
+        fill: none;
+        stroke-width: $strokeWidthStandard;
+    }
+    
+}

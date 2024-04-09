@@ -9,8 +9,9 @@ interface TilePosition {
 }
 interface BackgroundProps {
     columns?: number;
+    duration?: number;
 }
-const Background: FC<BackgroundProps> = function({ columns = 5 }) {
+const Background: FC<BackgroundProps> = function({ columns = 5, duration = 2 }) {
     const parentWrap = useRef<HTMLDivElement>(null);
     const [parentWidth, setParentWidth] = useState<number>(0);
     const [parentHeight, setParentHeight] = useState<number>(0);

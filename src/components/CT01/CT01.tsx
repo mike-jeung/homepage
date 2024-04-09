@@ -3,16 +3,34 @@ import './CT01.scss';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 
+
 interface CT01Props {
     col: string;
     row: string;
     styles: React.CSSProperties;
+    duration?: number;
+    pulseDuration?: number;
+    rotation?: {
+        duration?: number;
+        degree?: number;
+    }
 }
 gsap.registerPlugin(useGSAP);
 
-const CT01: FC<CT01Props> = ({ row = "", col = "", styles = {} }) => {
+const CT01: FC<CT01Props> = ({ row="", col="", styles={}, duration=2, pulseDuration=1, rotation={duration:2.5,degree:11} }) => {
     const r = row;
     const c = col;
+
+    const shuffleKeys = (obj: object): string[] => {
+        let keys = Object.keys(obj);
+        for (let i = keys.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [keys[i], keys[j]] = [keys[j], keys[i]];
+        }
+        return keys;
+    }
+
+
     let container = useRef<SVGSVGElement | null>(null);
     const lineRefs = {
         "ot6": useRef<SVGPolylineElement | null>(null),
@@ -37,21 +55,39 @@ const CT01: FC<CT01Props> = ({ row = "", col = "", styles = {} }) => {
         
     useGSAP( () => {
         let tl = gsap.timeline();
+        if (rotation.duration !== undefined && rotation.duration > 0) {
+            tl.add(gsap.fromTo(container.current,{rotate:rotation.degree},{rotate:0,duration:rotation.duration}),0);
+        }
         for (const line in lineRefs) {
             if (lineRefs[line].current) {
                 const l = lineRefs[line].current.getTotalLength();
-                let dur = 2,
+                let dur = duration,
                     start = 0;
                 // triangles have a different timing
                 if (line.match(/^tri/)) {
-                    dur = 0.75;
-                    start = 1;
+                    dur = duration / 2;
+                    start = duration / 2;
                 }
                 tl.set(lineRefs[line].current, {strokeDasharray:l});
-                const anim = gsap.fromTo(lineRefs[line].current, {strokeDashoffset:l, strokeDasharray:l}, {duration:dur, strokeDashoffset:0});
+                const anim = gsap.fromTo(lineRefs[line].current, {strokeDashoffset:l, strokeDasharray:l, ease:"power4.out"}, {duration:dur, strokeDashoffset:0});
                 tl.add(anim,start);
             }
         }
+        if (pulseDuration > 0) {
+            const totalLength = tl.duration();
+
+            const shuffledKeys = shuffleKeys(lineRefs);
+            const tl2 = gsap.timeline({ delay: totalLength,defaults:{duration:pulseDuration},repeat:-1});
+
+            for (let i = 0; i < shuffledKeys.length; i++) {
+                tl2.to(lineRefs[shuffledKeys[i]].current,{stroke:"#a6bddb"});
+                tl2.to(lineRefs[shuffledKeys[i]].current,{stroke:"#cee0f7"});                               
+            }
+        }
+        
+
+        
+        
     });
     return (
         <svg viewBox="0 0 552 638" className={`ct01 ct01v0 ${r} ${c}`} style={styles} ref={container}>
@@ -84,3 +120,4 @@ const CT01: FC<CT01Props> = ({ row = "", col = "", styles = {} }) => {
     );
 }
 export default CT01;
+export { CT01Props };
