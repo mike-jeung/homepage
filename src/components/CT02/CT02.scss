@@ -1,5 +1,6 @@
 $strokeColor1: #000;
 $activeLightColor: #00ff06;
+$inactiveLightColor: #493a2d;
 $grillColor: #898989;
 $lightRobotColor: #b7dbea;
 $darkRobotColor:#96b2bf;
@@ -13,7 +14,15 @@ $strokeWidthXl: 9;
 
 .ct02 {
     position:relative;
+    overflow: visible;
+    width: 100%;
+    svg {overflow: visible;}
 
+    .ring {
+        fill:none;
+        stroke: $edgeColor;
+        stroke-width: $strokeWidthXl;
+    }
     .arm-lt-top .outline,
     .arm-rt-top .outline,
     .arm-lt-fore .outline,

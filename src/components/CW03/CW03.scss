@@ -1,0 +1,61 @@
+@import "../../variables.scss";
+$backgroundColor: #F9F4D5;
+$articleFont: 'Courier New', Courier, monospace;
+$offset: $globalWidthConstant * $marginFraction * 1px;
+
+.cw03 {
+    
+    h3 {
+        padding: 0;
+        margin: 0 0 1em 0;
+        background-color: $backgroundColor;
+        font-weight: 400;
+        font-size: 2rem;
+        width: 100%;
+        min-width: 100%;
+    }
+    article {
+        background-color: $backgroundColor;
+        font-family: $articleFont;
+        font-size: 1.4rem;
+        width: 100%;
+        border-radius: 8px;
+        position: relative;
+        padding: 2rem;
+        margin: 0;
+        min-height: 24em;
+        box-sizing: border-box;
+        -webkit-box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.2);
+        -moz-box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.2);
+        box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.2);
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        p {
+            margin: 0 0 1em;
+        }
+        > div {
+            max-width: calc(66% - 2rem);
+            min-width: calc(66% - 2rem);
+            width: calc(66% - 2rem);
+        }
+        > figure {
+            display: block;
+            box-sizing: border-box;
+            max-width: calc(34% - 2rem);
+            min-width: calc(34% - 2rem);
+            width: calc(34% - 2rem);
+
+            background-color: #FFF;
+            padding: 8px;
+            margin:0;
+        }
+    }
+    ul.cw03w2 {
+        padding: 0;
+        border: 0;
+        margin: 0;
+        list-style-type: none;
+        width: 100%;
+    }
+}

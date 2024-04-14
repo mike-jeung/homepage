@@ -1,0 +1,24 @@
+.cb01 {
+    position: relative;
+    h1 {
+        font-size: 6rem;
+        font-weight:500;
+        padding: 0;
+        margin: 0;
+    }
+    .caption {
+        font-size: 1.2rem;
+        font-weight: 200;
+        display: block;
+        text-align: left;
+        color: #333;
+    }
+    p {
+        font-size: 1.8rem;
+        font-weight: 300;
+        line-height: 1.4;
+        color: #999;
+        padding: 0.5em 0 0;
+        margin: 0;
+    }
+}
