@@ -1,8 +1,80 @@
 $globalWidthConstant: 750;
-$marginFraction: .066666666666667;
+$marginFraction: 0.04;
+
+$boxMinHt: 450px;
 
 $globalWidth: $globalWidthConstant * 1px;
 $padPercent: $marginFraction * 100%;
 
+$padMobile: 20px;
+
 $baseBGColor: #EEEEEE;
 $bentoBGColor: #FFFFFF;
+
+$menuArrowSVG: '<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="enable-background:new 0 0 629 332" viewBox="0 0 629 332"><path d="M300.5 1.7c1.6-.4 3.3-.7 5-1-1.7.2-3.4.6-5 1zm51.6 11.9c-1.3-1.1-2.6-2.1-4-3.1 1.4.9 2.7 2 4 3.1zm1 .8c-.3-.3-.7-.6-1-.8.1.1.2.1.3.2l.7.6z"/><path d="M614.8 311c-2.2 2.7-4.7 5.1-7.3 7.3-21.5 18.1-53.5 18.6-75.8 0L314.5 136 97.3 318.2c-25 20.9-62.2 17.7-83.1-7.3C3.7 298.4-.7 282.9.6 267.8c1.4-15 8.4-29.5 20.9-40l255.1-214c1.9-1.6 3.9-3.1 6.1-4.5.4-.3.8-.5 1.3-.8.9-.5 1.7-1 2.6-1.5.4-.2.8-.4 1.2-.7.7-.4 1.5-.7 2.2-1.1.3-.2.6-.3 1-.4.4-.2.8-.3 1.2-.5.4-.2.8-.3 1.2-.5 1.6-.6 3.2-1.1 4.8-1.6l1.2-.3 1.2-.3c1.6-.4 3.3-.7 5-1 .4-.1.8-.1 1.3-.2 1.2-.2 2.5-.3 3.7-.4.5 0 1-.1 1.5-.1h3.6c.9 0 1.8.1 2.7.1.9.1 1.9.1 2.8.2.5.1.9.1 1.4.2 1.4.2 2.8.4 4.2.7.5.1 1 .2 1.4.3.9.2 1.8.5 2.7.7.5.1.9.3 1.4.4.5.2.9.3 1.4.4.4.1.9.3 1.3.5h.1c.4.2.9.3 1.3.5.4.1.7.3 1.1.4 1 .4 2 .8 2.9 1.3l1.2.6c.4.2.8.4 1.1.6.4.2.8.4 1.1.6.4.2.7.4 1 .6 0 0 .1.1.2.1l3.3 2.1c1.5 1 2.9 2.1 4.3 3.3l.7.6.2.2 254.1 213.2c24.9 21.3 28.1 58.5 7.2 83.5z" style="fill:#96b2bf"/><path d="M276.6 13.7c1.9-1.6 3.9-3.1 6-4.4-2 1.4-4.1 2.9-6 4.4l-1 .8c.4-.2.7-.5 1-.8zm7.3-5.2c.8-.5 1.7-1 2.6-1.5-.9.5-1.8 1-2.6 1.5zm38.6-8c1.4.2 2.8.4 4.2.7-1.5-.2-2.8-.5-4.2-.7z"/></svg>';
+
+$bp_tablet: 780px;
+$bp_mobile: 599px;
+
+@function svg-url($svg, $colormap: false) {
+    //  Add namespace if missing
+    @if not str-index($svg, xmlns) {
+        $svg: str-replace($svg, '<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
+    }
+    @if $colormap {
+    	@each $orig, $replace in $colormap {
+    		$svg: str-replace($svg, $orig, $replace);
+    	}
+    }
+    //  Chunk up string avoids "stack level too deep" error
+    $encoded:'';
+    $slice: 2000;
+    $index: 0;
+    $loops: ceil(calc(str-length($svg) / $slice));
+    @for $i from 1 through $loops {
+        $chunk: str-slice($svg, $index, $index + $slice - 1);
+
+
+        
+        //   Encode
+        $chunk: str-replace($chunk, '"', '\'');
+        $chunk: str-replace($chunk, '%', '%25');
+        $chunk: str-replace($chunk, '&', '%26');
+        $chunk: str-replace($chunk, '#', '%23');
+        $chunk: str-replace($chunk, '{', '%7B');
+        $chunk: str-replace($chunk, '}', '%7D');
+        $chunk: str-replace($chunk, '<', '%3C');
+        $chunk: str-replace($chunk, '>', '%3E');
+
+        //    The maybe list
+        //
+        //    Keep size and compile time down
+        //    ... only add on documented fail
+        //
+        //  $chunk: str-replace($chunk, '|', '%7C');
+        //  $chunk: str-replace($chunk, '[', '%5B');
+        //  $chunk: str-replace($chunk, ']', '%5D');
+        //  $chunk: str-replace($chunk, '^', '%5E');
+        //  $chunk: str-replace($chunk, '`', '%60');
+        //  $chunk: str-replace($chunk, ';', '%3B');
+        //  $chunk: str-replace($chunk, '?', '%3F');
+        //  $chunk: str-replace($chunk, ':', '%3A');
+        //  $chunk: str-replace($chunk, '@', '%40');
+        //  $chunk: str-replace($chunk, '=', '%3D');
+
+        $encoded: #{$encoded}#{$chunk};
+        $index: $index + $slice;
+    }
+    @return url("data:image/svg+xml,#{$encoded}");
+}
+            
+//  Helper function to replace characters in a string
+@function str-replace($string, $search, $replace: '') {
+    $index: str-index($string, $search); 
+    @if $index { 
+        @return str-slice($string, 1, $index - 1) + $replace + 
+            str-replace(str-slice($string, $index + 
+            str-length($search)), $search, $replace); 
+    }
+    @return $string; 
+}

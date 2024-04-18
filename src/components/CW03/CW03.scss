@@ -1,61 +1,137 @@
 @import "../../variables.scss";
-$backgroundColor: #F9F4D5;
-$articleFont: 'Courier New', Courier, monospace;
+
 $offset: $globalWidthConstant * $marginFraction * 1px;
 
+// $menuInactiveBGColor: #DDD;
+$menuInactiveBGColor: #688C98;
+// $menuInactiveBGColor: #EAF9FF;
+$menuBGColor: #EAF9FF;
+$menuColor: #688C98;
+$menuBorderColor: #DDD;
+$captionColor: #A39136;
+@mixin baseUl {
+    padding: 0;
+    border: 0;
+    margin: 0;
+    list-style-type: none;
+}
 .cw03 {
-    
-    h3 {
-        padding: 0;
-        margin: 0 0 1em 0;
-        background-color: $backgroundColor;
-        font-weight: 400;
-        font-size: 2rem;
-        width: 100%;
-        min-width: 100%;
+    button {
+        position: absolute;
+        top: $offset;
+        right: $offset;
+        cursor: pointer;
     }
-    article {
-        background-color: $backgroundColor;
-        font-family: $articleFont;
-        font-size: 1.4rem;
-        width: 100%;
-        border-radius: 8px;
+    .cw03w0 {
+        padding: $offset;
+        min-height: $boxMinHt;
         position: relative;
-        padding: 2rem;
+    }
+    .cw03w1 {
+        padding-top: calc($offset * 1.5);
+        > ul {
+            @include baseUl();
+        }
+    }
+    .cw03menu {
+        position: absolute;
+        overflow: hidden;
+        background-color: $menuInactiveBGColor;
+        top: 8rem;
+        right: 0;
+        bottom: 3rem;
+        left:0;
+        transition: max-height 0.3s ease-in-out, background 0.3s;
+        max-height: 0;
+        overflow-y: auto;
+        padding: 0;
+        border-top: 1px solid $menuBorderColor;
+        border-bottom: 1px solid $menuBorderColor;
+        color: $menuColor;
         margin: 0;
-        min-height: 24em;
+        
+        ul {
+            @include baseUl();
+            opacity: 0;
+            transition: opacity 0.25s ease-in-out 0s;
+            max-height: 1000px;
+            width: 48%;
+            > li {
+                padding: 0;
+                margin: 0 0 1.5em 0;
+            }
+        }
+        p {
+            padding: 0;
+            margin: 0;
+            font-size: 1.4rem;
+        }
+        &.cw03menu-active {
+            max-height: 1000px;
+            background: $menuBGColor;
+        }
+        &.cw03menu-active ul {
+            opacity: 1;
+            transition: opacity 0.25s ease-in-out 0.3s;
+        }
+    }
+    h2 {margin-bottom: 0}
+    h4 {
+        font-size: 1.8rem;
+        font-weight: 500;
+        padding: 0;
+        margin: 0 0 0.3rem 0;
+        span {
+            display: inline-block;
+            margin: 0 0 0 1em;
+            font-size: 1.2rem;
+            font-weight: 300;
+            text-transform: uppercase;
+            color: $captionColor;
+        }
+    }
+    
+    .cw03w2 {
+        width: 100%;
         box-sizing: border-box;
-        -webkit-box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.2);
-        -moz-box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.2);
-        box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.2);
+        padding: $offset;
+        margin: 0;
         display: flex;
         justify-content: space-between;
-        flex-wrap: wrap;
-        p {
-            margin: 0 0 1em;
-        }
-        > div {
-            max-width: calc(66% - 2rem);
-            min-width: calc(66% - 2rem);
-            width: calc(66% - 2rem);
-        }
-        > figure {
-            display: block;
-            box-sizing: border-box;
-            max-width: calc(34% - 2rem);
-            min-width: calc(34% - 2rem);
-            width: calc(34% - 2rem);
-
-            background-color: #FFF;
-            padding: 8px;
-            margin:0;
-        }
+        align-items: flex-start;
     }
-    ul.cw03w2 {
-        padding: 0;
-        border: 0;
-        margin: 0;
-        list-style-type: none;
-        width: 100%;
+}
+@media (max-width:$bp_tablet) {
+    .cw03 {
+        .cw03w0 {
+            padding: $padMobile;
+            .icnbtn {
+                top: $padMobile;
+                right: $padMobile;
+            }
+        }
+        .cw03menu {
+            top: 70px;
+        }
+        .cw03w2 {
+            flex-direction: column;
+            padding: $padMobile;
+        }
+        .cw03w2 ul {
+            width: 100%;
+        }
+        .cw03menu h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.2rem;
+        }
+        .cw03menu h4 span {
+            font-size: 0.8rem;
+        }
+        .cw03menu p {
+            font-size: 0.9rem;
+        }
+        .cw03menu ul li {
+            margin-bottom: 0.75em;
+        }
     }
 }

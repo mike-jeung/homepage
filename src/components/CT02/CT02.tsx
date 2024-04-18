@@ -53,6 +53,8 @@ const CT02:FC = () => {
         "l5": useRef<SVGRectElement | null>(null),
         "head": useRef<SVGGElement | null>(null),
         "mouth": useRef<SVGRectElement | null>(null),
+        "arm_lt": useRef<SVGGElement>(null),
+        "arm_rt": useRef<SVGGElement>(null),
         "arm_lt_top": useRef<SVGGElement>(null),
         "arm_rt_top": useRef<SVGGElement>(null),
         "arm_lt_fore": useRef<SVGGElement>(null),
@@ -60,8 +62,10 @@ const CT02:FC = () => {
         "o_r": useRef<SVGCircleElement | null>(null),
     };
     useGSAP( () => {
-        let t0 = gsap.timeline();
-        let t1 = gsap.timeline({repeat:-1});
+        const t0 = gsap.timeline(),
+            t1 = gsap.timeline({repeat:-1}),
+            t2 = gsap.timeline(),
+            t3 = gsap.timeline({repeat:-1});
         t1.add(gsap.fromTo(refs.g1.current,{rotate:0,transformOrigin:"50% 50%"},{rotate:360,duration:300,ease:"none"}),0);
         // L1 edges
         for (let i = 1; i <= 8; i++) {
@@ -99,6 +103,21 @@ const CT02:FC = () => {
             let nodeAnim = gsap.fromTo(node, {scale:0,transformOrigin:"50% 50%"},{scale:1,duration:0.25});
             t0.add(nodeAnim, 2.5);
         }
+        t2.add(gsap.fromTo(refs.arm_lt.current,{transformOrigin:"92.32% 50%",rotate:0},{rotate:-70,duration:0.5,ease:"none"}),0);
+        t2.add(gsap.fromTo(refs.arm_lt_fore.current,{transformOrigin:"85.27% 50%",rotate:0},{rotate:90,duration:0.5,ease:"none"}),0);
+        t2.add(gsap.fromTo(refs.arm_rt.current,{transformOrigin:"7.68% 50%",rotate:0},{rotate:70,duration:0.5,ease:"none"}),0);
+        t2.add(gsap.fromTo(refs.arm_rt_fore.current,{transformOrigin:"14.73% 50%",rotate:0},{rotate:-90,duration:0.5,ease:"none"}),0);
+        for (let i = 1; i <= 5;i++) {
+            t3.add(gsap.to(refs["l"+i].current,{duration:1,fill:"#00ff06",ease:"none"}),i);
+        }
+        t3.add(gsap.to({},{duration:3}))
+        /*
+
+            533 - 470
+92.32%
+forearm 482.5 - 408.83, w = 86.4
+85.27%
+        */
     });
     return (
         <section className="ct02 ct02v0">
@@ -181,7 +200,7 @@ const CT02:FC = () => {
                         </g>
                         <path className="shoulder-rt-outline" d="M539.76,570.23s11.84,8.46,7.84,22.46-16.89,14-16.89,14l9.05-36.46Z"/>
                         <path className="shoulder-lt-outline" d="M327.17,570.23s-11.84,8.46-7.84,22.46c4,14,16.89,14,16.89,14l-9.05-36.46Z"/>
-                        <g className="arm-rt">
+                        <g className="arm-rt" ref={refs.arm_rt}>
                             <g className="arm-rt-top" ref={refs.arm_rt_top}>
                                 <path className="outline" d="M593.6,599.7h-53s-11-.5-11-10.5,11-10.5,11-10.5h53s9.5,1.58,9.5,10.5-9.5,10.5-9.5,10.5Z"/>
                                 <path className="arm" d="M540.6,599.2c-.41-.02-10.5-.6-10.5-10s10.09-9.98,10.52-10h52.98c.29.06,9,1.62,9,10s-8.41,9.88-9.04,10h-52.96Z"/>
@@ -197,7 +216,7 @@ const CT02:FC = () => {
                                 <circle className="r3" cx="592.6" cy="589.7" r="3.5"/>
                             </g>
                         </g>
-                        <g className="arm-lt">
+                        <g className="arm-lt" ref={refs.arm_lt}>
                             <g className="arm-lt-top" ref={refs.arm_lt_top}>
                                 <path className="outline" d="M273.33,599.7h53s11-.5,11-10.5-11-10.5-11-10.5h-53s-9.5,1.58-9.5,10.5,9.5,10.5,9.5,10.5Z"/>
                                 <path className="arm" d="M273.33,599.2c-.29-.06-9-1.62-9-10s8.99-9.99,9.08-10.01h52.92c.41.03,10.5.61,10.5,10.01s-9.95,9.97-10.51,10h-52.99Z"/>

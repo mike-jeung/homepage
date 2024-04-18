@@ -1,3 +1,4 @@
+@import "../../variables.scss";
 .cb01 {
     position: relative;
     h1 {
@@ -20,5 +21,21 @@
         color: #999;
         padding: 0.5em 0 0;
         margin: 0;
+    }
+}
+@media (max-width: $bp_tablet) {
+    .cb01 {
+        .caption {
+            font-size: 0.8rem;
+        }
+        h1 {
+            font-size: 3rem;
+
+        }
+        p {
+            font-size: 1.1rem;
+            line-height: 1.2;
+            padding-top: 0.25em;
+        }
     }
 }

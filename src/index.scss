@@ -20,8 +20,49 @@ h2 {
     padding: 0;
     margin: 0 0 0.5em;
 }
-// @media screen and (max-width: 767px) {
-//     html {
-//         font-size: 100%;
-//     }
-// }
+button.icnbtn {
+    padding:0;
+    border: 0;
+    margin: 0;
+    background: none;
+}
+.icn {
+    transition: transform 250ms;
+    width: 32px;
+    height: 32px;
+    &.icn-arrow-up,
+    &.icn-arrow-down {
+        background:svg-url($menuArrowSVG);
+        display: block;
+        background-repeat: no-repeat;
+        background-size: 100%;
+        background-position: 50% 50%;
+        transform: rotate(180deg);
+
+        
+    }
+    &.icn-arrow-down {
+        transform: rotate(0);
+    }
+
+}
+.sro {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+    white-space: nowrap;
+    display: inline-block;
+}
+@media screen and (max-width: $bp_tablet) {
+    html {
+        font-size: 100%;
+        h2 {
+            font-size: 1.6rem;
+        }
+    }
+}

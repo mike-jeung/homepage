@@ -1,16 +1,16 @@
 @import "../../variables.scss";
-@mixin horizline($edge) {
-    background-image: linear-gradient(to right, black 25%, rgba(255,255,255,0) 0%);
-    background-size: 4px 1px;
-    background-repeat: repeat-x;
-    background-position: $edge;
-}
-@mixin vertline($edge) {
-    background-image: linear-gradient(to top, black 25%, rgba(255,255,255,0) 0%);
-    background-size: 1px 4px;
-    background-repeat: repeat-y;
-    background-position: $edge;
-}
+// @mixin horizline($edge) {
+//     background-image: linear-gradient(to right, black 25%, rgba(255,255,255,0) 0%);
+//     background-size: 4px 1px;
+//     background-repeat: repeat-x;
+//     background-position: $edge;
+// }
+// @mixin vertline($edge) {
+//     background-image: linear-gradient(to top, black 25%, rgba(255,255,255,0) 0%);
+//     background-size: 1px 4px;
+//     background-repeat: repeat-y;
+//     background-position: $edge;
+// }
 $maxW: $globalWidth;
 
 .cl01 {
@@ -35,20 +35,22 @@ $maxW: $globalWidth;
         margin: 0;
     }
     .cl01w1 > * {
-        padding: 3% $padPercent;
         width: 100%;
         background: $bentoBGColor;
         border-radius: 22px;
         box-sizing: border-box;
         padding: calc($padPercent - 1%) $padPercent $padPercent;
     }
-    .cl01bleed > * {
+    .cl01bleed { 
         padding: 0;
-        width: 100%;
-        min-width: 100%;
-        max-width: 100%;
+        
+        & > * {
+            padding: 0;
+            width: 100%;
+            min-width: 100%;
+            max-width: 100%;
+        }
     }
-
     .cl01w1 > .col1 {
         width: calc(60% - 1.5rem);
         min-width: calc(60% - 1.5rem);
@@ -61,5 +63,31 @@ $maxW: $globalWidth;
         min-width: 40%;
         max-width: 40%;
     }
+    
+}
+@media (max-width: $bp_tablet) {
+    .cl01 {
+        .cl01w0 {
+            margin-top: $padMobile;
+        }
+        .cl01w1 {
+            justify-content: space-between;
+            gap: $padMobile $padMobile;
+        }
+        .cl01w1 > .col0,
+        .cl01w1 > .col1,
+        .cl01w1 > .col2 {
+            width:95%;
+            min-width: 95%;
+            max-width: 95%;
+            margin:0 auto;
+            padding: $padMobile;
+        }
+        .col0.cl01bleed {
+            padding: 0;
+        }
+    }
+}
+@media (max-width: $bp_mobile) {
     
 }
