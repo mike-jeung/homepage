@@ -26,7 +26,7 @@ const CW04:FC = () => {
     }
     const handleForm = (e:React.MouseEvent<HTMLButtonElement>):void => {
         console.log(formData);
-        
+        e.preventDefault();
     };
     return (
         <section className="cw04 cw04v0">
@@ -34,13 +34,13 @@ const CW04:FC = () => {
                 <form>
                     <ul>
                         <li><label htmlFor="contact-name">Name</label>
-                        <input placeholder="Name" id="contact-name" name="name" className="cw04field" type="text" value={formData.name} onChange={handleChange} /></li>
+                        <input placeholder="Your Name" id="contact-name" name="name" className="cw04field" type="text" value={formData.name} onChange={handleChange} /></li>
 
                         <li><label htmlFor="contact-email">Email</label>
-                        <input placeholder="Email" id="contact-email" name="email" className="cw04field" type="text" value={formData.email} onChange={handleChange} /></li>
+                        <input placeholder="Your Email" id="contact-email" name="email" className="cw04field" type="text" value={formData.email} onChange={handleChange} /></li>
 
                         <li className="cw04city"><label htmlFor="contact-city">City</label>
-                        <input placeholder="City" id="contact-city" name="city" className="cw04field" type="text" value={formData.city} onChange={handleChange} /></li>
+                        <input placeholder="City" id="contact-city" name="city" className="cw04field" type="text" value={formData.city} onChange={handleChange} tabIndex={-1} /></li>
 
                         <li className="cw04full"><label htmlFor="contact-msg">Message</label>
                         <textarea placeholder="What would you like to build?" id="contact-msg" name="message" className="cw04msg" value={formData.message} onChange={handleChange}></textarea></li>

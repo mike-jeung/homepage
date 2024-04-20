@@ -103,12 +103,12 @@ const CT02:FC = () => {
             let nodeAnim = gsap.fromTo(node, {scale:0,transformOrigin:"50% 50%"},{scale:1,duration:0.25});
             t0.add(nodeAnim, 2.5);
         }
-        t2.add(gsap.fromTo(refs.arm_lt.current,{transformOrigin:"92.32% 50%",rotate:0},{rotate:-70,duration:0.5,ease:"none"}),0);
+        t2.add(gsap.fromTo(refs.arm_lt.current,{transformOrigin:"92.32% 50%",rotate:0},{rotate:-60,duration:0.5,ease:"none"}),0);
         t2.add(gsap.fromTo(refs.arm_lt_fore.current,{transformOrigin:"85.27% 50%",rotate:0},{rotate:90,duration:0.5,ease:"none"}),0);
-        t2.add(gsap.fromTo(refs.arm_rt.current,{transformOrigin:"7.68% 50%",rotate:0},{rotate:70,duration:0.5,ease:"none"}),0);
+        t2.add(gsap.fromTo(refs.arm_rt.current,{transformOrigin:"7.68% 50%",rotate:0},{rotate:60,duration:0.5,ease:"none"}),0);
         t2.add(gsap.fromTo(refs.arm_rt_fore.current,{transformOrigin:"14.73% 50%",rotate:0},{rotate:-90,duration:0.5,ease:"none"}),0);
         for (let i = 1; i <= 5;i++) {
-            t3.add(gsap.to(refs["l"+i].current,{duration:1,fill:"#00ff06",ease:"none"}),i);
+            t3.add(gsap.to(refs["l"+i].current,{duration:0.5,fill:"#00ff06",ease:"none"}),i * 0.5);
         }
         t3.add(gsap.to({},{duration:3}))
         /*
