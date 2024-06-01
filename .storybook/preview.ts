@@ -1,4 +1,6 @@
-import type { Preview } from "@storybook/react";
+import { Preview } from "@storybook/react";
+import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/blocks";
+import '../src/index.scss';
 
 const preview: Preview = {
   parameters: {
@@ -7,6 +9,9 @@ const preview: Preview = {
         color: /(background|color)$/i,
         date: /Date$/i,
       },
+    },
+    docs: {
+      
     },
     viewMode: "docs",
   },

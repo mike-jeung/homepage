@@ -2,7 +2,7 @@ import React, { FC, ReactNode } from "react";
 import CB02 from "./CB02";
 
 interface CB02v0Props {
-    title: ReactNode;
+    title?: ReactNode;
     desc?: ReactNode[];
 }
 // content block: article

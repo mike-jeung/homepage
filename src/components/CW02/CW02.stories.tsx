@@ -1,20 +1,20 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import CW01 from "./CW01";
+import CW02 from "./CW02";
 
-const meta: Meta<typeof CW01> = {
-    title: "Content Widget/CW01",
-    component: CW01,
+const meta: Meta<typeof CW02> = {
+    title: "Content Widget/CW02",
+    component: CW02,
     parameters: {
         docs: {
             description: {
-                component: 'This component constructs a tiled background consisting of the CT01.',
+                component: 'This component is an animated navigation widget, currently in development.',
             },
         },
     },
 }
 
-type Story = StoryObj<typeof CW01>;
+type Story = StoryObj<typeof CW02>;
 
 export const Primary: Story = {
     args: {

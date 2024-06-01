@@ -7,11 +7,11 @@ interface TilePosition {
     col: string;
     styles: React.CSSProperties;
 }
-interface BackgroundProps {
+interface CW01Props {
     columns?: number;
     duration?: number;
 }
-const Background: FC<BackgroundProps> = function({ columns = 5, duration = 2 }) {
+const CW01: FC<CW01Props> = function({ columns = 5, duration = 2 }) {
     const parentWrap = useRef<HTMLDivElement>(null);
     const [parentWidth, setParentWidth] = useState<number>(0);
     const [parentHeight, setParentHeight] = useState<number>(0);
@@ -97,4 +97,4 @@ const Background: FC<BackgroundProps> = function({ columns = 5, duration = 2 }) 
     );
 }
 
-export default Background;
+export default CW01;

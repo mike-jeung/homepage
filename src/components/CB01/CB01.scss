@@ -22,6 +22,22 @@
         padding: 0.5em 0 0;
         margin: 0;
     }
+    &.cb01v2 {
+        .cb01w0 {
+            padding: $boxPadding;
+        }
+        h3 {margin:0}
+        p {
+            font-size: 1.4rem;
+            padding: 0.3em 0 0;
+            margin: 0;
+            line-height: 1.2;
+        }
+    }
+    &.cb01v4 {
+        h2 {margin:0}
+        p {padding:0;margin:0;font-size:1.4rem}
+    }
 }
 @media (max-width: $bp_tablet) {
     .cb01 {

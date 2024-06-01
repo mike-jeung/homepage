@@ -1,0 +1,49 @@
+@import "../../variables.scss";
+.cw06 {
+    width: 100%;
+    .cw06w1 {
+        // list-style-type: none;
+        // display: flex;
+        // justify-content: space-between;
+        padding: 0 0 38% 0;
+        margin: 0;
+        position: relative;
+       
+    }
+    @for $i from 1 to 4 {
+        .cw06col#{$i} {
+            // column-gap: $bentoColGap;
+            & > .cw06w2 {
+                max-width: calc((100% / $i) - ($bentoColGap * ($i - 1) / $i));
+                min-width: calc((100% / $i) - ($bentoColGap * ($i - 1) / $i));
+                padding-bottom: 38%;
+                // &:nth-child(#{$i}n) {
+                //     margin-right: 0;
+                // }
+            }
+        }
+    }
+    .cw06w2 {
+        display: inline-block;
+        box-sizing: border-box;
+        padding: 0;
+        // margin: 0 $bentoColGap 0 0;
+        margin: 0;
+        border-radius: $bentoBorderRadius;
+        background: #FFF;
+        min-height: 16em;
+        // position: relative;
+        position: absolute;
+        vertical-align: top;
+    }
+    .cw06w3 {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom:0;
+        left: 0;
+        padding: $bentoStdPad;
+        margin: auto auto;
+
+    }
+}

@@ -1,4 +1,6 @@
 @import "../../variables.scss";
+$stdPad: 2.5rem;
+
 // @mixin horizline($edge) {
 //     background-image: linear-gradient(to right, black 25%, rgba(255,255,255,0) 0%);
 //     background-size: 4px 1px;
@@ -11,7 +13,7 @@
 //     background-repeat: repeat-y;
 //     background-position: $edge;
 // }
-$maxW: $globalWidth;
+$maxW: $globalWidth2;
 
 .cl01 {
     width: 100%;
@@ -31,15 +33,24 @@ $maxW: $globalWidth;
         align-items: stretch;
         align-content: stretch;
         gap: 1.5rem 1.5rem;
-        padding: 1px 0 0 0;
+        padding: 0;
         margin: 0;
     }
-    .cl01w1 > * {
+    
+    .cl01w1 + .cl01w1 {
+        margin-top: $bentoRowGap;
+    }
+    .cl01w1:not(.cl01grid):not(.cl01invis) > * {
         width: 100%;
         background: $bentoBGColor;
-        border-radius: 22px;
+        border-radius: $bentoBorderRadius;
         box-sizing: border-box;
-        padding: calc($padPercent - 1%) $padPercent $padPercent;
+        padding: $bentoStdPad;
+    }
+    .cl01w1.cl01invis > * {
+        border-radius: 0;
+        background: none;
+        padding: 0;
     }
     .cl01bleed { 
         padding: 0;
@@ -51,29 +62,75 @@ $maxW: $globalWidth;
             max-width: 100%;
         }
     }
-    .cl01w1 > .col1 {
-        width: calc(60% - 1.5rem);
-        min-width: calc(60% - 1.5rem);
-        max-width: calc(60% - 1.5rem);
+    // .cl01w1 > .col1 {
+    //     width: calc(60% - 1.5rem);
+    //     min-width: calc(60% - 1.5rem);
+    //     max-width: calc(60% - 1.5rem);
+    //     display: flex;
+    //     align-items: center;
+    // }
+    // .cl01w1 > .col2 {
+    //     width: 40%;
+    //     min-width: 40%;
+    //     max-width: 40%;
+    // }
+    .cl01grid {
+        display: grid;
+        grid-template-columns: [c1] $bentoBoxUnit [c2] $bentoBoxUnit [c3] $bentoBoxUnit [c4] $bentoBoxUnit [c5] $bentoBoxUnit [clast];
+        grid-template-rows: [r1] calc($bentoBoxUnit/2 - $bentoRowHalfGap)  [r2] calc($bentoBoxUnit/2 - $bentoRowHalfGap) [r3] calc($bentoBoxUnit/2 - $bentoRowHalfGap) [r4] calc($bentoBoxUnit/2 - $bentoRowHalfGap) [r5] calc($bentoBoxUnit/2 - $bentoRowHalfGap) [rlast];
+        column-gap: $bentoColGap;
+        row-gap: $bentoRowGap;
+        padding: 0;
+    }
+    .cl01w3 {
+        background-color: #fff;
+        border-radius: 22px;
+        display:inline;
+    }
+    .cl01robot,
+    .cl01beat {
+        grid-column-start: c4;
+        grid-column-end: clast;
+    }
+    .cl01svcs {
+        grid-row-start: r1;
+        grid-row-end: r3;
         display: flex;
         align-items: center;
     }
-    .cl01w1 > .col2 {
-        width: 40%;
-        min-width: 40%;
-        max-width: 40%;
+    .cl01robot {
+        grid-row-start: r1;
+        grid-row-end: r5;
+        display:flex;
+        align-items: center;
+        padding: 3rem;
     }
+    .cl01beat {
+        grid-row-start: r5;
+        grid-row-end: r6;
+    }
+    .cl01name {
+        grid-column-start: c1;
+        grid-column-end: c4;
+        grid-row-start: r3;
+        grid-row-end: r6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2.5rem;
+    }
+    
     
 }
 @media (max-width: $bp_tablet) {
     .cl01 {
-        .cl01w0 {
-            margin-top: $padMobile;
-        }
-        .cl01w1 {
-            justify-content: space-between;
-            gap: $padMobile $padMobile;
-        }
+        // .cl01w0 {
+        //     margin-top: $padMobile;
+        // }
+        // .cl01w1 {
+        //     justify-content: space-between;
+        //     gap: $padMobile $padMobile;
+        // }
         .cl01w1 > .col0,
         .cl01w1 > .col1,
         .cl01w1 > .col2 {

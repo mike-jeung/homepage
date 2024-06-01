@@ -7,7 +7,11 @@ interface FormData {
     city: string;
     message: string;
 }
-const CW04:FC = () => {
+interface CW04Props {
+    title?: string;
+    intro?: string;
+}
+const CW04:FC<CW04Props> = ({title,intro}) => {
     const [formData, setFormData] = useState<FormData>({
         name:"",
         email:"",
@@ -31,6 +35,8 @@ const CW04:FC = () => {
     return (
         <section className="cw04 cw04v0">
             <div className="cw04w0">
+                {title && <h2>{title}</h2>}
+                {intro && <p>{intro}</p>}
                 <form>
                     <ul>
                         <li><label htmlFor="contact-name">Name</label>

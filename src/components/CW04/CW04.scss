@@ -37,6 +37,7 @@
         border-radius: $formBorderRadius;
         padding: 0.75em 1em;
         opacity: 0.75;
+        box-sizing: border-box;
         &:hover {
             opacity: 1;
         }

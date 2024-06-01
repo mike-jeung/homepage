@@ -24,7 +24,8 @@ $strokeWidthXl: 9;
     }
     svg {
         overflow: visible;
-        max-width: 240px;
+        // max-width: 240px;
+        max-width: 100%;
         margin: auto;
     }
 
