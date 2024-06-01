@@ -73,7 +73,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
         for (let i = 0; i < cardCount; i++) {
             const cardRef = cardRefs.current[i];
             const cardPos = pos.get(i);
-            
+
             if (cardRef !== null && cardPos) {
                 timelines.current[i] = gsap.timeline({paused:true}).addLabel("start" + i,0);
                 
@@ -85,8 +85,8 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
                 
                 timelines.current[i].addPause();
 
-                timelines.current[i].addLabel("unpick" + i);
-                timelines.current[i].add(gsap.to(cardRef,{background:"#000",left:cardPos.left,minWidth:unitW + "px",maxWidth:unitW + "px",duration:0}),"unpick" + i);
+                timelines.current[i].addLabel("unpick" + i, "+=0.5");
+                timelines.current[i].add(gsap.to(cardRef,{left:cardPos.left,minWidth:unitW + "px",maxWidth:unitW + "px",duration:0}),"unpick" + i);
                 timelines.current[i].add(gsap.to(cardRef,{top:cardRef.offsetHeight + 15,duration:0.5,ease:"circ.inOut"}),"unpick" + i);
                 
                 timelines.current[i].addPause();
