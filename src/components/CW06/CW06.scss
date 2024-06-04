@@ -42,8 +42,36 @@
         right: 0;
         bottom:0;
         left: 0;
-        padding: $bentoStdPad;
+        padding: 60% $bentoStdPad $bentoStdPad;
         margin: auto auto;
+        transition: padding 0.5s;
+    }
+    .cw06active {
+        .cw06w3 {
+            padding-top:$bentoStdPad;
+        }
+        .cw06close {
+            background-image: svg-url($menuCloseX);
+            background-size: contain;
+            width:24px;
+            height:24px;
+            position:absolute;
+            right:0;
+            top: 0;
+        }
+        .cw06open {
+            display: none;
+        }
+    }
+    .cw06open {
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        color: #09c;
 
+        &:after {
+            content:"\2b95";
+            padding: 0;
+            margin:0;
+        }
     }
 }

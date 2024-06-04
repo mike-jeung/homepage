@@ -28,7 +28,7 @@ const CL01:FC = () => {
                         <CB01v4 title="ChatBot" caption="PROJECT" description="Retrieval Augmented Generation on Sun Tzu’s Art of War" />,
                         <CB01v4 title="WebBot" caption="PROJECT IN DEVELOPMENT" description="Can a LLM function as a web production resource?" />,
                         <CB01v4 title="Scoreboard" caption="PROJECT IN DEVELOPMENT" description="Figure skating scoring dashboard. Which judge scores you the lowest? The highest?" />,
-                    ]}></CW06>
+                    ]} />
                 </div>
                 <div className="cl01w1">
                     <div>
