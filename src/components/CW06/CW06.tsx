@@ -8,9 +8,14 @@ interface CW06Props {
 }
 interface CW06Pos {
     left:number;
+    leftR2?:number;
     top:number;
+    topR2?:number;
     height?:number;
+    heightR2:number;
     width?:number;
+    widthR2?:number;
+
 }
 
 const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
@@ -19,23 +24,27 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
         [cardPos, setCardPos] = useState<Map<number, CW06Pos>>(new Map()),
         [cardPosEnd, setCardPosEnd] = useState<Map<number, CW06Pos>>(new Map()),
         [featureCardIdx, setFeatureCardIdx] = useState<number | null>(null),
-        [hasInitialPosition, setHasInitialPosition] = useState<boolean>(false);
+        [hasInitialPosition, setHasInitialPosition] = useState<boolean>(false),
+        [isAnimating, setIsAnimating] = useState<boolean>(false);
 
     const cardRefs = useRef<(HTMLDivElement | null)[]>([]),
         containerRef = useRef<HTMLDivElement | null>(null),
-        containerTl = useRef<gsap.core.Timeline>(gsap.timeline({paused:true})),
+        containerTimelines = useRef<gsap.core.Timeline[]>([]),
         timelines = useRef<gsap.core.Timeline[]>([]),
-        topTimeline = useRef<gsap.core.Timeline>(gsap.timeline({paused:true}));
-
+        openTimelines = useRef<gsap.core.Timeline[]>([]),
+        closeTimelines = useRef<gsap.core.Timeline[]>([]),
+        topTimeline = useRef<gsap.core.Timeline>(gsap.timeline({paused:true})),
+        timelineMap = useRef<Map<string,gsap.core.Timeline>>(new Map());
     const 
         { contextSafe } = useGSAP(),
+        animDelay = 0.5,
+        animDuration = 0.5,
         gapW = 15;
         
-        
-        
-
     let col = 0,
         containerW:number,
+        unitH:number = 0,
+        unitH2ndRow:number = 0,
         unitW:number = 0,
         unitW2ndRow:number = 0;
 
@@ -46,7 +55,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
     },[]);
 
     useEffect( () => {
-        console.log("useeffect")
+
         const closedPos:Map<number,CW06Pos> = new Map,
             container = containerRef.current;
         setCardCount(cards.length);
@@ -56,11 +65,18 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
             if (container) {
                 containerW = container.clientWidth;
                 unitW = (containerW - (gapW * (cols - 1))) / cols;
-                unitW2ndRow = (containerW - (gapW * (cols - 1))) / col;
+                unitW2ndRow = cols > 1 ? (containerW - (gapW * (cols - 2))) / (cols - 1) : containerW;
 
                 for (let i = 0; i < cards.length; i++) {
-                    // TO-DO: calculate top position of cards.
-                    closedPos.set(i,{left:(unitW + gapW) * col,top:0});
+                    closedPos.set(i,{
+                        left:(unitW + gapW) * col,
+                        top:0,
+                        topR2:0,
+                        width:unitW,
+                        widthR2:unitW2ndRow,
+                        height:container.children[0].clientHeight,
+                        heightR2:container.children[0].clientHeight * 0.6}
+                    );
                     col = col === cols - 1 ? 0 : col + 1;
                 }
                 setCardPos( closedPos );
@@ -70,142 +86,127 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
 
         if (container) {
             const containerStyles = window.getComputedStyle(container);
-            const pb = parseInt(containerStyles.paddingBottom) * 2 + 15 + "px";
             const pbClosed = parseInt(containerStyles.paddingBottom) + "px";
-
-            containerTl.current?.addLabel("containerExpand",0);
-            containerTl.current?.add(
-                gsap.to(container,{
-                    paddingBottom:pb,
-                    duration:0.5,
-                    ease:"circ.inOut"
-                })
-            );
+            const pb = parseInt(pbClosed) * 2 + 15 + "px";
             
-            containerTl.current?.addPause();
-            containerTl.current?.addLabel("containerClose", "+=2");
-            containerTl.current?.add(gsap.to(container,{paddingBottom:pbClosed,duration:0.5,delay:0.5,ease:"circ.inOut"}),"containerClose");
+
+            containerTimelines.current.push(gsap.timeline({paused:true}));
+            containerTimelines.current[0].to(container,{
+                paddingBottom:pb,
+                duration: animDuration,
+                ease:"circ.inOut"
+            })
+            .eventCallback("onStart", () => {
+                setIsAnimating(true);
+            })
+            .eventCallback("onComplete", () => {
+                setIsAnimating(false);
+            });
+            containerTimelines.current.push(gsap.timeline({paused:true}));
+            containerTimelines.current[1].to(container,{
+                paddingBottom:pbClosed,
+                duration: animDuration,
+                delay: animDelay,
+                ease:"circ.inOut"},
+            )
+            .eventCallback("onStart", () => {
+                setTimeout(setFeatureCardIdx.bind(null,null),animDelay * 1000);
+                setIsAnimating(true);
+            })
+            .eventCallback("onComplete", () => {
+                setIsAnimating(false);
+            });
         }
 
         for (let i = 0; i < cardCount; i++) {
-            const cardRef = cardRefs.current[i];
-            const cardPos = closedPos.get(i);
+            let cardRef = cardRefs.current[i];
+            let cardPos = closedPos.get(i);
 
-            if (cardRef !== null && cardPos) {
-                timelines.current[i] = gsap.timeline({paused:true});
-                timelines.current[i].addLabel("pick" + i);
-                
-                // Expand picked card after unpicked cards move
-
-                timelines.current[i].fromTo(cardRef,{
+             if (cardRef !== null && cardPos) {
+                // Set initial positions
+                gsap.set(cardRef,{
                     left:cardPos.left,
+                    top:0,
                     minWidth:unitW + "px",
                     maxWidth:unitW + "px"
-                },{
-                    left:0,
-                    minWidth:containerW + "px",
-                    maxWidth:containerW + "px",
-                    delay:0.5,
-                    duration:0.5,
-                    ease:"circ.inOut"
-                },"pick" + i);
+                });
+ 
+                openTimelines.current[i] = gsap.timeline({paused:true});
 
-                timelines.current[i].addPause();
-                timelines.current[i].addLabel("unpick" + i, "+=2");
+                if (closedPos && cardRefs) {
 
-                // Set initial unpicked positions
-                
-                timelines.current[i].to(cardRef,{
-                    left:cardPos.left,
-                    minWidth:unitW + "px",
-                    maxWidth:unitW + "px",
-                    duration:0
-                },"unpick" + i);
-                
-                // Move unpicked card down to second "row"
-                
-                timelines.current[i].to(cardRef,{
-                    top:cardRef.offsetHeight + 15,
-                    duration:0.5,
-                    ease:"circ.inOut",
-                },"unpick" + i);
-                
-                
-                // Shrink expanded card
-                timelines.current[i].addPause();
-                timelines.current[i].addLabel("pickClose" + i, "+=2");
+                    for (let j = 0; j < cardCount; j++) {
+                        openTimelines.current[i].set(cardRefs.current[j],{
+                            left:closedPos.get(j)?.left,
+                            top:0,
+                            minWidth:unitW + "px",
+                            maxWidth:unitW + "px"
+                        },0);
+                        
+                        if (j !== i) {
+                            const unpickedCardRef = cardRefs.current[j];
+                            const unpickedCardPos = closedPos.get(j);
 
-                timelines.current[i].to(cardRef,{
-                    left:"0px",
-                    minWidth:containerW + "px",
-                    maxWidth:containerW + "px",
-                    top:"0px",
-                    duration:0
-                },"pickClose" + i);
-
-                timelines.current[i].to(cardRef,{
-                    left:cardPos.left,
-                    minWidth:unitW + "px",
-                    maxWidth:unitW + "px",
-                    top:"0px",
-                    duration:0.5,
-                    ease:"circ.inOut"
-                },"pickClose" + i);
-
-                timelines.current[i].addPause();
-                timelines.current[i].addLabel("unpickClose" + i, "+=2");
-                
-                timelines.current[i].to(cardRef,{
-                    top:cardRef.offsetHeight + 15,
-                    duration:0
-                },"unpickClose" + i);
-
-                timelines.current[i].to(cardRef,{
-                    top:"0px",
-                    delay:0.5,
-                    duration:0.5,
-                    ease:"circ.inOut"
-                },"unpickClose" + i);
-
-                timelines.current[i].addPause();
-                
-
+                            if (unpickedCardRef && unpickedCardPos) {
+                                // Move to 2nd row
+                                openTimelines.current[i].to(unpickedCardRef,{
+                                    left:unpickedCardPos.left,
+                                    top: unpickedCardRef.offsetHeight + 15,
+                                    minWidth:unitW + "px",
+                                    maxWidth:unitW + "px",
+                                    paddingBottom: "22%",
+                                    minHeight:0,
+                                    duration: animDuration,
+                                    ease:"circ.inOut",
+                                },0)
+                            }
+                        }
+                    }
+                    // expand picked card
+                    openTimelines.current[i].to(cardRef,{
+                        left:0,
+                        top:cardPos.top,
+                        minWidth:containerW + "px",
+                        maxWidth:containerW + "px",
+                        duration: animDuration,
+                        ease:"circ.inOut"
+                    },animDuration);
+                }
             }
         }
         // cleanup
         return () => {
-            containerTl.current?.kill();
-            for (let i = 0; i < timelines.current.length; i++) {
-                timelines.current[i].kill();
+            containerTimelines.current[0].kill();
+            containerTimelines.current[1].kill();
+            for (let i = 0; i < openTimelines.current.length; i++) {
+                openTimelines.current[i].kill();
             }
-            timelines.current = [];
+            openTimelines.current = [];
         };
     },[cardRefs]);
 
     const handleClick  = (e:React.MouseEvent<HTMLAnchorElement, MouseEvent>,index:number,action:string) => {
         e.preventDefault();
+        if (isAnimating) return 0; // no interruptions
+        console.log(openTimelines)
         if (action === "open") {
-            setFeatureCardIdx(index);
-            containerTl.current?.play("containerExpand");
-            for (let i = 0; i < cardCount; i++) {
-                if (i === index) {
-                    timelines.current[i].play("pick" + i);
-                } else {
-                    timelines.current[i].play("unpick" + i);
-                }
+            if (featureCardIdx !== null) {
+                openTimelines.current[featureCardIdx].reverse();
+                containerTimelines.current[1].play(0);
+                setTimeout(() => {
+                    setFeatureCardIdx(index);
+                    containerTimelines.current[0].play(0);
+                    openTimelines.current[index].play(0);
+                },1000)
+            } else {
+                setFeatureCardIdx(index);
+                containerTimelines.current[0].play(0);
+                openTimelines.current[index].play(0);
             }
         } else if (action === "close") {
-            setTimeout(setFeatureCardIdx.bind(null,null),500);
-            for (let i = 0; i < cardCount; i++) {
-                if (i === index) {
-                    timelines.current[i].play("pickClose" + i);
-                } else {
-                    timelines.current[i].play("unpickClose" + i);
-                }
-            }
-            containerTl.current?.play("containerClose");
+            openTimelines.current[index].reverse();
+            containerTimelines.current[1].play(0);
         }
-        
     };
     return (
         <section className="cw06 cw06v0">

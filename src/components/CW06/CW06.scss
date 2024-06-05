@@ -42,7 +42,7 @@
         right: 0;
         bottom:0;
         left: 0;
-        padding: 60% $bentoStdPad $bentoStdPad;
+        padding: $bentoStdPad;
         margin: auto auto;
         transition: padding 0.5s;
     }
@@ -53,11 +53,11 @@
         .cw06close {
             background-image: svg-url($menuCloseX);
             background-size: contain;
-            width:24px;
-            height:24px;
+            width:20px;
+            height:20px;
             position:absolute;
-            right:0;
-            top: 0;
+            right:$bentoStdPad;
+            top:$bentoStdPad;
         }
         .cw06open {
             display: none;
