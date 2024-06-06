@@ -37,22 +37,18 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
         timelineMap = useRef<Map<string,gsap.core.Timeline>>(new Map());
     const 
         { contextSafe } = useGSAP(),
-        animDelay = 0.5,
-        animDuration = 0.5,
-        gapW = 15;
+        animDelay = 0.25,
+        animDuration = 0.25,
+        gapW = 15,
+        heightFactor = 0.38;
         
     let col = 0,
         containerW:number,
+        deltaHt:number = 0,
         unitH:number = 0,
         unitH2ndRow:number = 0,
         unitW:number = 0,
         unitW2ndRow:number = 0;
-
-    useEffect( () => {
-        const containerSize = () => {
-
-        }
-    },[]);
 
     useEffect( () => {
 
@@ -66,6 +62,9 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
                 containerW = container.clientWidth;
                 unitW = (containerW - (gapW * (cols - 1))) / cols;
                 unitW2ndRow = cols > 1 ? (containerW - (gapW * (cols - 2))) / (cols - 1) : containerW;
+                unitH = containerW * heightFactor;
+                unitH2ndRow = containerW * 0.22;
+                deltaHt = unitH - unitH2ndRow;
 
                 for (let i = 0; i < cards.length; i++) {
                     closedPos.set(i,{
@@ -74,11 +73,12 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
                         topR2:0,
                         width:unitW,
                         widthR2:unitW2ndRow,
-                        height:container.children[0].clientHeight,
-                        heightR2:container.children[0].clientHeight * 0.6}
+                        height:unitH,
+                        heightR2:unitH2ndRow}
                     );
                     col = col === cols - 1 ? 0 : col + 1;
                 }
+                console.log(closedPos)
                 setCardPos( closedPos );
                 setHasInitialPosition(true);
             }
@@ -89,12 +89,12 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
             const pbClosed = parseInt(containerStyles.paddingBottom) + "px";
             const pb = parseInt(pbClosed) * 2 + 15 + "px";
             
-
+            // container expansion
             containerTimelines.current.push(gsap.timeline({paused:true}));
             containerTimelines.current[0].to(container,{
                 paddingBottom:pb,
                 duration: animDuration,
-                ease:"circ.inOut"
+                ease:"none"
             })
             .eventCallback("onStart", () => {
                 setIsAnimating(true);
@@ -102,12 +102,14 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
             .eventCallback("onComplete", () => {
                 setIsAnimating(false);
             });
+
+            // container contraction
             containerTimelines.current.push(gsap.timeline({paused:true}));
             containerTimelines.current[1].to(container,{
                 paddingBottom:pbClosed,
                 duration: animDuration,
                 delay: animDelay,
-                ease:"circ.inOut"},
+                ease:"none"},
             )
             .eventCallback("onStart", () => {
                 setTimeout(setFeatureCardIdx.bind(null,null),animDelay * 1000);
@@ -127,6 +129,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
                 gsap.set(cardRef,{
                     left:cardPos.left,
                     top:0,
+                    height: unitH,
                     minWidth:unitW + "px",
                     maxWidth:unitW + "px"
                 });
@@ -139,6 +142,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
                         openTimelines.current[i].set(cardRefs.current[j],{
                             left:closedPos.get(j)?.left,
                             top:0,
+                            height: unitH,
                             minWidth:unitW + "px",
                             maxWidth:unitW + "px"
                         },0);
@@ -151,13 +155,14 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
                                 // Move to 2nd row
                                 openTimelines.current[i].to(unpickedCardRef,{
                                     left:unpickedCardPos.left,
-                                    top: unpickedCardRef.offsetHeight + 15,
+                                    top: unpickedCardRef.offsetHeight + 15 + deltaHt,
                                     minWidth:unitW + "px",
                                     maxWidth:unitW + "px",
                                     paddingBottom: "22%",
+                                    height: unitH2ndRow,
                                     minHeight:0,
                                     duration: animDuration,
-                                    ease:"circ.inOut",
+                                    ease:"none",
                                 },0)
                             }
                         }
@@ -170,7 +175,13 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
                         maxWidth:containerW + "px",
                         duration: animDuration,
                         ease:"circ.inOut"
-                    },animDuration);
+                    },animDuration)
+                    .to(cardRef,{
+                        height: unitH + deltaHt,
+                        duration: animDuration/2,
+                        delay:animDuration/1.9,
+                        ease:"none"
+                    },0);
                 }
             }
         }
@@ -197,7 +208,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
                     setFeatureCardIdx(index);
                     containerTimelines.current[0].play(0);
                     openTimelines.current[index].play(0);
-                },1000)
+                },animDuration * 2000)
             } else {
                 setFeatureCardIdx(index);
                 containerTimelines.current[0].play(0);
