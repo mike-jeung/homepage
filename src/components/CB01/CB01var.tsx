@@ -6,13 +6,9 @@ interface CB01v0Props {
     title: string;
     caption?: string;
     description?: string;
-}
-interface CB01v1Props {
-    title: string;
-}
-interface CB01v2Props {
-    title: string;
-    caption: string;
+    moreTxt?: string;
+    moreLink?: string;
+    moreClick?: (e:React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
 }
 // #endregion
 // #region Variants
@@ -27,7 +23,7 @@ const CB01v0:FC<CB01v0Props> = ({title = "Title",caption = "Caption",description
         </CB01>
     );
 }
-const CB01v1:FC<CB01v1Props> = ({title}) => {
+const CB01v1:FC<CB01v0Props> = ({title}) => {
 
     return (
         <CB01 v={1}>
@@ -37,7 +33,7 @@ const CB01v1:FC<CB01v1Props> = ({title}) => {
         </CB01>
     );
 }
-const CB01v2:FC<CB01v2Props> = ({title,caption}) => {
+const CB01v2:FC<CB01v0Props> = ({title,caption}) => {
 
     return (
         <CB01 v={2}>
@@ -75,7 +71,5 @@ export {
     CB01v1,
     CB01v2,
     CB01v4,
-    CB01v0Props,
-    CB01v1Props,
-    CB01v2Props
+    CB01v0Props
 }

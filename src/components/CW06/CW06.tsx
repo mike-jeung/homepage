@@ -4,9 +4,10 @@ import gsap from 'gsap';
 import { useGSAP } from "@gsap/react";
 interface CW06Props {
     cards: ReactNode[];
+    cardsContent?: ReactNode[];
     cols?: number;
 }
-interface CW06Pos {
+interface CW06CardPosition {
     left:number;
     leftR2?:number;
     top:number;
@@ -15,119 +16,157 @@ interface CW06Pos {
     heightR2:number;
     width?:number;
     widthR2?:number;
-
+    contentH?:number;
 }
 
-const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
+const CW06:FC<CW06Props> = ({cards, cardsContent = [], cols = 3}) => {
 
     const [cardCount, setCardCount] = useState(cards.length),
-        [cardPos, setCardPos] = useState<Map<number, CW06Pos>>(new Map()),
-        [cardPosEnd, setCardPosEnd] = useState<Map<number, CW06Pos>>(new Map()),
+        [cardPos, setCardPos] = useState<Map<number, CW06CardPosition>>(new Map()),
         [featureCardIdx, setFeatureCardIdx] = useState<number | null>(null),
         [hasInitialPosition, setHasInitialPosition] = useState<boolean>(false),
         [isAnimating, setIsAnimating] = useState<boolean>(false);
 
-    const cardRefs = useRef<(HTMLDivElement | null)[]>([]),
-        containerRef = useRef<HTMLDivElement | null>(null),
-        containerTimelines = useRef<gsap.core.Timeline[]>([]),
-        timelines = useRef<gsap.core.Timeline[]>([]),
-        openTimelines = useRef<gsap.core.Timeline[]>([]),
-        closeTimelines = useRef<gsap.core.Timeline[]>([]),
-        topTimeline = useRef<gsap.core.Timeline>(gsap.timeline({paused:true})),
-        timelineMap = useRef<Map<string,gsap.core.Timeline>>(new Map());
-    const 
-        { contextSafe } = useGSAP(),
-        animDelay = 0.25,
-        animDuration = 0.25,
-        gapW = 15,
-        heightFactor = 0.38;
+    const cardRefs = useRef<(HTMLDivElement | null)[]>([]), 
+        containerRef = useRef<HTMLDivElement | null>(null), // cw06w1
+        //containerTimelines = useRef<gsap.core.Timeline[]>([]),
+        containerTimelinesAr = useRef<gsap.core.Timeline[][]>([]),
+        openTimelines = useRef<gsap.core.Timeline[]>([]);
         
-    let col = 0,
-        containerW:number,
-        deltaHt:number = 0,
-        unitH:number = 0,
-        unitH2ndRow:number = 0,
-        unitW:number = 0,
-        unitW2ndRow:number = 0;
+    const 
+        animDelay = 0.25,                       // delay to synch first and second parts of anmation
+        animDuration = 0.25,                    // duration of animation
+        cardShrinkFactor = 0.22,                // amount card height shrinks when it moves to second row
+        gapW = 15,                              // pixel gap between each card
+        heightFactor = 0.38;                    // multiply this by container width for default container height
+        
+    let cardContent:HTMLDivElement | null | undefined,
+        cardContentWrap:Element | null,         // wrapping container of the card content for getting style info
+        cardContentPadding = 0,                 // padding of the card
+        cardContentHt = 0,                      // height of the card content when expanded
+        cardPosition:CW06CardPosition | undefined,
+        cardRef:HTMLDivElement | null,
+        col = 0,                                // calculated number of columns in second row 
+        containerH:number,                      // default container height
+        containerW:number,                      // default container width
+        containerExpandedH:number,              // container height when a card is selected
+        containerStyles:CSSStyleDeclaration,
+        deltaHt = 0,                            // difference between selected and unselected heights of card
+        pb:string,                              // container animates to this padding value
+        pbClosed:string,                        // container bottom padding closed state
+        unitH = 0,                              // default height of a card
+        unitH2ndRow = 0,                        // height of unselected card
+        unitW = 0,                              // default width of card
+        unitW2ndRow = 0,                        // width of unselected card
+        unselectedCardTop,
+        w4Ht = 0,                               // height of content component that was passed in (closed)
+        wContentHt = 0;                         // height of content component that was passed in (open)
 
     useEffect( () => {
 
-        const closedPos:Map<number,CW06Pos> = new Map,
+        const position:Map<number,CW06CardPosition> = new Map,
             container = containerRef.current;
         setCardCount(cards.length);
         
         if (!hasInitialPosition) {
-            // calculate and execute positioning
+            // calculate sizing/positioning
             if (container) {
                 containerW = container.clientWidth;
+                containerH = containerW * heightFactor;
                 unitW = (containerW - (gapW * (cols - 1))) / cols;
                 unitW2ndRow = cols > 1 ? (containerW - (gapW * (cols - 2))) / (cols - 1) : containerW;
-                unitH = containerW * heightFactor;
-                unitH2ndRow = containerW * 0.22;
+                unitH = containerH;
+                unitH2ndRow = containerW * cardShrinkFactor;
                 deltaHt = unitH - unitH2ndRow;
 
                 for (let i = 0; i < cards.length; i++) {
-                    closedPos.set(i,{
+                    cardContent = cardRefs.current[i]?.querySelector(".cw06content");
+                    position.set(i,{
                         left:(unitW + gapW) * col,
                         top:0,
                         topR2:0,
                         width:unitW,
                         widthR2:unitW2ndRow,
                         height:unitH,
-                        heightR2:unitH2ndRow}
-                    );
+                        heightR2:unitH2ndRow,
+                        contentH: cardContent ? cardContent.clientHeight : 0,
+                    });
                     col = col === cols - 1 ? 0 : col + 1;
                 }
-                console.log(closedPos)
-                setCardPos( closedPos );
+                console.log(position)
+                setCardPos( position );
                 setHasInitialPosition(true);
             }
         }
 
         if (container) {
-            const containerStyles = window.getComputedStyle(container);
-            const pbClosed = parseInt(containerStyles.paddingBottom) + "px";
-            const pb = parseInt(pbClosed) * 2 + 15 + "px";
-            
-            // container expansion
-            containerTimelines.current.push(gsap.timeline({paused:true}));
-            containerTimelines.current[0].to(container,{
-                paddingBottom:pb,
-                duration: animDuration,
-                ease:"none"
-            })
-            .eventCallback("onStart", () => {
-                setIsAnimating(true);
-            })
-            .eventCallback("onComplete", () => {
-                setIsAnimating(false);
-            });
-
-            // container contraction
-            containerTimelines.current.push(gsap.timeline({paused:true}));
-            containerTimelines.current[1].to(container,{
-                paddingBottom:pbClosed,
-                duration: animDuration,
-                delay: animDelay,
-                ease:"none"},
-            )
-            .eventCallback("onStart", () => {
-                setTimeout(setFeatureCardIdx.bind(null,null),animDelay * 1000);
-                setIsAnimating(true);
-            })
-            .eventCallback("onComplete", () => {
-                setIsAnimating(false);
-            });
+            containerStyles = window.getComputedStyle(container);
+            pbClosed = parseInt(containerStyles.paddingBottom) + "px";
         }
+        
+            
 
         for (let i = 0; i < cardCount; i++) {
-            let cardRef = cardRefs.current[i];
-            let cardPos = closedPos.get(i);
+            cardRef = cardRefs.current[i];
+            cardPosition = position.get(i);
 
-             if (cardRef !== null && cardPos) {
+            if (cardRef !== null && cardPos) {
+                // customize the bottom padding to accommodate the content, cw06w4 + w06content
+                cardContentWrap = cardRef.querySelector(".cw06w3");
+                cardContentPadding = 0;
+                cardContentHt = 0;
+                if (cardContentWrap !== null) {
+
+                    cardContentPadding = parseInt(window.getComputedStyle(cardContentWrap).getPropertyValue("padding-top")) + parseInt(window.getComputedStyle(cardContentWrap).getPropertyValue("padding-bottom"));
+
+                    cardContentHt = (cardRef.querySelector(".cw06w4")?.clientHeight || 0) + (cardRef.querySelector(".cw06content")?.clientHeight || 0);
+
+                }
+                
+
+                pb = cardContentHt + cardContentPadding > unitH ? cardContentHt + cardContentPadding + unitH2ndRow + gapW + "px" : unitH + unitH2ndRow + gapW + "px";
+      
+                unselectedCardTop = cardContentHt + cardContentPadding > unitH ? cardContentHt + cardContentPadding : unitH;
+
+                console.log("pb",pb)
+
+                //pb = parseInt(pbClosed) * 2 + 15 + "px";
+            
+                // container expansion
+                containerTimelinesAr.current[i] = [];
+                containerTimelinesAr.current[i][0] = gsap.timeline({paused:true});
+                containerTimelinesAr.current[i][0].to(container,{
+                    paddingBottom:pb,
+                    duration: animDuration,
+                    ease:"none"
+                })
+                .eventCallback("onStart", () => {
+                    setIsAnimating(true);
+                })
+                .eventCallback("onComplete", () => {
+                    setIsAnimating(false);
+                });
+
+                // container contraction
+                
+                containerTimelinesAr.current[i][1] = gsap.timeline({paused:true});
+                containerTimelinesAr.current[i][1].to(container,{
+                    paddingBottom:pbClosed,
+                    duration: animDuration,
+                    delay: animDelay,
+                    ease:"none"},
+                )
+                .eventCallback("onStart", () => {
+                    setTimeout(setFeatureCardIdx.bind(null,null),animDelay * 1000);
+                    setIsAnimating(true);
+                })
+                .eventCallback("onComplete", () => {
+                    setIsAnimating(false);
+                });
+
                 // Set initial positions
                 gsap.set(cardRef,{
-                    left:cardPos.left,
+                    left:cardPosition?.left,
                     top:0,
                     height: unitH,
                     minWidth:unitW + "px",
@@ -136,11 +175,13 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
  
                 openTimelines.current[i] = gsap.timeline({paused:true});
 
-                if (closedPos && cardRefs) {
+
+                
+                if (position && cardRefs) {
 
                     for (let j = 0; j < cardCount; j++) {
                         openTimelines.current[i].set(cardRefs.current[j],{
-                            left:closedPos.get(j)?.left,
+                            left:position.get(j)?.left,
                             top:0,
                             height: unitH,
                             minWidth:unitW + "px",
@@ -149,13 +190,14 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
                         
                         if (j !== i) {
                             const unpickedCardRef = cardRefs.current[j];
-                            const unpickedCardPos = closedPos.get(j);
+                            const unpickedCardPos = position.get(j);
 
                             if (unpickedCardRef && unpickedCardPos) {
                                 // Move to 2nd row
                                 openTimelines.current[i].to(unpickedCardRef,{
                                     left:unpickedCardPos.left,
-                                    top: unpickedCardRef.offsetHeight + 15 + deltaHt,
+                                    // top: unpickedCardRef.offsetHeight + 15 + deltaHt,
+                                    top: unselectedCardTop + gapW,
                                     minWidth:unitW + "px",
                                     maxWidth:unitW + "px",
                                     paddingBottom: "22%",
@@ -170,14 +212,15 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
                     // expand picked card
                     openTimelines.current[i].to(cardRef,{
                         left:0,
-                        top:cardPos.top,
+                        top:cardPosition?.top,
                         minWidth:containerW + "px",
                         maxWidth:containerW + "px",
                         duration: animDuration,
                         ease:"circ.inOut"
                     },animDuration)
                     .to(cardRef,{
-                        height: unitH + deltaHt,
+                        //height: unitH + deltaHt,
+                        height: cardContentHt + cardContentPadding,
                         duration: animDuration/2,
                         delay:animDuration/1.9,
                         ease:"none"
@@ -187,8 +230,11 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
         }
         // cleanup
         return () => {
-            containerTimelines.current[0].kill();
-            containerTimelines.current[1].kill();
+            for (let i = 0; i < containerTimelinesAr.current.length; i++) {
+                containerTimelinesAr.current[i][0].kill();
+                containerTimelinesAr.current[i][1].kill();
+                containerTimelinesAr.current[i] = [];
+            }
             for (let i = 0; i < openTimelines.current.length; i++) {
                 openTimelines.current[i].kill();
             }
@@ -202,21 +248,23 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
         console.log(openTimelines)
         if (action === "open") {
             if (featureCardIdx !== null) {
+                // close current card
                 openTimelines.current[featureCardIdx].reverse();
-                containerTimelines.current[1].play(0);
+                containerTimelinesAr.current[index][1].play(0);
+                // open new card
                 setTimeout(() => {
                     setFeatureCardIdx(index);
-                    containerTimelines.current[0].play(0);
+                    containerTimelinesAr.current[index][0].play(0);
                     openTimelines.current[index].play(0);
                 },animDuration * 2000)
             } else {
                 setFeatureCardIdx(index);
-                containerTimelines.current[0].play(0);
+                containerTimelinesAr.current[index][0].play(0);
                 openTimelines.current[index].play(0);
             }
         } else if (action === "close") {
             openTimelines.current[index].reverse();
-            containerTimelines.current[1].play(0);
+            containerTimelinesAr.current[index][1].play(0);
         }
     };
     return (
@@ -224,8 +272,19 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
             <div className="cw06w0">
                 <div className={`cw06w1 cw06col${cols}`} ref={containerRef}>
                     { cards.length > 0 && cards.map( (card,index) => {
-                        return <div key={index} className={"cw06w2" + (featureCardIdx == index ? " cw06active" : "")} ref={(el) => cardRefs.current[index] = el}><div className="cw06w3">{card}<a href="#" className="cw06open" onClick={(e) => handleClick(e,index,"open")}>More </a><a href="#" className="cw06close" onClick={(e) => handleClick(e,index,"close")}></a></div></div>
-                    }) }
+                        return (
+                            <div key={index} className={"cw06w2" + (featureCardIdx == index ? " cw06active" : "")} ref={(el) => cardRefs.current[index] = el}>
+                                <div className="cw06w3">
+                                    <div className="cw06w4">{card}</div>
+                                    <div className="cw06w5">
+                                        <a href="#" className="cw06open" onClick={(e) => handleClick(e,index,"open")}>More </a>
+                                        <a href="#" className="cw06close" onClick={(e) => handleClick(e,index,"close")}></a>
+                                    </div>
+                                    <div className="cw06content">{ cardsContent[index] }</div>
+                                </div>
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         </section>

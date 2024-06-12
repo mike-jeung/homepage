@@ -21,6 +21,7 @@ $strokeWidthXl: 9;
 
     .ct02w0 {
         text-align: center;
+        position: relative;
     }
     svg {
         overflow: visible;
@@ -121,6 +122,27 @@ $strokeWidthXl: 9;
         stroke-miterlimit: 10;
         fill: none;
         stroke-width: $strokeWidthStandard;
+    }
+    .speech-bubble {
+        position: absolute;
+        width: 35%;
+        height: auto;
+        left: 0;
+        right: 0;
+        top: 8%;
+        bottom:auto;
+        margin: 0 auto;
+        opacity: 0;
+    }
+    .bubble {
+        width: 100%;
+        position: relative;
+        path {
+            stroke-width:0
+        }
+        path.inner {
+            fill: #FFF;
+        }
     }
     
 }

@@ -45,10 +45,22 @@
         padding: $bentoStdPad;
         margin: auto auto;
         transition: padding 0.5s;
+        overflow: hidden;
+    }
+    .cw06content {
+        position: absolute;
+        left: -99999px;
+        opacity: 0;
+        transition: opacity 1s;
     }
     .cw06active {
         .cw06w3 {
             padding-top:$bentoStdPad;
+        }
+        .cw06content {
+            position: relative;
+            left: 0;
+            opacity: 1;
         }
         .cw06close {
             background-image: svg-url($menuCloseX);
@@ -58,6 +70,7 @@
             position:absolute;
             right:$bentoStdPad;
             top:$bentoStdPad;
+            display: inline-block;
         }
         .cw06open {
             display: none;
@@ -67,6 +80,7 @@
         font-size: 1.2rem;
         text-transform: uppercase;
         color: #09c;
+        display: inline-block;
 
         &:after {
             content:"\2b95";
