@@ -105,6 +105,8 @@ $maxW: $globalWidth2;
         display:flex;
         align-items: center;
         padding: 3rem;
+        background: rgb(255,255,255);
+        background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(183,219,234,1) 100%);
     }
     .cl01beat {
         grid-row-start: r5;
@@ -119,6 +121,10 @@ $maxW: $globalWidth2;
         align-items: center;
         justify-content: center;
         padding: 2.5rem;
+        background: rgba(255,230,151,1);
+        background: linear-gradient(-40deg, rgba(255,255,227,1) 0%, rgba(255,233,151,1) 75%, rgba(255,223,102,1) 100%);
+
+
     }
     
     
