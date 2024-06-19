@@ -44,7 +44,7 @@
         left: 0;
         padding: $bentoStdPad;
         margin: auto auto;
-        transition: padding 0.5s;
+        //transition: padding 0.5s;
         overflow: hidden;
     }
     .cw06content {
@@ -81,11 +81,56 @@
         text-transform: uppercase;
         color: #09c;
         display: inline-block;
-
+        position: absolute;
+        right: $bentoStdPad;
+        bottom: $bentoStdPad;
         &:after {
             content:"\2b95";
             padding: 0;
             margin:0;
         }
+    }
+    .cw06img {
+        padding: $bentoStdPad;
+        position: relative;
+        max-width: 285px;
+    }
+    .cw06img > * {
+        position: absolute;
+        top: $bentoStdPad;
+        left:0;
+        right:0;
+        margin: auto;
+
+    }
+    .cw06img.flushtop > * {
+        top: 0;
+        padding-top: 0;
+    }
+    .cw06img.flushleft > * {
+        left: 0;
+        padding-left: 0;
+    }
+    .cw06img.flushright > * {
+        right: 0;
+        padding-right: 0;
+    }
+    .cw06img.scale30 > *{
+        width: 30%;
+    }
+    .cw06img.scale40 > * {
+        width: 40%;
+    }
+    .cw06img.scale50 > * {
+        width: 50%;
+    }
+    .cw06img.scale60 > *{
+        width: 60%;
+    }
+    .cw06img.scale70 > * {
+        width: 70%;
+    }
+    .cw06img.scale80 > * {
+        width: 80%;
     }
 }

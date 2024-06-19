@@ -1,6 +1,9 @@
 @import "../../variables.scss";
 
 .cw05 {
+    .cw05input {
+        margin: 0;
+    }
     .cw05w1 {
         display: flex;
         flex-direction: column;

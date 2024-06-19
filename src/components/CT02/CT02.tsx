@@ -141,8 +141,8 @@ const CT02:FC = () => {
         t2.to(refs.head.current,{rotation:-1,duration:0.2},1.3);
         t2.to(refs.head.current,{rotation:0,duration:0.2},1.5);
         // bubble
-        t2.to(refs.bub.current,{top:"5%",opacity:1,duration:0.25, ease:"none"},0.5);
-        t2.to(refs.bub.current,{top:"0%",duration:4},1);
+        t2.to(refs.bub.current,{top:"7%",opacity:1,duration:0.5, ease:"none"},0.5);
+        t2.to(refs.bub.current,{top:"0%",duration:3, ease:"none"},1);
         t2.to(refs.bub.current,{opacity:0,duration:0.25},3.5);
 
         t2.to(refs.arm_lt.current,{rotate:-60,duration:0.5},1);

@@ -1,3 +1,35 @@
-.cb07 {
-    
+@import "../../variables.scss";
+.cw07 {
+    padding-bottom:100%;
+    position: relative;
+    width: 100%;
+    .cw07w0 {
+        position: absolute;
+        top: $bentoStdPad;
+        right: $bentoStdPad;
+        bottom: $bentoStdPad;
+        left: $bentoStdPad;
+        display: flex;
+        align-items: center;
+    }
+    .cw07w0.fullbleed {
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+    .cw07w1 {
+        position: relative;
+        min-width:100%;
+        max-width: 100%;
+        // top: 0;
+        // right: 0;
+        // bottom: 0;
+        // left: 0;
+        overflow: hidden;
+    }
+    .cw07w2 {
+        opacity:0;
+        display: none;
+    }
 }
