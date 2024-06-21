@@ -26,7 +26,7 @@ const CL01:FC = () => {
                 // args:{},
                 cmp:SI01v1
             },
-            disp:"",
+            disp:"fullbleed freeanim",
         },{
             content: {
                 args: {

@@ -44,7 +44,29 @@
         stroke-width:4px;
     }
 }
-.si01.si01v1 svg {
+.si01.si01v1 {
+    .si01w0 {
+        padding-bottom: 100%;
+    }
+    svg {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    svg.si01win1,
+    svg.si01win2 {
+        width: 60%;
+    }
+    svg.si01win1 {
+        top: 20%;
+        left: 12%;
+        z-index: 2;
+    }
+    svg.si01win2 {
+        top: 33%;
+        left: 27%;
+        z-index: 1;
+    }
     circle,
     path,
     rect {
@@ -68,10 +90,7 @@
     .r3 {
         fill:#f99;
     }
-    .r4,
-    .r5,
-    .r6,
-    .r7 {
+    .r4 {
         fill:#999;
     }
     .r8 {
@@ -80,14 +99,14 @@
     .r9 {
         fill:#00203a;
     }
-    .r10,.r11,.r12,
-    .r13,.r14,.r15,
-    .r16,.r17,.r18,
-    .r19,.r20,.r21 {
+    .r10 {
         fill:#7f7f7f;
     }
     .r22 {
         fill:#ccc;
+    }
+    .r23 {
+        fill:#6c6
     }
     .p1 {
         fill:#fff;

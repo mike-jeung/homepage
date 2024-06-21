@@ -1,7 +1,8 @@
-import React, { Component, FC, ReactNode, useEffect, useRef, useState } from "react";
+import React, { Component, FC, ReactNode, useContext, useEffect, useRef, useState } from "react";
 import "./CW06.scss";
 import gsap from 'gsap';
-import { useGSAP } from "@gsap/react";
+import { StatusContext } from "../../App";
+
 interface CW06Props {
     cards: CardData[];
     cols?: number;
@@ -41,7 +42,8 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
         containerRef = useRef<HTMLDivElement | null>(null), // cw06w1
         //containerTimelines = useRef<gsap.core.Timeline[]>([]),
         containerTimelinesAr = useRef<gsap.core.Timeline[][]>([]),
-        openTimelines = useRef<gsap.core.Timeline[]>([]);
+        openTimelines = useRef<gsap.core.Timeline[]>([]),
+        status = useContext(StatusContext);
         
     const 
         animDelay = 0.25,                       // delay to synch first and second parts of anmation
@@ -74,6 +76,8 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
         unselectedCardTop,
         w4Ht = 0,                               // height of content component that was passed in (closed)
         wContentHt = 0;                         // height of content component that was passed in (open)
+
+        console.log("stat",status);
 
     useEffect( () => {
 
@@ -137,15 +141,10 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
                     cardContentHt = (cardRef.querySelector(".cw06w4")?.clientHeight || 0) + (cardRef.querySelector(".cw06content")?.clientHeight || 0);
 
                 }
-                
-
+                // calculate bottom padding of container
                 pb = cardContentHt + cardContentPadding > unitH ? cardContentHt + cardContentPadding + unitH2ndRow + gapW + "px" : unitH + unitH2ndRow + gapW + "px";
       
                 unselectedCardTop = cardContentHt + cardContentPadding > unitH ? cardContentHt + cardContentPadding : unitH;
-
-                //console.log("pb",pb)
-
-                //pb = parseInt(pbClosed) * 2 + 15 + "px";
             
                 // container expansion
                 containerTimelinesAr.current[i] = [];
@@ -194,6 +193,8 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
 
                 
                 if (position && cardRefs) {
+
+                    // unpicked card animation
 
                     for (let j = 0; j < cardCount; j++) {
                         openTimelines.current[i].set(cardRefs.current[j],{
