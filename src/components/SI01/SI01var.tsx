@@ -7,48 +7,73 @@ import { useGSAP } from '@gsap/react';
 
 // #region Variants
 const SI01v0:FC = () => {
+    // chatbot
     const refs = {
+        "c1": useRef<SVGCircleElement | null>(null),
+        "c2": useRef<SVGCircleElement | null>(null),
+        "c3": useRef<SVGCircleElement | null>(null),
         "mouth": useRef<SVGPathElement | null>(null),
         "qmark": useRef<SVGPathElement | null>(null),
     }
-    const timeline = useRef<gsap.core.Timeline | null>(gsap.timeline({repeat:-1}));
+    const timeline = useRef<gsap.core.Timeline | null>(gsap.timeline({repeat:1}));
     useGSAP( () => {
         if (timeline && timeline.current) {
-            timeline.current.set(refs.mouth.current,{transformOrigin:"0% 20%"})
-                .to(refs.mouth.current,{scaleY:0.4,duration:0.25})
-                .to(refs.mouth.current,{scaleY:1,duration:0.25})
+            timeline.current.set(refs.mouth.current,{x:-1,transformOrigin:"0% 20%"})
+                .fromTo(refs.c1.current,{transformOrigin:"center",scale:1,opacity:0.8},{scale:8,opacity:0,duration:1.5,ease:"c2.out"})
+                .fromTo(refs.c2.current,{transformOrigin:"center",scale:1,opacity:0.8},{scale:8,opacity:0,duration:1.5,ease:"c2.out"},"<0.7")
+                .fromTo(refs.c3.current,{transformOrigin:"center",scale:1,opacity:0.8},{scale:8,opacity:0,duration:1.5,ease:"c2.out"},"<0.7")
+                .fromTo(refs.mouth.current,{scaleY:0.3,y:5,scaleX:1.25},{scaleY:0.4,duration:0.15})
+                .to(refs.mouth.current,{scaleY:0.6,duration:0.15,delay:0})
+                .to(refs.mouth.current,{scaleY:0.3,duration:0.15,delay:0})
+                .to(refs.mouth.current,{scaleY:1,duration:0.15})
                 .to(refs.mouth.current,{scaleY:0.2,duration:0.25})
+                .to(refs.mouth.current,{scaleY:1,duration:0.15})
+                .to(refs.mouth.current,{scaleY:0.4,duration:0.15})
                 .to(refs.mouth.current,{scaleY:1,duration:0.25})
+                .to(refs.mouth.current,{scaleY:0.3,duration:0.15})
+                
         }
     });
     return (
         <SI01 v={0}>
             <div className="si01w0">
-                <svg xmlns="http://www.w3.org/2000/svg" className="chatbot" viewBox="0 0 174 125"><defs><linearGradient id="si01-g0" x1="118.78" x2="118.78" y1="34.98" y2="118.98" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#bee8ff"/><stop offset=".18" stop-color="#bae5fd"/><stop offset=".35" stop-color="#aedff9"/><stop offset=".51" stop-color="#9bd4f2"/><stop offset=".68" stop-color="#7fc4e8"/><stop offset=".84" stop-color="#5cb0db"/><stop offset="1" stop-color="#39c"/></linearGradient></defs><g><path d="M89.78 71.48H40.95l-22.43 16 4.18-16H11.78c-4.42 0-8-3.58-8-8v-52c0-4.42 3.58-8 8-8h78c4.42 0 8 3.58 8 8v52c0 4.42-3.58 8-8 8Z" className="p1"/><path d="M47 39.16c0-1.05.18-1.88.54-2.49.36-.61.98-1.13 1.86-1.58.53-.27 1.31-.65 2.34-1.14 3.85-1.78 5.77-3.86 5.77-6.24 0-1.8-.63-3.26-1.9-4.38s-2.94-1.68-5.01-1.68c-1.37 0-2.63.18-3.78.54-1.15.36-1.86.76-2.11 1.19-.06.12-.12.4-.18.85-.16 1.76-.85 2.64-2.08 2.64-.64 0-1.16-.23-1.54-.7s-.57-1.09-.57-1.88v-2.87c0-1.07 1.05-1.98 3.16-2.72s4.68-1.11 7.71-1.11c3.26 0 5.91.95 7.95 2.84s3.06 4.35 3.06 7.35c0 2.4-.83 4.43-2.48 6.08s-4.43 3.2-8.33 4.64v2.34c0 .64-.21 1.17-.62 1.57-.41.4-.95.6-1.62.6s-1.22-.19-1.61-.56c-.38-.37-.58-.89-.58-1.55v-1.73Zm-3.22 11.1c0-1.29.49-2.34 1.48-3.16.99-.82 2.29-1.23 3.91-1.23s2.96.41 3.96 1.22 1.49 1.87 1.49 3.18-.5 2.37-1.51 3.19c-1.01.82-2.32 1.23-3.94 1.23s-2.9-.42-3.9-1.25-1.49-1.89-1.49-3.18Z" className="p2" ref={refs.qmark}/></g><g><path d="M170.28 59.98v16c0 3.31-2.69 6-6 6h-4v13c0 4.42-3.58 8-8 8h-11.24l4.24 16-22.48-16H85.28c-4.42 0-8-3.58-8-8v-13h-4c-3.31 0-6-2.69-6-6v-16c0-3.31 2.69-6 6-6h4v-11c0-4.42 3.58-8 8-8h67c4.42 0 8 3.58 8 8v11h4c3.31 0 6 2.69 6 6Z" className="p3"/><path d="M118.28 34.98v-10" className="p4"/><path d="M105 62.98v-9c0-3-6-3-6 0v9c0 3 6 3 6 0ZM136.5 62.98v-9c0-3-6-3-6 0v9c0 3 6 3 6 0Z" className="p5"/></g><circle cx="118.28" cy="15.98" r="9"/><path d="M113.28 71.98h9c1.1 0 2 .9 2 2v11c0 2.76-2.24 5-5 5h-3c-2.76 0-5-2.24-5-5v-11c0-1.1.9-2 2-2Z" className="p5" ref={refs.mouth}/></svg>      
+                <svg xmlns="http://www.w3.org/2000/svg" className="chatbot" viewBox="0 0 174 125"><defs><linearGradient id="si01-g0" x1="118.78" x2="118.78" y1="34.98" y2="118.98" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#bee8ff"/><stop offset=".18" stop-color="#bae5fd"/><stop offset=".35" stop-color="#aedff9"/><stop offset=".51" stop-color="#9bd4f2"/><stop offset=".68" stop-color="#7fc4e8"/><stop offset=".84" stop-color="#5cb0db"/><stop offset="1" stop-color="#39c"/></linearGradient></defs><g><path d="M89.78 71.48H40.95l-22.43 16 4.18-16H11.78c-4.42 0-8-3.58-8-8v-52c0-4.42 3.58-8 8-8h78c4.42 0 8 3.58 8 8v52c0 4.42-3.58 8-8 8Z" className="p1"/><path d="M47 39.16c0-1.05.18-1.88.54-2.49.36-.61.98-1.13 1.86-1.58.53-.27 1.31-.65 2.34-1.14 3.85-1.78 5.77-3.86 5.77-6.24 0-1.8-.63-3.26-1.9-4.38s-2.94-1.68-5.01-1.68c-1.37 0-2.63.18-3.78.54-1.15.36-1.86.76-2.11 1.19-.06.12-.12.4-.18.85-.16 1.76-.85 2.64-2.08 2.64-.64 0-1.16-.23-1.54-.7s-.57-1.09-.57-1.88v-2.87c0-1.07 1.05-1.98 3.16-2.72s4.68-1.11 7.71-1.11c3.26 0 5.91.95 7.95 2.84s3.06 4.35 3.06 7.35c0 2.4-.83 4.43-2.48 6.08s-4.43 3.2-8.33 4.64v2.34c0 .64-.21 1.17-.62 1.57-.41.4-.95.6-1.62.6s-1.22-.19-1.61-.56c-.38-.37-.58-.89-.58-1.55v-1.73Zm-3.22 11.1c0-1.29.49-2.34 1.48-3.16.99-.82 2.29-1.23 3.91-1.23s2.96.41 3.96 1.22 1.49 1.87 1.49 3.18-.5 2.37-1.51 3.19c-1.01.82-2.32 1.23-3.94 1.23s-2.9-.42-3.9-1.25-1.49-1.89-1.49-3.18Z" className="p2" ref={refs.qmark}/></g><circle cx="118.28" cy="15.98" r="9" className="c1" ref={refs.c1}/><circle cx="118.28" cy="15.98" r="9" className="c1" ref={refs.c2}/><circle cx="118.28" cy="15.98" r="9" className="c1" ref={refs.c3}/><g><path d="M170.28 59.98v16c0 3.31-2.69 6-6 6h-4v13c0 4.42-3.58 8-8 8h-11.24l4.24 16-22.48-16H85.28c-4.42 0-8-3.58-8-8v-13h-4c-3.31 0-6-2.69-6-6v-16c0-3.31 2.69-6 6-6h4v-11c0-4.42 3.58-8 8-8h67c4.42 0 8 3.58 8 8v11h4c3.31 0 6 2.69 6 6Z" className="p3"/><path d="M118.28 34.98v-10" className="p4"/><path d="M105 62.98v-9c0-3-6-3-6 0v9c0 3 6 3 6 0ZM136.5 62.98v-9c0-3-6-3-6 0v9c0 3 6 3 6 0Z" className="p5"/></g><circle cx="118.28" cy="15.98" r="9"/><path d="M113.28 71.98h9c1.1 0 2 .9 2 2v11c0 2.76-2.24 5-5 5h-3c-2.76 0-5-2.24-5-5v-11c0-1.1.9-2 2-2Z" className="p5" ref={refs.mouth}/></svg>      
             </div>
         </SI01>
     );
 }
 const SI01v1:FC = () => {
+    // front end; add horizontal gradient
     const refs = {
         "win1":useRef<SVGSVGElement | null>(null),
         "win2":useRef<SVGSVGElement | null>(null),
     };
     const timeline = useRef<gsap.core.Timeline>(gsap.timeline({
-        //repeat:-1
+        
     }));
     useGSAP( () => {
-        timeline.current.fromTo(refs.win1.current,{x:-150,y:-150},{x:-20,y:-20,duration:0.5,ease:"power1.in"},0);
-        timeline.current.fromTo(refs.win2.current,{
-            x:150,
-            y:150,
-            //scale:0.9
-        },{x:20,y:20,duration:0.5,ease:"power1.in"},0);
-        timeline.current.to(refs.win1.current,{x:0,y:0,duration:2,ease:"none"},0.5);
-        timeline.current.to(refs.win2.current,{x:0,y:0,duration:2,ease:"none"},0.5);
-        // timeline.current.to(refs.win1.current,{x:-200,y:200,duration:0.25,ease:"none"},2.5);
-        // timeline.current.to(refs.win2.current,{x:200,y:-200,duration:0.25,ease:"none"},2.5);
+        
 
+        timeline.current.fromTo(refs.win1.current,{x:-150,y:0,scale:1,zIndex:2},{x:-20,y:0,duration:0.5,ease:"power1.in"},0);
+        timeline.current.fromTo(refs.win2.current,{x:150,y:0,scale:0.7,opacity:0.6,zIndex:1},{x:40,y:0,duration:0.5,ease:"power1.in"},0);
+
+        timeline.current.to(refs.win1.current,{x:0,duration:1.5,ease:"none"},">");
+        timeline.current.to(refs.win2.current,{x:10,duration:1.5,ease:"none"},">-1.5");
+
+        // timeline.current.to(refs.win1.current,{x:190,duration:0.25,ease:"power1.out"},">");
+        // timeline.current.to(refs.win2.current,{x:-190,duration:0.25,ease:"power1.out"},">-0.25");
+
+        // timeline.current.set(refs.win1.current,{y:25,scale:0.7,zIndex:1,opacity:0.6},">");
+        // timeline.current.set(refs.win2.current,{y:-20,scale:1,zIndex:2,opacity:1},">");
+
+        // timeline.current.to(refs.win1.current,{x:70,duration:0.5,ease:"power1.in"},">");
+        // timeline.current.to(refs.win2.current,{x:-50,duration:0.5,ease:"power1.in"},">-0.5");
+
+        // timeline.current.to(refs.win1.current,{x:50,zIndex:1,duration:1.5,ease:"none"},">");
+        // timeline.current.to(refs.win2.current,{x:-30,zIndex:2,duration:1.5,ease:"none"},">-1.5");
+
+        // timeline.current.to(refs.win1.current,{x:-300,duration:0.5,ease:"power1.out"},">");
+        // timeline.current.to(refs.win2.current,{x:300,duration:0.5,ease:"power1.out"},">-0.5");
 
 
 
@@ -65,7 +90,7 @@ const SI01v1:FC = () => {
     );
 }
 const SI01v2:FC = () => {
-    
+    // back end; add vertical gradient
     const refs = {
             "all": useRef<SVGSVGElement | null>(null),
             "dots": useRef<SVGGElement | null>(null),
@@ -89,16 +114,31 @@ const SI01v2:FC = () => {
             timeline.current.set(refs.top.current, {strokeDasharray:l})
                 .set(refs.bot.current, {strokeDasharray:l});
             timeline.current.from(platters,{y:-100,stagger:0.1,duration:0.25});
+            
+            timeline.current.addLabel("zoom");
 
-            timeline.current.fromTo(refs.bot.current, {strokeDashoffset:l, strokeDasharray:l, ease:"power4.out"}, {duration:0.5, strokeDashoffset:0})
-                .fromTo(refs.top.current, {strokeDashoffset:l, strokeDasharray:l, ease:"power4.out"}, {duration:0.5, strokeDashoffset:0},"<");
+            timeline.current.fromTo(refs.bot.current, {strokeDashoffset:l, strokeDasharray:l, ease:"power4.out"}, {duration:1, strokeDashoffset:0})
+                .fromTo(refs.top.current, {strokeDashoffset:l, strokeDasharray:l, ease:"power4.out"}, {duration:1, strokeDashoffset:0},"<");
 
-            timeline.current.fromTo(refs.dots.current,{x:-200},{x:200,duration:1});
+            timeline.current.fromTo(refs.dots.current,{x:-200},{x:200,duration:1},"<0.5");
 
-            // timeline.current.to(refs.bot.current, {duration:0.5, strokeDashoffset:-l},"<0.5")
-            //     .to(refs.top.current, {duration:0.5, strokeDashoffset:-l},"<");
+            // timeline.current.to(refs.bot.current, {duration:1, strokeDashoffset:-l},"<0.5")
+            //     .to(refs.top.current, {duration:1, strokeDashoffset:-l},"<");
 
+            // no stagger option, repeating dots
+            // timeline.current.to(refs.bot.current,{duration:2});
+            // timeline.current.add(() => {
+            //     timeline.current.tweenFromTo("zoom", timeline.current.duration(), {
+            //         repeat: -1, // repeat indefinitely
+            //         immediateRender: false, // don't start tween immediately
+            //     });
+            // });
+
+            // stagger up option
             // timeline.current.to(platters,{y:-200,stagger:{amount:0.5,from:"end"},duration:0.50});
+
+            // stagger down option
+            // timeline.current.to(platters,{y:200,stagger:{amount:0.5},duration:0.50});
         }
 
     });
@@ -160,12 +200,15 @@ const SI01v2:FC = () => {
     );
 }
 const SI01v3:FC = () => {
+    // webbot
     const refs = {
         "path": useRef<SVGPathElement | null>(null),
         "box1": useRef<SVGGElement | null>(null),
         "box2": useRef<SVGUseElement | null>(null),
     }
-    const timeline = useRef<gsap.core.Timeline>(gsap.timeline({repeat:-1}));
+    const timeline = useRef<gsap.core.Timeline>(gsap.timeline({
+        repeat:1
+    }));
     
     useGSAP( () => {
         timeline.current.set(refs.box2.current,{x:200,y:117});
@@ -212,7 +255,10 @@ const SI01v3:FC = () => {
     );
 }
 const SI01v4:FC = () => {
+    // chart
     const refs = {
+        "svg":useRef<SVGSVGElement | null>(null),
+        "all":useRef<SVGGElement | null>(null),
         "grid":useRef<SVGPathElement | null>(null),
         "b1":useRef<SVGPathElement | null>(null),
         "b2":useRef<SVGPathElement | null>(null),
@@ -220,39 +266,40 @@ const SI01v4:FC = () => {
         "b4":useRef<SVGPathElement | null>(null),
         "base":useRef<SVGPathElement | null>(null),
     };
-    const timeline = useRef<gsap.core.Timeline>(gsap.timeline());
+    const timeline = useRef<gsap.core.Timeline>(gsap.timeline()),
+        fillcolor = "#999";
     useGSAP( () => {
         timeline.current.from(refs.grid.current,{x:"-100%",duration:0.5,ease:"power1.in"})
+            //.set(refs.svg.current,{transformOrigin:"100% 50%",backgroundColor:"transparent",scaleX:1})
             .from(refs.base.current,{x:"-100%",duration:0.5,ease:"power1.in"},"<")
             .from(refs.b1.current,{transformOrigin: "50% 100%",scaleY:0,duration:0.5},"<0.25")
             .from(refs.b2.current,{transformOrigin: "50% 100%",scaleY:0,duration:0.5},"<0.25")
             .from(refs.b3.current,{transformOrigin: "50% 100%",scaleY:0,duration:0.5},"<0.25")
-            .fromTo(refs.b4.current,{transformOrigin: "50% 100%",scaleY:0},{scaleY:0.7,duration:0.5},"<0.25")
-            .to(refs.b4.current,{scaleY:0.71,scaleX:0.99,duration:0.05})
-            .to(refs.b4.current,{scaleY:0.69,scaleX:1.01,duration:0.05})
-            .to(refs.b4.current,{scaleY:0.71,scaleX:0.99,duration:0.05})
-            .to(refs.b4.current,{scaleY:0.69,scaleX:1.01,duration:0.05})
-            .to(refs.b4.current,{scaleY:0.71,scaleX:0.99,duration:0.05})
-            .to(refs.b4.current,{scaleY:0.69,scaleX:1.01,duration:0.05})
-            .to(refs.b4.current,{scaleY:0.71,scaleX:0.99,duration:0.05})
-            .to(refs.b4.current,{scaleY:0.69,scaleX:1.01,duration:0.05})
-            .to(refs.b4.current,{scaleY:0.71,scaleX:0.99,duration:0.05})
-            .to(refs.b4.current,{scaleY:0.69,scaleX:1.01,duration:0.05})
-            .to(refs.b4.current,{scaleY:0.71,scaleX:0.99,duration:0.05})
-            .to(refs.b4.current,{scaleY:0.69,scaleX:1.01,duration:0.05})
-            .to(refs.b4.current,{scaleY:0.71,scaleX:0.99,duration:0.05})
-            .to(refs.b4.current,{scaleY:0.69,scaleX:1.01,duration:0.05})
-            .to(refs.b4.current,{scaleY:0.71,scaleX:0.99,duration:0.05})
-            .to(refs.b4.current,{scaleY:0.69,scaleX:1.01,duration:0.05})
-            .to(refs.b4.current,{scaleY:0.71,scaleX:0.99,duration:0.05})
-            .to(refs.b1.current,{y:-7,duration:0.05},"<")
-            .to(refs.b2.current,{y:-7,duration:0.05},"<")
-            .to(refs.b3.current,{y:-7,duration:0.05},"<")
+            .fromTo(refs.b4.current,{transformOrigin: "50% 100%",scaleY:0},{scaleY:0.7,duration:0.5},"<0.25");
+        // shake it up
+        for (let i = 0; i < 20; i++) {
+            timeline.current.to(refs.b4.current,{scaleY:0.71,scaleX:0.99,duration:0.05})
+                .to(refs.b4.current,{scaleY:0.69,scaleX:1.01,duration:0.05});
+        }
+        // break out
+        timeline.current.to(refs.b1.current,{y:-18,rotation:-5,duration:0.05},"<")
+            .to(refs.b2.current,{y:-18,rotation:-5,duration:0.05},"<")
+            .to(refs.b3.current,{y:-18,rotation:-5,duration:0.05},"<")
             .to(refs.b4.current,{scaleY:1,scaleX:1,duration:0.05},"<")
-            .to(refs.b1.current,{y:0,duration:0.05},">")
-            .to(refs.b2.current,{y:0,duration:0.05},"<")
-            .to(refs.b3.current,{y:0,duration:0.05},"<")
-
+            .to(refs.b1.current,{y:0,x:-2,rotation:0,duration:0.05},">")
+            .to(refs.b2.current,{y:0,x:-2,rotation:0,duration:0.05},"<")
+            .to(refs.b3.current,{y:0,x:-2,rotation:0,duration:0.05},"<")
+            .to(refs.base.current,{duration:1},"<")
+            
+            // rotate the cube
+            // .to(refs.svg.current,{scaleX:0,duration:0.5,backgroundColor:fillcolor,ease:"none"},">")
+            // .to(refs.b1.current,{fill:fillcolor,duration:0.5,ease:"none"},"<")
+            // .to(refs.b2.current,{fill:fillcolor,duration:0.5,ease:"none"},"<")
+            // .to(refs.b3.current,{fill:fillcolor,duration:0.5,ease:"none"},"<")
+            // .to(refs.b4.current,{fill:fillcolor,duration:0.5,ease:"none"},"<")
+            // .to(refs.base.current,{stroke:fillcolor,duration:0.5,ease:"none"},"<")
+            // .to(refs.grid.current,{stroke:fillcolor,duration:0.5,ease:"none"},"<")
+            
             // .to(refs.b1.current,{scale:1.1,duration:0.05},"<")
             // .to(refs.b2.current,{scale:1.1,duration:0.05},"<")
             // .to(refs.b3.current,{scale:1.1,duration:0.05},"<")
@@ -265,19 +312,22 @@ const SI01v4:FC = () => {
     return (
         <SI01 v={4}>
             <div className="si01w0">
-                <svg xmlns="http://www.w3.org/2000/svg" id="data" viewBox="0 0 165 165">
-                    <path d="M0 33.65h165M0 55.65h165M0 66.65h165M0 77.65h165M0 88.65h165M0 99.65h165M0 110.65h165M0 44.65h165M0 121.65h165" ref={refs.grid} className="p1"/>
-                    <path d="M117.26-.35h27v133h-27z" className="p2" ref={refs.b4}/>
-                    <path d="M84.26 55.65h27v77h-27z" className="p2" ref={refs.b3}/>
-                    <path d="M51.26 77.65h27v55h-27z" className="p2" ref={refs.b2}/>
-                    <path d="M18.26 99.65h27v33h-27z" className="p2" ref={refs.b1}/>
-                    <path d="M0 132.65h165" className="p3" ref={refs.base}/>
+                <svg xmlns="http://www.w3.org/2000/svg" id="data" viewBox="0 0 165 165" ref={refs.svg}>
+                    <g ref={refs.all}>
+                        <path d="M0 33.65h165M0 55.65h165M0 66.65h165M0 77.65h165M0 88.65h165M0 99.65h165M0 110.65h165M0 44.65h165M0 121.65h165" ref={refs.grid} className="p1"/>
+                        <path d="M117.26-.35h27v133h-27z" className="p2" ref={refs.b4}/>
+                        <path d="M84.26 55.65h27v77h-27z" className="p2" ref={refs.b3}/>
+                        <path d="M51.26 77.65h27v55h-27z" className="p2" ref={refs.b2}/>
+                        <path d="M18.26 99.65h27v33h-27z" className="p2" ref={refs.b1}/>
+                        <path d="M0 132.65h165" className="p3" ref={refs.base}/>
+                    </g>
                 </svg>
             </div>
         </SI01>
     );
 }
 const SI01v5:FC = () => {
+    // scoreboard
     const refs = {
         
     };

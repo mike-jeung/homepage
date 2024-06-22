@@ -43,6 +43,10 @@
         stroke-miterlimit:10;
         stroke-width:4px;
     }
+    .c1 {
+        fill:none;
+        stroke-width:1px;
+    }
 }
 .si01.si01v1 {
     .si01w0 {
@@ -55,16 +59,16 @@
     }
     svg.si01win1,
     svg.si01win2 {
-        width: 60%;
+        width: 55%;
     }
     svg.si01win1 {
-        top: 20%;
+        top: 22%;
         left: 12%;
         z-index: 2;
     }
     svg.si01win2 {
-        top: 33%;
-        left: 27%;
+        top: 35%;
+        left: 30%;
         z-index: 1;
     }
     circle,
