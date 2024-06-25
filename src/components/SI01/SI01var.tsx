@@ -2,7 +2,6 @@ import React, { FC, useRef } from "react";
 import SI01, { SI01Props } from "./SI01";
 import gsap from "gsap";
 import { useGSAP } from '@gsap/react';
-import { time } from "console";
 // import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 
 
