@@ -300,6 +300,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
             <div className="cw06w0">
                 <div className={`cw06w1 cw06col${cols}`} ref={containerRef}>
                     { cards.length > 0 && cards.map( (card,index) => {
+                        console.log(card.textArgs)
                         return (
                             <div key={index} className={"cw06w2" + (featureCardIdx == index ? " cw06active" : "")} ref={(el) => cardRefs.current[index] = el}>
                                 {card.graphicCpt && <div className={`cw06img ${card.graphicScale ? "scale" + card.graphicScale : "scale" + defaultScale} ${card.graphicExtra && card.graphicExtra}`}><card.graphicCpt {...card.graphicArgs} /></div>}

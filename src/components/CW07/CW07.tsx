@@ -21,7 +21,7 @@ const CW07:FC<CW07Props> = ({tile,content,disp}) => {
         <section className="cw07 cw07v0">
             <div className={`cw07w0 ${disp && disp}`}>
                 <div className="cw07w1">
-                    {tile?.cmp && <tile.cmp />}
+                    {tile?.cmp && <tile.cmp {...tile.args} />}
                 </div>
                 <div className="cw07w2">
                     <content.cmp {...content.args} />
