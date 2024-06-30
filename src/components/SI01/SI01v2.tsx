@@ -1,5 +1,6 @@
 import React, { FC, useRef } from "react";
 import { useGSAP } from '@gsap/react';
+import "./style/SI01v2.scss";
 interface SI01v2Props {
     timeline:gsap.core.Timeline;
 }

@@ -1,5 +1,6 @@
 import React, { FC, useRef } from "react";
 import { useGSAP } from '@gsap/react';
+import "./style/SI01v1.scss";
 interface SI01v1Props {
     timeline:gsap.core.Timeline;
 }
@@ -33,29 +34,29 @@ const SI01v1:FC<SI01v1Props> = ({timeline}) => {
             timeline.set(refs.win1block.current,{opacity:0});
             timeline.set(refs.win2block.current,{opacity:0});
         
-            timeline.set(refs.win1.current,{x:300,y:25,scale:0.7,zIndex:1,opacity:0.4},">");
-            timeline.set(refs.win2.current,{x:-300,y:-20,scale:1,zIndex:2,opacity:1},">");
+            timeline.set(refs.win1.current,{x:"181%",y:"36%",scale:0.7,zIndex:1,opacity:0.4},">");
+            timeline.set(refs.win2.current,{x:"-181%",y:"-38%",scale:1,zIndex:2,opacity:1},">");
 
-            timeline.to(refs.win1.current,{x:70,duration:0.5,ease:"power1.in"},">");
-            timeline.to(refs.win2.current,{x:-50,duration:0.5,ease:"power1.in"},">-0.5");
+            timeline.to(refs.win1.current,{x:"62%",duration:0.5,ease:"power1.in"},">");
+            timeline.to(refs.win2.current,{x:"-44%",duration:0.5,ease:"power1.in"},">-0.5");
 
-            timeline.to(refs.win1.current,{x:44,zIndex:1,duration:1.5,ease:"none"},">");
-            timeline.to(refs.win2.current,{x:-20,zIndex:2,duration:1.5,ease:"none"},">-1.5");
+            timeline.to(refs.win1.current,{x:"42%",zIndex:1,duration:1.5,ease:"none"},">");
+            timeline.to(refs.win2.current,{x:"-26%",zIndex:2,duration:1.5,ease:"none"},">-1.5");
 
             timeline.to(refs.win2block.current,{opacity:1,duration:1,ease:"power1.in"},"<");
             timeline.to(refs.win2txt.current,{scaleX:1,stagger:0.1,duration:0.5,ease:"power1.in"},"<");
             
-            timeline.to(refs.win1.current,{x:-300,duration:0.25,ease:"power1.in"},">");
-            timeline.to(refs.win2.current,{x:300,duration:0.25,ease:"power1.in"},">-0.25");
+            timeline.to(refs.win1.current,{x:"-200%",duration:0.25,ease:"power1.in"},">");
+            timeline.to(refs.win2.current,{x:"200%",duration:0.25,ease:"power1.in"},">-0.25");
 
-            timeline.set(refs.win1.current,{x:-150,y:0,scale:1,opacity:1,zIndex:2});
-            timeline.set(refs.win2.current,{x:150,y:0,scale:0.7,opacity:0.4,zIndex:1});
+            timeline.set(refs.win1.current,{x:"-191%",y:0,scale:1,opacity:1,zIndex:2});
+            timeline.set(refs.win2.current,{x:"191%",y:0,scale:0.7,opacity:0.4,zIndex:1});
             
-            timeline.to(refs.win2.current,{x:40,y:0,duration:0.5,ease:"power1.in"},">");
-            timeline.to(refs.win1.current,{x:-20,y:0,duration:0.5,ease:"power1.in"},"<");
+            timeline.to(refs.win2.current,{x:"24%",y:0,duration:0.5,ease:"power1.in"},">");
+            timeline.to(refs.win1.current,{x:"-12%",y:0,duration:0.5,ease:"power1.in"},"<");
             
-            timeline.to(refs.win1.current,{x:10,duration:1.5,ease:"none"},">");
-            timeline.to(refs.win2.current,{x:12,duration:1.5,ease:"none"},">-1.5");
+            timeline.to(refs.win1.current,{x:"6%",duration:1.5,ease:"none"},">");
+            timeline.to(refs.win2.current,{x:"7.2%",duration:1.5,ease:"none"},">-1.5");
             timeline.to(refs.win1block.current,{stagger:0.3,opacity:1,duration:0.5,ease:"power1.in"},"<");
             timeline.to(refs.win1txt.current,{scaleX:1,stagger:0.2,duration:0.5,ease:"power1.in"},"<");
 

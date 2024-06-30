@@ -77,7 +77,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
         w4Ht = 0,                               // height of content component that was passed in (closed)
         wContentHt = 0;                         // height of content component that was passed in (open)
 
-        console.log("stat",status);
+        // console.log("stat",status);
 
     useEffect( () => {
 
@@ -111,7 +111,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
                     });
                     col = col === cols - 1 ? 0 : col + 1;
                 }
-                console.log(position)
+                // console.log(position)
                 setCardPos( position );
                 setHasInitialPosition(true);
             }
@@ -268,11 +268,11 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
             }
             openTimelines.current = [];
         };
-    },[cardRefs]);
+    },[]);
 
     const handleClick  = (e:React.MouseEvent<HTMLAnchorElement, MouseEvent>,index:number,action:string) => {
         e.preventDefault();
-        console.log("index",index)
+        // console.log("index",index)
         if (isAnimating) return 0; // no interruptions
         if (action === "open") {
             if (featureCardIdx !== null) {
@@ -300,7 +300,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
             <div className="cw06w0">
                 <div className={`cw06w1 cw06col${cols}`} ref={containerRef}>
                     { cards.length > 0 && cards.map( (card,index) => {
-                        console.log(card.textArgs)
+                        // console.log(card.textArgs)
                         return (
                             <div key={index} className={"cw06w2" + (featureCardIdx == index ? " cw06active" : "")} ref={(el) => cardRefs.current[index] = el}>
                                 {card.graphicCpt && <div className={`cw06img ${card.graphicScale ? "scale" + card.graphicScale : "scale" + defaultScale} ${card.graphicExtra && card.graphicExtra}`}><card.graphicCpt {...card.graphicArgs} /></div>}

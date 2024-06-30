@@ -1,0 +1,74 @@
+.si01.si01v1 {
+    .si01w0 {
+        padding-bottom: 100%;
+    }
+    svg {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    svg.si01win1,
+    svg.si01win2 {
+        width: 55%;
+    }
+    svg.si01win1 {
+        top: 25%;
+        left: 12%;
+        z-index: 2;
+    }
+    svg.si01win2 {
+        top: 40%;
+        left: 30%;
+        z-index: 1;
+    }
+    circle,
+    path,
+    rect {
+        stroke-width: 0;
+    }
+    .c1 {
+        fill:#9f9;
+    }
+    .c2 {
+        fill:#ff9;
+    }
+    .c3 {
+        fill:#f66;
+    }
+    .r1 {
+        fill:#036;
+    }
+    .r2 {
+        fill:#fc0;
+    }
+    .r3 {
+        fill:#f99;
+    }
+    .r4 {
+        fill:#999;
+    }
+    .r8 {
+        fill:#09f;
+    }
+    .r9 {
+        fill:#00203a;
+    }
+    .r10 {
+        fill:#7f7f7f;
+    }
+    .r22 {
+        fill:#ccc;
+    }
+    .r23 {
+        fill:#6c6
+    }
+    .p1 {
+        fill:#fff;
+    }
+    .p2, .p3 {
+        fill:#036;
+    }
+    .p4 {
+        fill:#fff;
+    }
+}

@@ -76,7 +76,7 @@ const CL01:FC = () => {
             },
             textCpt: CB01,
             graphicCpt: SI01,
-            graphicArgs: {v:0},
+            graphicArgs: {v:0,timelineArgs:{repeat:1}},
             //graphicScale: "70",
             //graphicExtra: "flushtop",
             demoCpt: CW05,
