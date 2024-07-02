@@ -7,15 +7,16 @@ import SI01v2 from "./SI01v2";
 import SI01v3 from "./SI01v3";
 import SI01v4 from "./SI01v4";
 import SI01v5 from "./SI01v5";
+import { TimelineCallback } from "../../helpers";
 
 interface SI01Props {
     v?:number;
     timelineArgs?:Record<string,any>;
-    timelineCallbacks?:Record<string,any>;
+    timelineCallbacks?:TimelineCallback[];
 }
 interface SI01ChildProps {
     timeline:gsap.core.Timeline;
-    timelineCallbacks:Record<string,any>;
+    timelineCallbacks:TimelineCallback[];
 }
 const componentMap:Record<number,FC<any>> = {
     0:SI01v0,
@@ -27,7 +28,7 @@ const componentMap:Record<number,FC<any>> = {
 }
 // const SI01:FC<SI01Props> = ({v = 0, timelineArgs = {}}) => {
 
-const SI01 = forwardRef( ({v = 0, timelineArgs = {}, timelineCallbacks = {}}:SI01Props,ref) => {
+const SI01 = forwardRef( ({v = 0, timelineArgs = {}, timelineCallbacks = []}:SI01Props,ref) => {
     //console.log("timelineCallbacks",v,timelineCallbacks)
     const variation = "si01v" + v;
     const timeline = useRef<gsap.core.Timeline | null>(null);

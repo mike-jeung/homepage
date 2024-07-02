@@ -4,7 +4,7 @@ import "./style/SI01v0.scss";
 import { SI01ChildProps } from "./SI01";
 import { applyTimelineCallbacks } from "../../helpers";
 
-const SI01v0:FC<SI01ChildProps> = ({timeline, timelineCallbacks = {}}) => {
+const SI01v0:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
     // chatbot
     const refs = {
         "c1": useRef<SVGCircleElement | null>(null),
@@ -16,6 +16,7 @@ const SI01v0:FC<SI01ChildProps> = ({timeline, timelineCallbacks = {}}) => {
     //const timeline = useRef<gsap.core.Timeline | null>(gsap.timeline({repeat:1}));
     useEffect( () => {
         timeline.addLabel("initialize");
+        timeline.addLabel("loopStart");
         timeline.set(refs.mouth.current,{x:-1,transformOrigin:"0% 20%"})
             .fromTo(refs.c1.current,{transformOrigin:"center",scale:1,opacity:0.8},{scale:8,opacity:0,duration:1.5,ease:"c2.out"})
             .fromTo(refs.c2.current,{transformOrigin:"center",scale:1,opacity:0.8},{scale:8,opacity:0,duration:1.5,ease:"c2.out"},"<0.7")

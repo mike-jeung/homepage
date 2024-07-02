@@ -2,12 +2,13 @@ import React, { FC, ReactElement, ReactNode, useCallback, useEffect, useRef } fr
 import "./CW07.scss";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { TimelineCallback } from "../../helpers";
 interface CW07TileArgs {
     repeat?:number;
     
 }
 interface CW07Tile {
-    args?:Record<string,unknown>;
+    args?:Record<string,any>;
     cmp?:FC<any>;
     play?: () => void;
     pause?: () => void;
@@ -15,7 +16,7 @@ interface CW07Tile {
     goto?: () => void;
 }
 interface CW07Content {
-    args:Record<string,unknown>;
+    args:Record<string,any>;
     cmp:FC<any>;
 }
 interface CW07Props {
@@ -55,9 +56,17 @@ const CW07:FC<CW07Props> = ({tile,content,disp}) => {
         shrinkTiles();
     }, []);
 
-    // send function to child component timelines
+    // send function(s) to child component timelines
     if (tile && tile.args) {
-        tile.args["timelineCallbacks"] = {"onComplete":childCompletion};
+        tile.args["timelineCallbacks"] = [] as TimelineCallback[];
+        tile.args["timelineCallbacks"].push({
+            callbackType:"onComplete",
+            callback: childCompletion
+        } as TimelineCallback);
+        tile.args["timelineCallbacks"].push({
+            position:"iconState",
+            callback: childCompletion
+        });
     }
 
     const shrinkTiles = () => {
@@ -72,14 +81,27 @@ const CW07:FC<CW07Props> = ({tile,content,disp}) => {
         
         // timeline.current = gsap.timeline({paused:true});
         timeline.current?.addPause(0);
-        timeline.current?.fromTo(refs.tile.current,{scale:1},{scale:0.5,duration:1},">")
+        timeline.current?.fromTo(refs.tile.current,{scale:1},{scale:0.5,duration:0.5,ease:"power1.out"},">")
+            .to(refs.tile.current,{y:"-35px",duration:0.25})
+            .to(refs.content.current,{opacity:1,top:"32%",duration:0.25},"<")
     },[]);
+    const mouseEvent = (e) => {
+        console.log(e);
+        const mode = e.type;
 
+
+        if (mode === "mouseenter") {
+            console.log("enter")
+        } else if (mode === "mouseleave") {
+            console.log("leave")
+        }
+
+    };
 
     // console.log("tile args",tile?.args);
     return (
         <section className="cw07 cw07v0">
-            <div className={`cw07w0 ${disp && disp}`}>
+            <div className={`cw07w0 ${disp && disp}`} onMouseEnter={mouseEvent} onMouseLeave={mouseEvent}>
                 <div className="cw07w1" onClick={handleClick} ref={refs.tile}>
                     {tile?.cmp && <tile.cmp {...tile.args} ref={refs.child} />}
                 </div>

@@ -4,7 +4,7 @@ import "./style/SI01v3.scss";
 import { SI01ChildProps } from "./SI01";
 import { applyTimelineCallbacks } from "../../helpers";
 
-const SI01v3:FC<SI01ChildProps> = ({timeline, timelineCallbacks = {}}) => {
+const SI01v3:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
     // webbot
     const refs = {
         "path": useRef<SVGPathElement | null>(null),
@@ -17,6 +17,7 @@ const SI01v3:FC<SI01ChildProps> = ({timeline, timelineCallbacks = {}}) => {
     
     useGSAP( () => {
         timeline.addLabel("initialize");
+        timeline.addLabel("loopStart");
         timeline.set(refs.box2.current,{x:200,y:117});
         timeline.fromTo(refs.box1.current,{x:0,y:-400},{x:0,y:0,duration:1,ease:"power2.in"});
         timeline.to(refs.box1.current, {x:200,y:117,duration:1,ease:"power2.inOut"});

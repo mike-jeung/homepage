@@ -4,7 +4,7 @@ import "./style/SI01v2.scss";
 import { SI01ChildProps } from "./SI01";
 import { applyTimelineCallbacks } from "../../helpers";
 
-const SI01v2:FC<SI01ChildProps> = ({timeline, timelineCallbacks = {}}) => {
+const SI01v2:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
     // back end; add vertical gradient
     const refs = {
         "all": useRef<SVGSVGElement | null>(null),
@@ -27,6 +27,7 @@ const SI01v2:FC<SI01ChildProps> = ({timeline, timelineCallbacks = {}}) => {
         const l = refs.top.current?.getTotalLength();
         if (platters && l) {
             timeline.addLabel("initialize");
+            timeline.addLabel("loopStart");
             timeline.set(refs.top.current, {strokeDasharray:l})
                 .set(refs.bot.current, {strokeDasharray:l});
             timeline.from(platters,{y:-100,stagger:0.2,duration:0.5});
@@ -42,9 +43,14 @@ const SI01v2:FC<SI01ChildProps> = ({timeline, timelineCallbacks = {}}) => {
             timeline.to(refs.bot.current, {duration:1.5, strokeDashoffset:-l},"<0.75")
                 .to(refs.top.current, {duration:1.5, strokeDashoffset:-l},"<");
             
-                timeline.set(refs.dots.current,{opacity:0},">");
-                
+            timeline.set(refs.dots.current,{opacity:0},">");
+        
+            timeline.addLabel("iconState",">");
+            timeline.addPause("iconState");
+            timeline.addLabel("afterIconState",">");
+            
             applyTimelineCallbacks(timeline,timelineCallbacks);
+
             // no stagger option, repeating dots
             // timeline.to(refs.bot.current,{duration:2});
             // timeline.add(() => {
@@ -58,7 +64,7 @@ const SI01v2:FC<SI01ChildProps> = ({timeline, timelineCallbacks = {}}) => {
             // timeline.to(platters,{y:-200,stagger:{amount:0.5,from:"end"},duration:0.50});
 
             // stagger down option
-            // timeline.to(platters,{y:200,stagger:{amount:0.5},duration:0.50});
+            timeline.to(platters,{y:200,stagger:{amount:0.5},duration:0.50});
         }
 
     });

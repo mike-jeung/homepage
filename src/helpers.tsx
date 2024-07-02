@@ -4,6 +4,12 @@ import { Meta, StoryFn, StoryObj } from '@storybook/react';
 interface StoryParams {
     description: string;
 }
+interface TimelineCallback {
+    position?:string;
+    params?:any[];
+    callbackType?:string;
+    callback:() => void;
+}
 const createStory = <T extends unknown>(Component:FC<T>, args: T, params:StoryParams): StoryFn<T> => {
     const Template: StoryFn<T> = (args) => <Component {...args} />;
     const story = Template.bind({});
@@ -28,10 +34,22 @@ const debounce = (func: (...args: any[]) => void, wait: number) => {
         timeout = setTimeout(later, wait);
     };
 };
-const applyTimelineCallbacks = (timeline:gsap.core.Timeline,timelineCallbacks:Record<string,any>) => {
+const applyTimelineCallbacks = (timeline:gsap.core.Timeline,timelineCallbacks:TimelineCallback[] = []) => {
     if (timelineCallbacks) {
-        for (const tcb in timelineCallbacks) {
-            timeline.eventCallback(tcb as gsap.CallbackType,timelineCallbacks[tcb])
+        for (let i = 0; i < timelineCallbacks.length; i++) {
+            const pos = timelineCallbacks[i].position,
+                params = timelineCallbacks[i].params,
+                cb = timelineCallbacks[i].callback,
+                callbackType = timelineCallbacks[i].callbackType;
+
+            if (callbackType) {
+                // event callback
+                timeline.eventCallback(callbackType as gsap.CallbackType,cb,params);
+            } else if (pos) {
+                timeline.call(cb,params,pos);
+            } else {
+                timeline.call(cb,params);
+            }          
         }
     }
 };
@@ -39,5 +57,6 @@ const applyTimelineCallbacks = (timeline:gsap.core.Timeline,timelineCallbacks:Re
 export {
     applyTimelineCallbacks,
     createStory,
-    debounce
+    debounce,
+    TimelineCallback
 }

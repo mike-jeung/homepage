@@ -20,7 +20,7 @@ const CL01:FC = () => {
                 args: {
                     v:2,
                     title:"Back End",
-                    caption:"I build robust, scalable web applications",
+                    caption:"I administer data and build APIs",
                 },
                 cmp:CB01
             },
@@ -34,7 +34,7 @@ const CL01:FC = () => {
                 args: {
                     v:2,
                     title:"Front End",
-                    caption:"I design bold user experiences with the latest tech",
+                    caption:"I create interfaces & translate ideas into user experiences",
                 },
                 cmp:CB01
             },
@@ -48,7 +48,7 @@ const CL01:FC = () => {
                 args: {
                     v:2,
                     title:"Solutions",
-                    caption:"I implement digital strategies that drive business results",
+                    caption:"I implement digital strategy",
                 },
                 cmp:CB01
             },
@@ -72,7 +72,7 @@ const CL01:FC = () => {
                 v:4,
                 title:"ChatBot",
                 caption:"PROJECT", 
-                description:"Retrieval Augmented Generation with Sun Tzu’s Art of War",
+                description:"Retrieval Augmented Generation Example with Sun Tzu’s Art of War",
             },
             textCpt: CB01,
             graphicCpt: SI01,

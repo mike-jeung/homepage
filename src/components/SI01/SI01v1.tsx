@@ -4,7 +4,7 @@ import "./style/SI01v1.scss";
 import { SI01ChildProps } from "./SI01";
 import { applyTimelineCallbacks } from "../../helpers";
 
-const SI01v1:FC<SI01ChildProps> = ({timeline, timelineCallbacks = {}}) => {
+const SI01v1:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
     // front end; add horizontal gradient
     const refs = {
         "win1":useRef<SVGSVGElement | null>(null),
@@ -29,6 +29,7 @@ const SI01v1:FC<SI01ChildProps> = ({timeline, timelineCallbacks = {}}) => {
         
         if (refs.win2txt.current && refs.win1txt.current && refs.win2block.current && refs.win1block.current) {
             timeline.addLabel("initialize");
+            timeline.addLabel("loopStart");
             timeline.set(refs.win1txt.current,{scaleX:0});
             timeline.set(refs.win2txt.current,{scaleX:0});
         
@@ -61,11 +62,12 @@ const SI01v1:FC<SI01ChildProps> = ({timeline, timelineCallbacks = {}}) => {
             timeline.to(refs.win1block.current,{stagger:0.3,opacity:1,duration:0.5,ease:"power1.in"},"<");
             timeline.to(refs.win1txt.current,{scaleX:1,stagger:0.2,duration:0.5,ease:"power1.in"},"<");
 
-            // timeline.to(refs.win1.current,{x:190,duration:0.25,ease:"power1.out"},">");
-            // timeline.to(refs.win2.current,{x:-190,duration:0.25,ease:"power1.out"},">-0.25");
-
-
+            timeline.addLabel("iconState",">");
+            timeline.addPause("iconState");
+            timeline.addLabel("afterIconState",">");
             
+            timeline.to(refs.win1.current,{x:190,duration:0.25,ease:"power1.out"},">");
+            timeline.to(refs.win2.current,{x:-190,duration:0.25,ease:"power1.out"},">-0.25");
 
             applyTimelineCallbacks(timeline,timelineCallbacks);
 
