@@ -1,10 +1,10 @@
-import React, { FC, useRef } from "react";
+import React, { FC, useEffect, useRef } from "react";
 import { useGSAP } from '@gsap/react';
 import "./style/SI01v2.scss";
-interface SI01v2Props {
-    timeline:gsap.core.Timeline;
-}
-const SI01v2:FC<SI01v2Props> = ({timeline}) => {
+import { SI01ChildProps } from "./SI01";
+import { applyTimelineCallbacks } from "../../helpers";
+
+const SI01v2:FC<SI01ChildProps> = ({timeline, timelineCallbacks = {}}) => {
     // back end; add vertical gradient
     const refs = {
         "all": useRef<SVGSVGElement | null>(null),
@@ -26,6 +26,7 @@ const SI01v2:FC<SI01v2Props> = ({timeline}) => {
         const platters = refs.all.current?.querySelectorAll(".platters > g");
         const l = refs.top.current?.getTotalLength();
         if (platters && l) {
+            timeline.addLabel("initialize");
             timeline.set(refs.top.current, {strokeDasharray:l})
                 .set(refs.bot.current, {strokeDasharray:l});
             timeline.from(platters,{y:-100,stagger:0.2,duration:0.5});
@@ -43,7 +44,7 @@ const SI01v2:FC<SI01v2Props> = ({timeline}) => {
             
                 timeline.set(refs.dots.current,{opacity:0},">");
                 
-
+            applyTimelineCallbacks(timeline,timelineCallbacks);
             // no stagger option, repeating dots
             // timeline.to(refs.bot.current,{duration:2});
             // timeline.add(() => {

@@ -1,10 +1,10 @@
 import React, { FC, useEffect, useRef } from "react";
 import { useGSAP } from '@gsap/react';
 import "./style/SI01v0.scss";
-interface SI01v0Props {
-    timeline:gsap.core.Timeline;
-}
-const SI01v0:FC<SI01v0Props> = ({timeline}) => {
+import { SI01ChildProps } from "./SI01";
+import { applyTimelineCallbacks } from "../../helpers";
+
+const SI01v0:FC<SI01ChildProps> = ({timeline, timelineCallbacks = {}}) => {
     // chatbot
     const refs = {
         "c1": useRef<SVGCircleElement | null>(null),
@@ -15,8 +15,7 @@ const SI01v0:FC<SI01v0Props> = ({timeline}) => {
     }
     //const timeline = useRef<gsap.core.Timeline | null>(gsap.timeline({repeat:1}));
     useEffect( () => {
-        console.log("******************************** usegsap")
-
+        timeline.addLabel("initialize");
         timeline.set(refs.mouth.current,{x:-1,transformOrigin:"0% 20%"})
             .fromTo(refs.c1.current,{transformOrigin:"center",scale:1,opacity:0.8},{scale:8,opacity:0,duration:1.5,ease:"c2.out"})
             .fromTo(refs.c2.current,{transformOrigin:"center",scale:1,opacity:0.8},{scale:8,opacity:0,duration:1.5,ease:"c2.out"},"<0.7")
@@ -29,7 +28,13 @@ const SI01v0:FC<SI01v0Props> = ({timeline}) => {
             .to(refs.mouth.current,{scaleY:1,duration:0.15})
             .to(refs.mouth.current,{scaleY:0.4,duration:0.15})
             .to(refs.mouth.current,{scaleY:1,duration:0.25})
-            .to(refs.mouth.current,{scaleY:0.3,duration:0.15})
+            .to(refs.mouth.current,{scaleY:0.3,duration:0.15});
+
+        applyTimelineCallbacks(timeline,timelineCallbacks);
+        
+        return () => {
+            timeline.kill();
+        }
     },[]);
     return (
         <div className="si01w0">

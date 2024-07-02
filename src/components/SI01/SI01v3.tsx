@@ -1,10 +1,10 @@
-import React, { FC, useRef } from "react";
+import React, { FC, useEffect, useRef } from "react";
 import { useGSAP } from '@gsap/react';
 import "./style/SI01v3.scss";
-interface SI01v3Props {
-    timeline:gsap.core.Timeline;
-}
-const SI01v3:FC<SI01v3Props> = ({timeline}) => {
+import { SI01ChildProps } from "./SI01";
+import { applyTimelineCallbacks } from "../../helpers";
+
+const SI01v3:FC<SI01ChildProps> = ({timeline, timelineCallbacks = {}}) => {
     // webbot
     const refs = {
         "path": useRef<SVGPathElement | null>(null),
@@ -16,6 +16,7 @@ const SI01v3:FC<SI01v3Props> = ({timeline}) => {
     // }));
     
     useGSAP( () => {
+        timeline.addLabel("initialize");
         timeline.set(refs.box2.current,{x:200,y:117});
         timeline.fromTo(refs.box1.current,{x:0,y:-400},{x:0,y:0,duration:1,ease:"power2.in"});
         timeline.to(refs.box1.current, {x:200,y:117,duration:1,ease:"power2.inOut"});
@@ -23,7 +24,7 @@ const SI01v3:FC<SI01v3Props> = ({timeline}) => {
         timeline.to(refs.box2.current,{x:400,y:234,duration:1,ease:"power2.inOut"},"<")
             .to(refs.box2.current,{opacity:0,duration:0.25},">-0.75");
         
-        
+        applyTimelineCallbacks(timeline,timelineCallbacks);
     });
     return (
         <div className="si01w0">

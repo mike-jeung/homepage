@@ -303,7 +303,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
                         // console.log(card.textArgs)
                         return (
                             <div key={index} className={"cw06w2" + (featureCardIdx == index ? " cw06active" : "")} ref={(el) => cardRefs.current[index] = el}>
-                                {card.graphicCpt && <div className={`cw06img ${card.graphicScale ? "scale" + card.graphicScale : "scale" + defaultScale} ${card.graphicExtra && card.graphicExtra}`}><card.graphicCpt {...card.graphicArgs} /></div>}
+                                {card.graphicCpt && <div className={`cw06img ${card.graphicScale ? "scale" + card.graphicScale : "scale" + defaultScale}${card.graphicExtra != undefined ? " "+card.graphicExtra: ""}`}><card.graphicCpt {...card.graphicArgs} /></div>}
                                 <div className="cw06w3">
                                     <div className="cw06w4">{card.textCpt && <card.textCpt {...card.textArgs} />}</div>
                                     <div className="cw06w5">

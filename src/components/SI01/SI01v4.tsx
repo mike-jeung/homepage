@@ -1,10 +1,12 @@
-import React, { FC, useRef } from "react";
+import React, { FC, useEffect, useRef } from "react";
 import { useGSAP } from '@gsap/react';
 import "./style/SI01v4.scss";
-interface SI01v4Props {
-    timeline:gsap.core.Timeline;
-}
-const SI01v4:FC<SI01v4Props> = ({timeline}) => {
+import { SI01ChildProps } from "./SI01";
+import { applyTimelineCallbacks } from "../../helpers";
+
+const SI01v4:FC<SI01ChildProps> = ({timeline, timelineCallbacks = {}}) => {
+    console.log("chart")
+
     // chart
     const refs = {
         "svg":useRef<SVGSVGElement | null>(null),
@@ -19,6 +21,7 @@ const SI01v4:FC<SI01v4Props> = ({timeline}) => {
     // const timeline = useRef<gsap.core.Timeline>(gsap.timeline());
 
     useGSAP( () => {
+        timeline.addLabel("initialize");
         timeline.from(refs.grid.current,{x:"-100%",duration:0.5,ease:"power1.in"})
             //.set(refs.svg.current,{transformOrigin:"100% 50%",backgroundColor:"transparent",scaleX:1})
             .from(refs.base.current,{x:"-100%",duration:0.5,ease:"power1.in"},"<")
@@ -40,6 +43,8 @@ const SI01v4:FC<SI01v4Props> = ({timeline}) => {
             .to(refs.b2.current,{y:0,x:-2,rotation:0,duration:0.05},"<")
             .to(refs.b3.current,{y:0,x:-2,rotation:0,duration:0.05},"<")
             .to(refs.base.current,{duration:1},"<")
+        
+        applyTimelineCallbacks(timeline,timelineCallbacks);
 
     });
     return (

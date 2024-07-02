@@ -1,10 +1,10 @@
-import React, { FC, useRef } from "react";
+import React, { FC, useEffect, useRef } from "react";
 import { useGSAP } from '@gsap/react';
 import "./style/SI01v1.scss";
-interface SI01v1Props {
-    timeline:gsap.core.Timeline;
-}
-const SI01v1:FC<SI01v1Props> = ({timeline}) => {
+import { SI01ChildProps } from "./SI01";
+import { applyTimelineCallbacks } from "../../helpers";
+
+const SI01v1:FC<SI01ChildProps> = ({timeline, timelineCallbacks = {}}) => {
     // front end; add horizontal gradient
     const refs = {
         "win1":useRef<SVGSVGElement | null>(null),
@@ -28,6 +28,7 @@ const SI01v1:FC<SI01v1Props> = ({timeline}) => {
         
         
         if (refs.win2txt.current && refs.win1txt.current && refs.win2block.current && refs.win1block.current) {
+            timeline.addLabel("initialize");
             timeline.set(refs.win1txt.current,{scaleX:0});
             timeline.set(refs.win2txt.current,{scaleX:0});
         
@@ -62,6 +63,11 @@ const SI01v1:FC<SI01v1Props> = ({timeline}) => {
 
             // timeline.to(refs.win1.current,{x:190,duration:0.25,ease:"power1.out"},">");
             // timeline.to(refs.win2.current,{x:-190,duration:0.25,ease:"power1.out"},">-0.25");
+
+
+            
+
+            applyTimelineCallbacks(timeline,timelineCallbacks);
 
         }
 

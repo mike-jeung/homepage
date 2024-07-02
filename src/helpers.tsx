@@ -28,8 +28,16 @@ const debounce = (func: (...args: any[]) => void, wait: number) => {
         timeout = setTimeout(later, wait);
     };
 };
+const applyTimelineCallbacks = (timeline:gsap.core.Timeline,timelineCallbacks:Record<string,any>) => {
+    if (timelineCallbacks) {
+        for (const tcb in timelineCallbacks) {
+            timeline.eventCallback(tcb as gsap.CallbackType,timelineCallbacks[tcb])
+        }
+    }
+};
 
 export {
+    applyTimelineCallbacks,
     createStory,
     debounce
 }

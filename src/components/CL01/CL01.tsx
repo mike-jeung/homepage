@@ -89,7 +89,7 @@ const CL01:FC = () => {
             },
             textCpt: CB01,
             graphicCpt:SI01,
-            graphicArgs: {v:3},
+            graphicArgs: {v:3,timelineArgs:{repeat:4}},
             graphicScale: "70",
             graphicExtra: "flushtop",
             //demoCpt: ,
