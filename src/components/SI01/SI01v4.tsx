@@ -48,9 +48,9 @@ const SI01v4:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
 
         timeline.addLabel("iconState",">");
         timeline.addPause("iconState");
-        timeline.addLabel("afterIconState",">");
+        timeline.addLabel("afterIconState",">0.1");
 
-        timeline.to(refs.allBars.current,{x:"150%",duration:0.5});
+        timeline.to(refs.allBars.current,{x:"150%",duration:0.5},">0.1");
 
         applyTimelineCallbacks(timeline,timelineCallbacks);
 

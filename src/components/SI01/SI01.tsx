@@ -55,8 +55,12 @@ const SI01 = forwardRef( ({v = 0, timelineArgs = {}, timelineCallbacks = []}:SI0
     const play = (position:(string | number) = 0) => {
         timeline.current?.play(position);
     }
-    const pause = () => {
-        timeline.current?.pause();
+    const pause = (position:(string | number)) => {
+        if (position) {
+            timeline.current?.pause(position);
+        } else {
+            timeline.current?.pause();
+        }
     }
     const resume = () => {
         timeline.current?.play();

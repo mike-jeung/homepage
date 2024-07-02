@@ -34,8 +34,8 @@ const SI01v2:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
             
             timeline.addLabel("zoom");
 
-            timeline.fromTo(refs.bot.current, {strokeDashoffset:l, strokeDasharray:l, ease:"power4.out"}, {duration:1.5, strokeDashoffset:0})
-                .fromTo(refs.top.current, {strokeDashoffset:l, strokeDasharray:l, ease:"power4.out"}, {duration:1.5, strokeDashoffset:0},"<");
+            timeline.fromTo(refs.bot.current, {strokeDashoffset:l, strokeDasharray:l, ease:"power4.in"}, {duration:1.5, strokeDashoffset:0})
+                .fromTo(refs.top.current, {strokeDashoffset:l, strokeDasharray:l, ease:"power4.in"}, {duration:1.5, strokeDashoffset:0},"<");
 
             timeline.fromTo(refs.dots.current,{opacity:1,x:-200},{x:200,duration:1},"<1.25");
                 
@@ -47,7 +47,7 @@ const SI01v2:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
         
             timeline.addLabel("iconState",">");
             timeline.addPause("iconState");
-            timeline.addLabel("afterIconState",">");
+            timeline.addLabel("afterIconState",">0.1");
             
             applyTimelineCallbacks(timeline,timelineCallbacks);
 
@@ -61,10 +61,10 @@ const SI01v2:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
             // });
 
             // stagger up option
-            // timeline.to(platters,{y:-200,stagger:{amount:0.5,from:"end"},duration:0.50});
+            //timeline.to(platters,{y:-200,stagger:{amount:0.5,from:"end"},duration:0.50},">0.1");
 
             // stagger down option
-            timeline.to(platters,{y:200,stagger:{amount:0.5},duration:0.50});
+            timeline.to(platters,{y:200,stagger:{amount:0.5},duration:0.50},">0.1");
         }
 
     });
