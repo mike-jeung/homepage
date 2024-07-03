@@ -48,7 +48,7 @@ const CL01:FC = () => {
                 args: {
                     v:2,
                     title:"Solutions",
-                    caption:"I implement digital strategy",
+                    caption:"I implement digital strategies and solve complex problems",
                 },
                 cmp:CB01
             },
@@ -64,7 +64,7 @@ const CL01:FC = () => {
         v:0,
         title:"Mike Jeung",
         caption:"WEB DEVELOPER",
-        description:"Highly experienced and versatile web developer offering expertise in technical project management, high-level strategic planning, and full stack software engineering."
+        description:"Experienced and versatile web developer offering expertise in technical project management, high-level strategic planning, and full stack software engineering."
     };
     const cards:CardData[] = [
         {
