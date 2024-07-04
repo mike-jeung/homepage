@@ -25,6 +25,10 @@ const SI01v3:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
         timeline.to(refs.box2.current,{x:400,y:234,duration:1,ease:"power2.inOut"},"<")
             .to(refs.box2.current,{opacity:0,duration:0.25},">-0.75");
         
+        timeline.addLabel("iconState",">");
+        timeline.addPause("iconState");
+        timeline.addLabel("afterIconState",">0.1");
+
         applyTimelineCallbacks(timeline,timelineCallbacks);
     });
     return (

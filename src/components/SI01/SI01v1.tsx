@@ -68,7 +68,6 @@ const SI01v1:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
             
             timeline.to(refs.win1.current,{x:190,duration:0.25,ease:"power1.out"},">0.1");
             timeline.to(refs.win2.current,{x:-190,duration:0.25,ease:"power1.out"},">-0.25");
-
             applyTimelineCallbacks(timeline,timelineCallbacks);
 
         }

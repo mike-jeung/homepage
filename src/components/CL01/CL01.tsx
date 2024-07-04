@@ -20,7 +20,7 @@ const CL01:FC = () => {
                 args: {
                     v:2,
                     title:"Back End",
-                    caption:"I administer data and build APIs",
+                    caption:"I administer data and infrastructure, and build APIs",
                 },
                 cmp:CB01
             },
@@ -34,7 +34,7 @@ const CL01:FC = () => {
                 args: {
                     v:2,
                     title:"Front End",
-                    caption:"I create interfaces & translate ideas into user experiences",
+                    caption:"I create engaging user interfaces & experiences",
                 },
                 cmp:CB01
             },
@@ -48,7 +48,7 @@ const CL01:FC = () => {
                 args: {
                     v:2,
                     title:"Solutions",
-                    caption:"I implement digital strategies and solve complex problems",
+                    caption:"I build applications tailored to your business",
                 },
                 cmp:CB01
             },
@@ -72,11 +72,16 @@ const CL01:FC = () => {
                 v:4,
                 title:"ChatBot",
                 caption:"PROJECT", 
-                description:"Retrieval Augmented Generation Example with Sun Tzu’s Art of War",
+                description:"Retrieval Augmented Generation Example with Sun Tzu's Art of War",
             },
             textCpt: CB01,
             graphicCpt: SI01,
-            graphicArgs: {v:0,timelineArgs:{repeat:1}},
+            graphicArgs: {
+                v:0,
+                timelineArgs:{
+                    repeat:1
+                }
+            },
             //graphicScale: "70",
             //graphicExtra: "flushtop",
             demoCpt: CW05,
@@ -89,7 +94,12 @@ const CL01:FC = () => {
             },
             textCpt: CB01,
             graphicCpt:SI01,
-            graphicArgs: {v:3,timelineArgs:{repeat:4}},
+            graphicArgs: {
+                v:3,
+                timelineArgs:{
+                    repeat:3
+                }
+            },
             graphicScale: "70",
             graphicExtra: "flushtop",
             //demoCpt: ,
@@ -102,7 +112,9 @@ const CL01:FC = () => {
             },
             textCpt: CB01,
             graphicCpt:SI01,
-            graphicArgs: {v:5},
+            graphicArgs: {
+                v:5
+            },
             //graphicScale: "70",
             //graphicExtra: "flushtop",
             //demoCpt: ,

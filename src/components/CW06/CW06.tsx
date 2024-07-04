@@ -1,7 +1,8 @@
-import React, { Component, FC, ReactNode, useContext, useEffect, useRef, useState } from "react";
+import React, { Component, FC, ReactNode, useCallback, useContext, useEffect, useRef, useState } from "react";
 import "./CW06.scss";
 import gsap from 'gsap';
 import { StatusContext } from "../../App";
+import { TimelineCallback } from "../../helpers";
 
 interface CW06Props {
     cards: CardData[];
@@ -11,7 +12,7 @@ interface CardData {
     textArgs:{};
     textCpt:FC<any>;
     graphicScale?:string;
-    graphicArgs?:{};
+    graphicArgs?:Record<string,any>;
     graphicCpt?:FC<any>;
     graphicExtra?:string;
     demoArgs?:{};
@@ -38,11 +39,14 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
         [hasInitialPosition, setHasInitialPosition] = useState<boolean>(false),
         [isAnimating, setIsAnimating] = useState<boolean>(false);
 
-    const cardRefs = useRef<(HTMLDivElement | null)[]>([]), 
+    const cardRefs = useRef<(HTMLDivElement | null)[]>([]),
+        childRefs = useRef<React.RefObject<any>[]>([]),
         containerRef = useRef<HTMLDivElement | null>(null), // cw06w1
         //containerTimelines = useRef<gsap.core.Timeline[]>([]),
         containerTimelinesAr = useRef<gsap.core.Timeline[][]>([]),
+        initialRun = useRef<boolean>(false),
         openTimelines = useRef<gsap.core.Timeline[]>([]),
+        mouseStatus = useRef<string | null>(null),
         status = useContext(StatusContext);
         
     const 
@@ -79,6 +83,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
 
         // console.log("stat",status);
 
+        
     useEffect( () => {
 
         const position:Map<number,CW06CardPosition> = new Map,
@@ -125,6 +130,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
             
 
         for (let i = 0; i < cardCount; i++) {
+            
             cardRef = cardRefs.current[i];
             cardPosition = position.get(i);
 
@@ -295,15 +301,58 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
             containerTimelinesAr.current[index][1].play(0);
         }
     };
+    const handleMouseEvent = (e:React.MouseEvent<HTMLDivElement, MouseEvent>,index:number) => {
+        console.log(e);
+        mouseStatus.current = e.type;
+
+        if (!initialRun.current) {
+            if (mouseStatus.current === "mouseenter") {
+                console.log("enter")
+                
+            } else if (mouseStatus.current === "mouseleave") {
+                console.log("exit")
+
+                
+            }
+        }
+    };
+    const childCheckpoint = useCallback( () => {
+        if (mouseStatus.current === "mouseenter") {
+            // if (refs.child && refs.child.current) {
+            //     refs.child.current.play && refs.child.current.play("afterIconState");
+            // }
+        } else {
+        //     shrinkTiles();
+        }
+    },[])
+    const childCompletion = useCallback( () => {
+        if (mouseStatus.current === "mouseenter") {
+            // if (refs.child && refs.child.current) {
+            //     refs.child.current.play && refs.child.current.play("loopStart");
+            // }
+        } 
+    }, []);
     return (
         <section className="cw06 cw06v0">
             <div className="cw06w0">
                 <div className={`cw06w1 cw06col${cols}`} ref={containerRef}>
                     { cards.length > 0 && cards.map( (card,index) => {
                         // console.log(card.textArgs)
+
+                        if (card.graphicArgs) {
+                            card.graphicArgs["timelineCallbacks"] = [] as TimelineCallback[];
+                            card.graphicArgs["timelineCallbacks"].push({
+                                callbackType:"onComplete",
+                                callback: childCompletion
+                            } as TimelineCallback);
+                            card.graphicArgs["timelineCallbacks"].push({
+                                position:"iconState",
+                                callback: childCheckpoint
+                            } as TimelineCallback);
+                        }
                         return (
-                            <div key={index} className={"cw06w2" + (featureCardIdx == index ? " cw06active" : "")} ref={(el) => cardRefs.current[index] = el}>
-                                {card.graphicCpt && <div className={`cw06img ${card.graphicScale ? "scale" + card.graphicScale : "scale" + defaultScale}${card.graphicExtra != undefined ? " "+card.graphicExtra: ""}`}><card.graphicCpt {...card.graphicArgs} /></div>}
+                            <div key={index} className={"cw06w2" + (featureCardIdx == index ? " cw06active" : "")} ref={(el) => cardRefs.current[index] = el} onMouseEnter={(e) => handleMouseEvent(e,index)} onMouseLeave={(e) => handleMouseEvent(e,index)}>
+                                {card.graphicCpt && <div className={`cw06img ${card.graphicScale ? "scale" + card.graphicScale : "scale" + defaultScale}${card.graphicExtra != undefined ? " "+card.graphicExtra: ""}`}><card.graphicCpt {...card.graphicArgs} ref={(el) => childRefs.current[index] = el} /></div>}
                                 <div className="cw06w3">
                                     <div className="cw06w4">{card.textCpt && <card.textCpt {...card.textArgs} />}</div>
                                     <div className="cw06w5">

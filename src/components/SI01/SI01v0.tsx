@@ -31,6 +31,10 @@ const SI01v0:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
             .to(refs.mouth.current,{scaleY:1,duration:0.25})
             .to(refs.mouth.current,{scaleY:0.3,duration:0.15});
 
+        timeline.addLabel("iconState",">");
+        timeline.addPause("iconState");
+        timeline.addLabel("afterIconState",">0.1");
+        
         applyTimelineCallbacks(timeline,timelineCallbacks);
         
         return () => {

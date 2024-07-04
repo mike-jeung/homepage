@@ -27,10 +27,10 @@ const SI01v4:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
             //.set(refs.svg.current,{transformOrigin:"100% 50%",backgroundColor:"transparent",scaleX:1})
             .from(refs.base.current,{x:"-100%",duration:0.5,ease:"power1.in"},"<")
             .addLabel("loopStart",">")
-            .from(refs.b1.current,{transformOrigin: "50% 100%",scaleY:0,duration:0.8},"<0.4")
-            .from(refs.b2.current,{transformOrigin: "50% 100%",scaleY:0,duration:0.8},"<0.4")
-            .from(refs.b3.current,{transformOrigin: "50% 100%",scaleY:0,duration:0.8},"<0.4")
-            .fromTo(refs.b4.current,{transformOrigin: "50% 100%",scaleY:0},{scaleY:0.7,duration:0.8},"<0.4");
+            .from(refs.b1.current,{transformOrigin: "50% 100%",scaleY:0,duration:0.7},"<0.35")
+            .from(refs.b2.current,{transformOrigin: "50% 100%",scaleY:0,duration:0.7},"<0.35")
+            .from(refs.b3.current,{transformOrigin: "50% 100%",scaleY:0,duration:0.7},"<0.35")
+            .fromTo(refs.b4.current,{transformOrigin: "50% 100%",scaleY:0},{scaleY:0.7,duration:0.7},"<0.35");
         // shake it up
         for (let i = 0; i < 20; i++) {
             timeline.to(refs.b4.current,{scaleY:0.71,scaleX:0.99,duration:0.05})
@@ -45,7 +45,6 @@ const SI01v4:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
             .to(refs.b2.current,{y:0,x:-2,rotation:0,duration:0.05},"<")
             .to(refs.b3.current,{y:0,x:-2,rotation:0,duration:0.05},"<")
             .to(refs.base.current,{duration:1},"<");
-
         timeline.addLabel("iconState",">");
         timeline.addPause("iconState");
         timeline.addLabel("afterIconState",">0.1");

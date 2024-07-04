@@ -34,17 +34,19 @@ const SI01v2:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
             
             timeline.addLabel("zoom");
 
-            timeline.fromTo(refs.bot.current, {strokeDashoffset:l, strokeDasharray:l, ease:"power4.in"}, {duration:1.5, strokeDashoffset:0})
-                .fromTo(refs.top.current, {strokeDashoffset:l, strokeDasharray:l, ease:"power4.in"}, {duration:1.5, strokeDashoffset:0},"<");
+            timeline.fromTo(refs.bot.current, {strokeDashoffset:l, strokeDasharray:l, ease:"power4.in"}, {duration:1.25, strokeDashoffset:0})
+                .fromTo(refs.top.current, {strokeDashoffset:l, strokeDasharray:l, ease:"power4.in"}, {duration:1.25, strokeDashoffset:0},"<");
 
-            timeline.fromTo(refs.dots.current,{opacity:1,x:-200},{x:200,duration:1},"<1.25");
+            timeline.fromTo(refs.dots.current,{opacity:1,x:-200},{x:200,duration:1},"<1.1");
                 
 
-            timeline.to(refs.bot.current, {duration:1.5, strokeDashoffset:-l},"<0.75")
-                .to(refs.top.current, {duration:1.5, strokeDashoffset:-l},"<");
+            timeline.to(refs.bot.current, {duration:1.25, strokeDashoffset:-l},"<0.625")
+                .to(refs.top.current, {duration:1.25, strokeDashoffset:-l},"<");
             
             timeline.set(refs.dots.current,{opacity:0},">");
-        
+            
+
+            
             timeline.addLabel("iconState",">");
             timeline.addPause("iconState");
             timeline.addLabel("afterIconState",">0.1");
