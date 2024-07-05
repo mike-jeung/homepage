@@ -18,6 +18,15 @@ interface SI01ChildProps {
     timeline:gsap.core.Timeline;
     timelineCallbacks:TimelineCallback[];
 }
+interface SI01TimelineControls {
+    args?:Record<string,any>;
+    cmp?:FC<any>;
+    play?: (arg?: number | string) => void;
+    pause?: (arg?: number | string) => void;
+    resume?: () => void;
+    getTimeline?: () => gsap.core.Timeline;
+    goto?: (arg?: number | string) => void;
+}
 const componentMap:Record<number,FC<any>> = {
     0:SI01v0,
     1:SI01v1,
@@ -64,7 +73,10 @@ const SI01 = forwardRef( ({v = 0, timelineArgs = {}, timelineCallbacks = []}:SI0
     }
     const resume = () => {
         timeline.current?.play();
-    }
+    };
+    const getTimeline = () => {
+        return timeline.current;
+    };
     const goto = (position:(string | number)) => {
         if (position) {
             timeline.current?.seek(position);
@@ -85,6 +97,7 @@ const SI01 = forwardRef( ({v = 0, timelineArgs = {}, timelineCallbacks = []}:SI0
         play,
         pause,
         resume,
+        getTimeline,
         goto
     }));
 
@@ -96,4 +109,4 @@ const SI01 = forwardRef( ({v = 0, timelineArgs = {}, timelineCallbacks = []}:SI0
 });
 
 export default SI01;
-export { SI01Props, SI01ChildProps }
+export { SI01Props, SI01ChildProps, SI01TimelineControls }

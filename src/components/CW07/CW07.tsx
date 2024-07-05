@@ -3,17 +3,10 @@ import "./CW07.scss";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { TimelineCallback } from "../../helpers";
+import { SI01TimelineControls as CW07Tile } from "../SI01/SI01"; 
 interface CW07TileArgs {
     repeat?:number;
     
-}
-interface CW07Tile {
-    args?:Record<string,any>;
-    cmp?:FC<any>;
-    play?: (arg?: number | string) => void;
-    pause?: (arg?: number | string) => void;
-    resume?: () => void;
-    goto?: (arg?: number | string) => void;
 }
 interface CW07Content {
     args:Record<string,any>;

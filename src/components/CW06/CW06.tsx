@@ -3,7 +3,7 @@ import "./CW06.scss";
 import gsap from 'gsap';
 import { StatusContext } from "../../App";
 import { TimelineCallback } from "../../helpers";
-
+import { SI01TimelineControls } from "../SI01/SI01";
 interface CW06Props {
     cards: CardData[];
     cols?: number;
@@ -40,13 +40,14 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
         [isAnimating, setIsAnimating] = useState<boolean>(false);
 
     const cardRefs = useRef<(HTMLDivElement | null)[]>([]),
-        childRefs = useRef<React.RefObject<any>[]>([]),
+        childRefs = useRef<SI01TimelineControls[]>([]),
         containerRef = useRef<HTMLDivElement | null>(null), // cw06w1
-        //containerTimelines = useRef<gsap.core.Timeline[]>([]),
         containerTimelinesAr = useRef<gsap.core.Timeline[][]>([]),
-        initialRun = useRef<boolean>(false),
-        openTimelines = useRef<gsap.core.Timeline[]>([]),
+        hoverIndex = useRef<number | undefined>(undefined),
+        initialRun = useRef<boolean[]>([]),     // tracks first run of each card animation
         mouseStatus = useRef<string | null>(null),
+        openTimelines = useRef<gsap.core.Timeline[]>([]),
+        animationCycles = useRef<number[]>([]), // track number of repeats of each card anim
         status = useContext(StatusContext);
         
     const 
@@ -77,7 +78,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
         unitH2ndRow = 0,                        // height of unselected card
         unitW = 0,                              // default width of card
         unitW2ndRow = 0,                        // width of unselected card
-        unselectedCardTop,
+        unselectedCardTop = 0,
         w4Ht = 0,                               // height of content component that was passed in (closed)
         wContentHt = 0;                         // height of content component that was passed in (open)
 
@@ -278,7 +279,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
 
     const handleClick  = (e:React.MouseEvent<HTMLAnchorElement, MouseEvent>,index:number,action:string) => {
         e.preventDefault();
-        // console.log("index",index)
+
         if (isAnimating) return 0; // no interruptions
         if (action === "open") {
             if (featureCardIdx !== null) {
@@ -302,54 +303,79 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
         }
     };
     const handleMouseEvent = (e:React.MouseEvent<HTMLDivElement, MouseEvent>,index:number) => {
-        console.log(e);
         mouseStatus.current = e.type;
-
-        if (!initialRun.current) {
+        const childRef = childRefs.current[index];
+        if (childRef && childRef.getTimeline) {
+            const childTimeline = childRef.getTimeline();
             if (mouseStatus.current === "mouseenter") {
-                console.log("enter")
-                
+                hoverIndex.current = index;
+                childTimeline.resume();
+                initialRun.current[index] = false;                
             } else if (mouseStatus.current === "mouseleave") {
-                console.log("exit")
-
-                
+                hoverIndex.current = undefined;
+                childTimeline.pause();
             }
         }
     };
-    const childCheckpoint = useCallback( () => {
-        if (mouseStatus.current === "mouseenter") {
-            // if (refs.child && refs.child.current) {
-            //     refs.child.current.play && refs.child.current.play("afterIconState");
-            // }
-        } else {
-        //     shrinkTiles();
+    const childCheckpoint = useCallback( (index:number) => {
+        const childRef = childRefs.current[index];
+        if (childRef.getTimeline) {
+            const timeline = childRef.getTimeline();
+            const count = timeline.repeat();
+            if (childRef.play && childRef.pause && childRef.resume) {
+                if (initialRun.current[index]) {
+                    if (count > animationCycles.current[index]) {
+                        childRef.play("afterIconState");
+                        animationCycles.current[index]++;
+                    } else {
+                        childRef.pause("afterIconState");
+                        initialRun.current[index] = false;
+                        animationCycles.current[index] = 0;
+                    }
+                } else {
+                    if (hoverIndex.current === index) {
+                        childRef.play("afterIconState");
+                    }
+                }
+            }
         }
-    },[])
-    const childCompletion = useCallback( () => {
+    },[]);
+    const childCompletion = useCallback( (index:number) => {
+        const childRef = childRefs.current[index];
+        if (initialRun.current[index]) initialRun.current[index] = false;
         if (mouseStatus.current === "mouseenter") {
-            // if (refs.child && refs.child.current) {
-            //     refs.child.current.play && refs.child.current.play("loopStart");
-            // }
+            if (childRef.play) {
+                childRef.play("loopStart");
+            }
         } 
-    }, []);
+    },[]);
+
+    // some initialization
+    for (let i = 0; i < cardCount; i++) {
+        const card = cards[i];
+        initialRun.current[i] = true;
+        animationCycles.current[i] = 0;
+        // send function(s) to child component timelines
+        if (card.graphicArgs) {
+            card.graphicArgs["timelineCallbacks"] = [] as TimelineCallback[];
+            card.graphicArgs["timelineCallbacks"].push({
+                callbackType:"onComplete",
+                callback: childCompletion,
+                params:[i]
+            } as TimelineCallback);
+            card.graphicArgs["timelineCallbacks"].push({
+                position:"iconState",
+                callback: childCheckpoint,
+                params:[i]
+            } as TimelineCallback);
+        }
+    }
     return (
         <section className="cw06 cw06v0">
             <div className="cw06w0">
                 <div className={`cw06w1 cw06col${cols}`} ref={containerRef}>
                     { cards.length > 0 && cards.map( (card,index) => {
                         // console.log(card.textArgs)
-
-                        if (card.graphicArgs) {
-                            card.graphicArgs["timelineCallbacks"] = [] as TimelineCallback[];
-                            card.graphicArgs["timelineCallbacks"].push({
-                                callbackType:"onComplete",
-                                callback: childCompletion
-                            } as TimelineCallback);
-                            card.graphicArgs["timelineCallbacks"].push({
-                                position:"iconState",
-                                callback: childCheckpoint
-                            } as TimelineCallback);
-                        }
                         return (
                             <div key={index} className={"cw06w2" + (featureCardIdx == index ? " cw06active" : "")} ref={(el) => cardRefs.current[index] = el} onMouseEnter={(e) => handleMouseEvent(e,index)} onMouseLeave={(e) => handleMouseEvent(e,index)}>
                                 {card.graphicCpt && <div className={`cw06img ${card.graphicScale ? "scale" + card.graphicScale : "scale" + defaultScale}${card.graphicExtra != undefined ? " "+card.graphicExtra: ""}`}><card.graphicCpt {...card.graphicArgs} ref={(el) => childRefs.current[index] = el} /></div>}

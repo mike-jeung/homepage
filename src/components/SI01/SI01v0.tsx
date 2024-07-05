@@ -33,7 +33,7 @@ const SI01v0:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
 
         timeline.addLabel("iconState",">");
         timeline.addPause("iconState");
-        timeline.addLabel("afterIconState",">0.1");
+        timeline.addLabel("afterIconState",">0.01");
         
         applyTimelineCallbacks(timeline,timelineCallbacks);
         
