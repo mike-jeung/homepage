@@ -113,10 +113,13 @@ const CL01:FC = () => {
             textCpt: CB01,
             graphicCpt:SI01,
             graphicArgs: {
-                v:5
+                v:5,
+                timelineArgs:{
+                    repeat:1
+                }
             },
-            //graphicScale: "70",
-            //graphicExtra: "flushtop",
+            graphicScale: "85",
+            graphicExtra: "smtop",
             //demoCpt: ,
         },
     ];
