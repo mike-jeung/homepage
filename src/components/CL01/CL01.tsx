@@ -72,7 +72,7 @@ const CL01:FC = () => {
                 v:4,
                 title:"ChatBot",
                 caption:"PROJECT", 
-                description:"Retrieval Augmented Generation Example with Sun Tzu's Art of War",
+                description:"Retrieval Augmented Generation Example with Sun Tzu's 'Art of War'",
             },
             textCpt: CB01,
             graphicCpt: SI01,
@@ -129,7 +129,7 @@ const CL01:FC = () => {
             <div className="cl01w0">
                 <div className="cl01w1 cl01grid">
                     
-                    {ticks.map( (tick, index) => (<div key={index} className="cl01w3 cl01svcs"><CW07 content={ticks[index].content} tile={ticks[index].tile} disp={ticks[index].disp}/></div>))}
+                    {ticks.map( (tick, index) => (<div key={index} className={`cl01w3 cl01svcs cl01svcs-${index}`}><CW07 content={ticks[index].content} tile={ticks[index].tile} disp={ticks[index].disp}/></div>))}
                     
                     <div className="cl01w3 cl01robot"><CT02 /></div>
                     <div className="cl01w3 cl01name"><CB01 {...namePlate} /></div>

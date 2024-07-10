@@ -100,6 +100,20 @@ $maxW: $globalWidth2;
         display: flex;
         align-items: center;
     }
+    .cl01svcs-0 {
+        background: #e0e0e0;
+        // background: linear-gradient(0deg, #ffd6d6 0%, #ffffff 60%);
+        background: linear-gradient(0deg, #ffdcc6 0%, #ffffff 60%);
+    }
+    .cl01svcs-1 {
+        background: #faffcc;
+        background: linear-gradient(0deg, #faffcc 0%, rgba(255,255,255,1) 75%);
+    }
+    .cl01svcs-2 {
+        background: #e5ffe5;
+        background: linear-gradient(0deg, #d9ffe5 0%, rgba(255,255,255,1) 75%);
+
+    }
     .cl01robot {
         grid-row-start: r1;
         grid-row-end: r5;
