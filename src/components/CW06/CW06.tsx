@@ -47,6 +47,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
         initialRun = useRef<boolean[]>([]),     // tracks first run of each card animation
         mouseStatus = useRef<string | null>(null),
         openTimelines = useRef<gsap.core.Timeline[]>([]),
+        pauseAll = useRef<boolean>(false),
         animationCycles = useRef<number[]>([]), // track number of repeats of each card anim
         status = useContext(StatusContext);
         
@@ -282,6 +283,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
 
         if (isAnimating) return 0; // no interruptions
         if (action === "open") {
+            pauseCardAnim(1);
             if (featureCardIdx !== null) {
                 // close current card
                 openTimelines.current[featureCardIdx].reverse();
@@ -300,6 +302,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
         } else if (action === "close") {
             openTimelines.current[index].reverse();
             containerTimelinesAr.current[index][1].play(0);
+            pauseCardAnim();
         }
     };
     const handleMouseEvent = (e:React.MouseEvent<HTMLDivElement, MouseEvent>,index:number) => {
@@ -309,7 +312,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
             const childTimeline = childRef.getTimeline();
             if (mouseStatus.current === "mouseenter") {
                 hoverIndex.current = index;
-                childTimeline.resume();
+                if (!pauseAll.current) {childTimeline.resume();}
                 initialRun.current[index] = false;                
             } else if (mouseStatus.current === "mouseleave") {
                 hoverIndex.current = undefined;
@@ -349,7 +352,21 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
             }
         } 
     },[]);
+    const pauseCardAnim = (pause = 0) => {
+        let childRef:SI01TimelineControls;
 
+        if (pause === 1) {
+            pauseAll.current = true;
+            for (let i = 0; i < cardCount; i++) {
+                childRef = childRefs.current[i];
+                if (childRef && childRef.pause) {
+                    childRef.pause();
+                }
+            }
+        } else {
+            pauseAll.current = false;
+        }
+    };
     // some initialization
     for (let i = 0; i < cardCount; i++) {
         const card = cards[i];

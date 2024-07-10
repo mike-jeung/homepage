@@ -24,7 +24,7 @@ const SI01v5:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
             timeline.addPause("iconState");
             timeline.addLabel("afterIconState",">0.1");
             timeline.to(ticks,{opacity:0,stagger:-0.1,duration:0.1},">0.1")
-                .to(refs.per.current,{innerText:50,duration:2.1,snap:{innerText:0.01}},"<")
+                .to(refs.per.current,{innerText:0,duration:2.1,snap:{innerText:0.01}},"<")
             applyTimelineCallbacks(timeline,timelineCallbacks);
         }
     });

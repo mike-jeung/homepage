@@ -35,8 +35,6 @@ const componentMap:Record<number,FC<any>> = {
     4:SI01v4,
     5:SI01v5,
 }
-// const SI01:FC<SI01Props> = ({v = 0, timelineArgs = {}}) => {
-
 const SI01 = forwardRef( ({v = 0, timelineArgs = {}, timelineCallbacks = []}:SI01Props,ref) => {
     //console.log("timelineCallbacks",v,timelineCallbacks)
     const variation = "si01v" + v;
@@ -49,18 +47,6 @@ const SI01 = forwardRef( ({v = 0, timelineArgs = {}, timelineCallbacks = []}:SI0
             return componentMap[v];
         }, [v]);
 
-    const handleClick = (e) => {
-        // console.log(e);
-        // console.log(isPlaying.current);
-        // e.preventDefault();
-        // if (isPlaying.current) {
-        //     isPlaying.current = false;
-        //     timeline.current.pause();
-        // } else {
-        //     isPlaying.current = true;
-        //     timeline.current.play();
-        // }
-    }
     const play = (position:(string | number) = 0) => {
         timeline.current?.play(position);
     }
@@ -102,7 +88,7 @@ const SI01 = forwardRef( ({v = 0, timelineArgs = {}, timelineCallbacks = []}:SI0
     }));
 
     return (
-        <section className={`si01 ${variation}`} onClick={handleClick}>
+        <section className={`si01 ${variation}`}>
             {isTimelineReady && <VariationComponent timeline={timeline.current} timelineCallbacks={callbacks} />}
         </section>
     );
