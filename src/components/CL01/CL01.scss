@@ -104,15 +104,17 @@ $maxW: $globalWidth2;
         background: #e0e0e0;
         // background: linear-gradient(0deg, #ffd6d6 0%, #ffffff 60%);
         background: linear-gradient(0deg, #ffdcc6 0%, #ffffff 60%);
+        background: linear-gradient(0deg, #faffcc 0%, rgba(255,255,255,1) 75%);
+        background: linear-gradient(0deg, #ffeca8 0%, rgba(255,255,255,1) 75%);
     }
     .cl01svcs-1 {
         background: #faffcc;
-        background: linear-gradient(0deg, #faffcc 0%, rgba(255,255,255,1) 75%);
+        background: linear-gradient(0deg, #ffefb3 0%, rgba(255,255,255,1) 75%);
     }
     .cl01svcs-2 {
         background: #e5ffe5;
         background: linear-gradient(0deg, #d9ffe5 0%, rgba(255,255,255,1) 75%);
-
+        background: linear-gradient(0deg, #fff2c4 0%, rgba(255,255,255,1) 75%);
     }
     .cl01robot {
         grid-row-start: r1;
@@ -126,6 +128,8 @@ $maxW: $globalWidth2;
     .cl01beat {
         grid-row-start: r5;
         grid-row-end: r6;
+        background: linear-gradient(0deg, #a2c4d2 0%, #B7DBEA 35%, #d6ecf5 90%);
+        background: #a3f0ca
     }
     .cl01name {
         grid-column-start: c1;
@@ -137,7 +141,7 @@ $maxW: $globalWidth2;
         justify-content: center;
         padding: 2.5rem;
         background: rgba(255,230,151,1);
-        background: linear-gradient(-50deg, rgba(255,255,227,1) 20%, rgba(255,233,151,1) 90%, rgba(255,223,102,1) 100%);
+        background: linear-gradient(-50deg, rgba(255,255,227,1) 20%, rgba(255,233,151,1) 90%, #FFDF66 100%);
 
 
     }
