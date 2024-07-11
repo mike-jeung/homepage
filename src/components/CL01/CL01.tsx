@@ -140,7 +140,7 @@ const CL01:FC = () => {
                 <div className="cl01w1 cl01invis">
                     <CW06 cards={cards} />
                 </div>
-                <div className="cl01w1">
+                <div className="cl01w1 cl01contact">
                     <div>
                         <CW04 title="Contact" />
                     </div>
