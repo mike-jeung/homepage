@@ -22,11 +22,12 @@ const SI01v4:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
     // const timeline = useRef<gsap.core.Timeline>(gsap.timeline());
 
     useGSAP( () => {
-        timeline.addLabel("initialize");
+        timeline.addLabel("initialize")
+        .addLabel("loopStart")
         timeline.from(refs.grid.current,{x:"-100%",duration:0.5,ease:"power1.in"})
             //.set(refs.svg.current,{transformOrigin:"100% 50%",backgroundColor:"transparent",scaleX:1})
             .from(refs.base.current,{x:"-100%",duration:0.5,ease:"power1.in"},"<")
-            .addLabel("loopStart",">")
+            
             .from(refs.b1.current,{transformOrigin: "50% 100%",scaleY:0,duration:0.7},"<0.35")
             .from(refs.b2.current,{transformOrigin: "50% 100%",scaleY:0,duration:0.7},"<0.35")
             .from(refs.b3.current,{transformOrigin: "50% 100%",scaleY:0,duration:0.7},"<0.35")
@@ -49,8 +50,9 @@ const SI01v4:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
         timeline.addPause("iconState");
         timeline.addLabel("afterIconState",">0.1");
 
-        timeline.to(refs.allBars.current,{x:"150%",duration:0.5},">0.1");
-
+        timeline.to(refs.allBars.current,{x:"150%",duration:0.5},">0.1")
+            .to(refs.grid.current,{x:"120%",duration:0.5,ease:"power1.out"},"<0.25")
+            .to(refs.base.current,{x:"120%",duration:0.5,ease:"power1.out"},"<");
         applyTimelineCallbacks(timeline,timelineCallbacks);
 
     });
