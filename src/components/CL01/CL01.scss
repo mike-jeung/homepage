@@ -128,8 +128,11 @@ $maxW: $globalWidth2;
     .cl01beat {
         grid-row-start: r5;
         grid-row-end: r6;
-        background: linear-gradient(0deg, #a2c4d2 0%, #B7DBEA 35%, #d6ecf5 90%);
-        background: #c5e4e0
+        // background: linear-gradient(0deg, #a2c4d2 0%, #B7DBEA 35%, #d6ecf5 90%);
+        background: #c5e4e0;
+        background: #e0e3e6;
+        // background: linear-gradient(0deg, #c5e4e0 0%, #d6ecf5 90%);
+
     }
     .cl01name {
         grid-column-start: c1;
@@ -146,7 +149,8 @@ $maxW: $globalWidth2;
 
     }
     .cl01w1.cl01contact > div {
-        background: linear-gradient(180deg, #ffffff 0%, #e2f8ff 100%) !important;
+        // background: linear-gradient(180deg, #ffffff 0%, #e2f8ff 100%) !important;
+        background-color: #f6ffff !important;
     }
     
 }
