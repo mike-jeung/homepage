@@ -84,7 +84,7 @@ $maxW: $globalWidth2;
     }
     .cl01w3 {
         background-color: #fff;
-        border-radius: 22px;
+        border-radius: $bentoBorderRadius;
         display:inline;
         position: relative;
         overflow: hidden;
@@ -101,19 +101,19 @@ $maxW: $globalWidth2;
         align-items: center;
     }
     .cl01svcs-0 {
-        background: #e0e0e0;
+        background: #fcf2be;
         // background: linear-gradient(0deg, #ffd6d6 0%, #ffffff 60%);
-        background: linear-gradient(0deg, #ffdcc6 0%, #ffffff 60%);
-        background: linear-gradient(0deg, #faffcc 0%, rgba(255,255,255,1) 75%);
-        background: linear-gradient(0deg, #fcf2be 0%, rgba(255,255,255,1) 75%);
+        // background: linear-gradient(0deg, #ffdcc6 0%, #ffffff 60%);
+        // background: linear-gradient(0deg, #faffcc 0%, rgba(255,255,255,1) 75%);
+        background: linear-gradient(0deg, #fefad5 0%, rgba(255,255,255,1) 75%);
     }
     .cl01svcs-1 {
-        background: #faffcc;
-        background: linear-gradient(0deg, #fdf6c9 0%, rgba(255,255,255,1) 75%);
+        background: #fdf6c9;
+        background: linear-gradient(0deg, #fefad5 0%, rgba(255,255,255,1) 75%);
     }
     .cl01svcs-2 {
-        background: #e5ffe5;
-        background: linear-gradient(0deg, #d9ffe5 0%, rgba(255,255,255,1) 75%);
+        background: #fefad5;
+        // background: linear-gradient(0deg, #d9ffe5 0%, rgba(255,255,255,1) 75%);
         background: linear-gradient(0deg, #fefad5 0%, rgba(255,255,255,1) 75%);
     }
     .cl01robot {
@@ -129,7 +129,7 @@ $maxW: $globalWidth2;
         grid-row-start: r5;
         grid-row-end: r6;
         // background: linear-gradient(0deg, #a2c4d2 0%, #B7DBEA 35%, #d6ecf5 90%);
-        background: #c5e4e0;
+        // background: #c5e4e0;
         background: #e0e3e6;
         // background: linear-gradient(0deg, #c5e4e0 0%, #d6ecf5 90%);
 
@@ -142,7 +142,7 @@ $maxW: $globalWidth2;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 2.5rem;
+        padding: $bentoStdPad;
         background: rgba(255,230,151,1);
         background: linear-gradient(-50deg, rgba(255,255,227,1) 20%, rgba(255,233,151,1) 90%, #FFDF66 100%);
 
@@ -150,19 +150,44 @@ $maxW: $globalWidth2;
     }
     .cl01w1.cl01contact > div {
         // background: linear-gradient(180deg, #ffffff 0%, #e2f8ff 100%) !important;
-        background-color: #f6ffff !important;
+        background-color: #e0e3e6 !important;
     }
     
 }
 @media (max-width: $bp_tablet) {
     .cl01 {
-        // .cl01w0 {
-        //     margin-top: $padMobile;
-        // }
-        // .cl01w1 {
-        //     justify-content: space-between;
-        //     gap: $padMobile $padMobile;
-        // }
+        // background: #F00;
+        
+        .cl01grid {
+            display: flex;
+            flex-direction: column;
+            padding: 0 $padMobile;
+        }
+        .cl01contact {
+            padding: 0 $padMobile;
+        }
+        .cl01w0 {
+            max-width: 100%;
+            margin-top: 0;
+        }
+        .cl01w1 {
+            flex-wrap: nowrap;
+            gap: $padMobile;
+            margin-top: $padMobile;
+        }
+        .cl01w1:not(.cl01grid):not(.cl01invis) > * {
+            padding: $bentoMobPad;
+            border-radius: $bentoMobBorderRadius;
+        }
+        .cl01w1.cl01invis > * {
+            border-radius: $bentoMobBorderRadius;
+        }
+        .cl01name {
+            padding: $bentoMobPad;
+        }
+        .cl01w1 .cl01svcs {
+            background: #fff;
+        }
         .cl01w1 > .col0,
         .cl01w1 > .col1,
         .cl01w1 > .col2 {
@@ -175,8 +200,32 @@ $maxW: $globalWidth2;
         .col0.cl01bleed {
             padding: 0;
         }
+        .cl01name {
+            order: 0;
+        }
+        .cl01beat {
+            order: 10;
+            display: none;
+        }
+        .cl01svcs-0 {
+            order: 50;
+        }
+        .cl01svcs-1 {
+            order: 50;
+        }
+        .cl01svcs-2 {
+            order: 50;
+        }
+        .cl01robot {
+            display: none;
+        }
+        .cl01w3 {
+            border-radius: $bentoMobBorderRadius;
+        }
     }
 }
 @media (max-width: $bp_mobile) {
-    
+    .cl01 {
+        // background: #0F0;
+    }
 }

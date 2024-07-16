@@ -6,7 +6,10 @@ $bentoBoxUnit: 165px;
 $bentoBoxTotal: $bentoBoxUnit * 5;
 $bentoBGColor: #FFFFFF;
 $bentoBorderRadius: 22px;
+$bentoMobBorderRadius: 12px;
+$bentoSmBorderRadius: 8px;
 $bentoStdPad: 2.5rem;
+$bentoMobPad: 1.4rem;
 $bentoColGap: 15px;
 $bentoRowGap: 15px;
 $bentoColHalfGap: calc($bentoColGap / 2);
@@ -14,6 +17,7 @@ $bentoRowHalfGap: calc($bentoRowGap / 2);
 
 
 $boxPadding: 2.5rem;
+$boxMobPadding: 1.4rem;
 
 $boxMinHt: 450px;
 
@@ -21,16 +25,26 @@ $globalWidth2: calc($bentoBoxTotal + 6rem);
 $globalWidth: $globalWidthConstant * 1px;
 $padPercent: $marginFraction * 100%;
 $padtopPercent: $topmarginFraction * 100%;
-$padMobile: 20px;
+$padMobile: 15px;
 
 $baseBGColor: #EEEEEE;
 
 
 
-$formFieldBG: #c0f0ff;
+$formFieldBG: #FFFFFF;
 $focusColor: #3cf;
 $focusColorDk: #09C;
 $formLabelColor: #666;
+$formBtnColor: #09C;
+$formBtnTxtColor: #FFF;
+
+$formFieldBG2: #c0f0ff;
+$focusColor2: #3cf;
+$focusColorDk2: #09C;
+$formLabelColor2: #666;
+$formBtnColor2: #09C;
+$formBtnTxtColor2: #09c;
+
 $formBorderRadius: 10px;
 $innerFormBorderRadius: 8px;
 

@@ -40,3 +40,37 @@
         // display: none;
     }
 }
+@media (max-width: $bp_tablet) {
+    .cw07 {
+        padding-bottom: 0;
+        .cw07w0 {
+            position: relative;
+            display: block;
+        }
+        .cw07w1 {
+            min-width: 70px;
+            max-width: 70px;
+            height: 70px;
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            align-items: stretch;
+            justify-content: center;
+            top: 10px;
+            left: 10px;
+            bottom: 10px;
+            right: auto;
+            background: #FFF;
+            overflow: hidden;
+            border-radius: $bentoSmBorderRadius;
+            border: 1px solid #CCC;
+
+        }
+        .cw07w2 {
+            opacity:1;
+            position: relative;
+            margin-left: 80px;
+        }
+    }
+}

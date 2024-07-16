@@ -129,3 +129,54 @@
     }
     
 }
+
+@media (max-width: $bp_tablet) {
+    .cw06 {
+        .cw06img {
+            padding: $bentoMobPad $bentoMobPad 0;
+            margin: auto;
+            max-width: 65%;
+            > * {
+                position: relative;
+                top: auto;
+            }
+            &.smtop > * {
+                top: auto;
+            }
+        }
+        .cw06open {
+            font-size: 0.85rem;
+            right: $bentoMobPad;
+            bottom: $bentoMobPad;
+        }
+        .cw06w0 {
+            padding: 0 $padMobile;
+        }
+        .cw06w1 {
+            padding-bottom: 0;
+        }
+        .cw06w2 {
+            border-radius: $bentoMobBorderRadius;
+            position: relative;
+            min-height: 0;
+            display: block;
+            margin-bottom: $padMobile;
+            &:last-child {
+                margin-bottom:0;
+            }
+        }
+        .cw06w3 {
+            padding: $bentoMobPad $bentoMobPad $bentoStdPad;
+            position: relative;
+        }
+        @for $i from 1 to 4 {
+            .cw06col#{$i} {
+                & > .cw06w2 {
+                    max-width: 100%;
+                    min-width: 100%;
+                    padding-bottom: 0;
+                }
+            }
+        }
+    }
+}

@@ -1,11 +1,13 @@
-import React, { FC, useEffect, useRef } from "react";
+import React, { FC, useContext, useEffect, useRef } from "react";
 import { useGSAP } from '@gsap/react';
 import "./style/SI01v2.scss";
 import { SI01ChildProps } from "./SI01";
 import { applyTimelineCallbacks } from "../../helpers";
+import { StatusContext } from "../../App";
 
 const SI01v2:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
     // back end; add vertical gradient
+    const status = useContext(StatusContext);
     const refs = {
         "all": useRef<SVGSVGElement | null>(null),
         "dots": useRef<SVGGElement | null>(null),
@@ -25,51 +27,57 @@ const SI01v2:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
     useGSAP( () => {
         const platters = refs.all.current?.querySelectorAll(".platters > g");
         const l = refs.top.current?.getTotalLength();
-        if (platters && l) {
-            timeline.addLabel("initialize");
-            timeline.addLabel("loopStart");
-            timeline.set(refs.top.current, {strokeDasharray:l})
-                .set(refs.bot.current, {strokeDasharray:l});
-            timeline.from(platters,{y:-100,stagger:0.2,duration:0.5});
-            
-            timeline.addLabel("zoom");
 
-            timeline.fromTo(refs.bot.current, {strokeDashoffset:l, strokeDasharray:l, ease:"power4.in"}, {duration:1.25, strokeDashoffset:0})
-                .fromTo(refs.top.current, {strokeDashoffset:l, strokeDasharray:l, ease:"power4.in"}, {duration:1.25, strokeDashoffset:0},"<");
+        timeline.addLabel("initialize")
+            .addLabel("loopStart");
+        if (status.isMobile || status.isTablet) {
 
-            timeline.fromTo(refs.dots.current,{opacity:1,x:-200},{x:200,duration:1},"<1.1");
+
+
+        } else {
+            if (platters && l) {
+                timeline.set(refs.top.current, {strokeDasharray:l})
+                    .set(refs.bot.current, {strokeDasharray:l});
+                timeline.from(platters,{y:-100,stagger:0.2,duration:0.5});
+                
+                timeline.addLabel("zoom");
+
+                timeline.fromTo(refs.bot.current, {strokeDashoffset:l, strokeDasharray:l, ease:"power4.in"}, {duration:1.25, strokeDashoffset:0})
+                    .fromTo(refs.top.current, {strokeDashoffset:l, strokeDasharray:l, ease:"power4.in"}, {duration:1.25, strokeDashoffset:0},"<");
+
+                timeline.fromTo(refs.dots.current,{opacity:1,x:-200},{x:200,duration:1},"<1.1");
+                    
+
+                timeline.to(refs.bot.current, {duration:1.25, strokeDashoffset:-l},"<0.625")
+                    .to(refs.top.current, {duration:1.25, strokeDashoffset:-l},"<");
+                
+                timeline.set(refs.dots.current,{opacity:0},">");
                 
 
-            timeline.to(refs.bot.current, {duration:1.25, strokeDashoffset:-l},"<0.625")
-                .to(refs.top.current, {duration:1.25, strokeDashoffset:-l},"<");
-            
-            timeline.set(refs.dots.current,{opacity:0},">");
-            
+                
+                timeline.addLabel("iconState",">");
+                timeline.addPause("iconState");
+                timeline.addLabel("afterIconState",">0.1");
+                
+                applyTimelineCallbacks(timeline,timelineCallbacks);
 
-            
-            timeline.addLabel("iconState",">");
-            timeline.addPause("iconState");
-            timeline.addLabel("afterIconState",">0.1");
-            
-            applyTimelineCallbacks(timeline,timelineCallbacks);
+                // no stagger option, repeating dots
+                // timeline.to(refs.bot.current,{duration:2});
+                // timeline.add(() => {
+                //     timeline.tweenFromTo("zoom", timeline.duration(), {
+                //         repeat: -1, // repeat indefinitely
+                //         immediateRender: false, // don't start tween immediately
+                //     });
+                // });
 
-            // no stagger option, repeating dots
-            // timeline.to(refs.bot.current,{duration:2});
-            // timeline.add(() => {
-            //     timeline.tweenFromTo("zoom", timeline.duration(), {
-            //         repeat: -1, // repeat indefinitely
-            //         immediateRender: false, // don't start tween immediately
-            //     });
-            // });
+                // stagger up option
+                //timeline.to(platters,{y:-200,stagger:{amount:0.5,from:"end"},duration:0.50},">0.1");
 
-            // stagger up option
-            //timeline.to(platters,{y:-200,stagger:{amount:0.5,from:"end"},duration:0.50},">0.1");
-
-            // stagger down option
-            timeline.to(platters,{y:200,stagger:{amount:0.5},duration:0.50},">0.1");
+                // stagger down option
+                timeline.to(platters,{y:200,stagger:{amount:0.5},duration:0.50},">0.1");
+            }
         }
-
-    });
+    },[status]);
     return (
     
         <div className="si01w0">

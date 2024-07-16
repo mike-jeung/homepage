@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useContext } from "react";
 import "./CL01.scss";
 import CB01 from "../CB01/CB01";
 //import { CB01v0, CB01v1, CB01v2, CB01v4 } from "../CB01/CB01var";
@@ -10,10 +10,12 @@ import CW05 from "../CW05/CW05";
 import CW06, { CardData } from "../CW06/CW06";
 import CW07 from "../CW07/CW07";
 import SI01 from "../SI01/SI01";
+import { StatusContext } from "../../App";
 
 const CL01:FC = () => {
 
-    
+    const status = useContext(StatusContext);
+    console.log(status)
     const ticks = [
         {
             content: {
@@ -131,7 +133,7 @@ const CL01:FC = () => {
                     
                     {ticks.map( (tick, index) => (<div key={index} className={`cl01w3 cl01svcs cl01svcs-${index}`}><CW07 content={ticks[index].content} tile={ticks[index].tile} disp={ticks[index].disp}/></div>))}
                     
-                    <div className="cl01w3 cl01robot"><CT02 /></div>
+                    <div className="cl01w3 cl01robot">{status.isTablet === false ? <CT02 /> : "" }</div>
                     <div className="cl01w3 cl01name"><CB01 {...namePlate} /></div>
                     <div className="cl01w3 cl01beat">
                         
