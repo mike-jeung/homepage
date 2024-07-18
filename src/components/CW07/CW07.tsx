@@ -105,7 +105,7 @@ const CW07:FC<CW07Props> = ({tile,content,disp}) => {
         }
     };
     useEffect( () => {
-        
+        console.log("cw07 mounted")
         // timeline.current = gsap.timeline({paused:true});
         timeline.current?.addLabel("start")
             .addPause("start")
@@ -116,6 +116,8 @@ const CW07:FC<CW07Props> = ({tile,content,disp}) => {
             .call(animStatus,["end"])
             .addPause("end");
         return (() => {
+            console.log("cw07 UNmounted")
+
             if (timeline.current) {
                 timeline.current.kill();
             } 

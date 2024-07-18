@@ -23,14 +23,14 @@ const SI01v4:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
     // const timeline = useRef<gsap.core.Timeline>(gsap.timeline());
 
     useGSAP( () => {
-
+        timeline.clear(true);
         timeline.addLabel("initialize")
             .addLabel("loopStart");
-        if (status.isMobile || status.isTablet) {
+        // if (status.isMobile || status.isTablet) {
 
 
 
-        } else {
+        // } else {
             
             timeline.from(refs.grid.current,{x:"-100%",duration:0.5,ease:"power1.in"})
                 //.set(refs.svg.current,{transformOrigin:"100% 50%",backgroundColor:"transparent",scaleX:1})
@@ -62,8 +62,8 @@ const SI01v4:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
                 .to(refs.grid.current,{x:"120%",duration:0.5,ease:"power1.out"},"<0.25")
                 .to(refs.base.current,{x:"120%",duration:0.5,ease:"power1.out"},"<");
             applyTimelineCallbacks(timeline,timelineCallbacks);
-        }
-    },[status]);
+        // }
+    });
     return (
         <div className="si01w0">
             <svg xmlns="http://www.w3.org/2000/svg" id="data" viewBox="0 0 165 165" ref={refs.svg}>

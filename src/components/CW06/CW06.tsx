@@ -36,8 +36,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
     const [cardCount, setCardCount] = useState(cards.length),
         [cardPos, setCardPos] = useState<Map<number, CW06CardPosition>>(new Map()),
         [featureCardIdx, setFeatureCardIdx] = useState<number | null>(null),
-        [hasInitialPosition, setHasInitialPosition] = useState<boolean>(false),
-        [isAnimating, setIsAnimating] = useState<boolean>(false);
+        [hasInitialPosition, setHasInitialPosition] = useState<boolean>(false);
 
     const cardRefs = useRef<(HTMLDivElement | null)[]>([]),
         childRefs = useRef<SI01TimelineControls[]>([]),
@@ -45,6 +44,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
         containerTimelinesAr = useRef<gsap.core.Timeline[][]>([]),
         hoverIndex = useRef<number | undefined>(undefined),
         initialRun = useRef<boolean[]>([]),     // tracks first run of each card animation
+        isAnimating = useRef<boolean>(false),
         mouseStatus = useRef<string | null>(null),
         openTimelines = useRef<gsap.core.Timeline[]>([]),
         pauseAll = useRef<boolean>(false),
@@ -83,21 +83,24 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
         w4Ht = 0,                               // height of content component that was passed in (closed)
         wContentHt = 0;                         // height of content component that was passed in (open)
 
-        // console.log("stat",status);
-
-        
+    const setIsAnimating = (val:boolean) => {
+        isAnimating.current = val;
+    }  
     useEffect( () => {
 
-        const position:Map<number,CW06CardPosition> = new Map,
-            container = containerRef.current;
-        setCardCount(cards.length);
         
-        if (status.isMobile || status.isTablet) {
+        
+        if (status.bp === "mobile") {
+            // console.log("cw06 mobile")
 
 
 
         } else {
-            if (!hasInitialPosition) {
+            const position:Map<number,CW06CardPosition> = new Map,
+                container = containerRef.current;
+            setCardCount(cards.length);
+            // console.log("cw06 mounted",cards.length)
+            //if (!hasInitialPosition) {
                 // calculate sizing/positioning
                 if (container) {
                     containerW = container.clientWidth;
@@ -123,11 +126,10 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
                         });
                         col = col === cols - 1 ? 0 : col + 1;
                     }
-                    // console.log(position)
                     setCardPos( position );
                     setHasInitialPosition(true);
                 }
-            }
+            //}
 
             if (container) {
                 containerStyles = window.getComputedStyle(container);
@@ -135,12 +137,10 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
             }
             
                 
-
             for (let i = 0; i < cardCount; i++) {
-                
                 cardRef = cardRefs.current[i];
                 cardPosition = position.get(i);
-
+                
                 if (cardRef !== null && cardPos) {
                     // customize the bottom padding to accommodate the content, cw06w4 + w06content
                     cardContentWrap = cardRef.querySelector(".cw06w3");
@@ -202,8 +202,6 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
                     gsap.set(cardContentWrap,{top: cardPosition?.wrapTop + "%"});
     
                     openTimelines.current[i] = gsap.timeline({paused:true});
-
-
                     
                     if (position && cardRefs) {
 
@@ -268,20 +266,23 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
                         },0);
                     }
                 }
+                
             }
+            // cleanup
+            return () => {
+                for (let i = 0; i < containerTimelinesAr.current.length; i++) {
+                    // console.log("cw06 cleanup",i)
+                    containerTimelinesAr.current[i][0].kill();
+                    containerTimelinesAr.current[i][1].kill();
+                    containerTimelinesAr.current[i] = [];
+                }
+                for (let i = 0; i < openTimelines.current.length; i++) {
+                    
+                    openTimelines.current[i].kill();
+                }
+                openTimelines.current = [];
+            };
         }
-        // cleanup
-        return () => {
-            for (let i = 0; i < containerTimelinesAr.current.length; i++) {
-                containerTimelinesAr.current[i][0].kill();
-                containerTimelinesAr.current[i][1].kill();
-                containerTimelinesAr.current[i] = [];
-            }
-            for (let i = 0; i < openTimelines.current.length; i++) {
-                openTimelines.current[i].kill();
-            }
-            openTimelines.current = [];
-        };
     },[status]);
 
     const handleClick  = (e:React.MouseEvent<HTMLAnchorElement, MouseEvent>,index:number,action:string) => {
@@ -290,7 +291,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
         if (status.isMobile || status.isTablet) {
 
         } else {
-            if (isAnimating) return 0; // no interruptions
+            if (isAnimating.current) return 0; // no interruptions
             if (action === "open") {
                 pauseCardAnim(1);
                 if (featureCardIdx !== null) {
@@ -402,7 +403,6 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
             <div className="cw06w0">
                 <div className={`cw06w1 cw06col${cols}`} ref={containerRef}>
                     { cards.length > 0 && cards.map( (card,index) => {
-                        // console.log(card.textArgs)
                         return (
                             <div key={index} className={"cw06w2" + (featureCardIdx == index ? " cw06active" : "")} ref={(el) => cardRefs.current[index] = el} onMouseEnter={(e) => handleMouseEvent(e,index)} onMouseLeave={(e) => handleMouseEvent(e,index)}>
                                 {card.graphicCpt && <div className={`cw06img ${card.graphicScale ? "scale" + card.graphicScale : "scale" + defaultScale}${card.graphicExtra != undefined ? " "+card.graphicExtra: ""}`}><card.graphicCpt {...card.graphicArgs} ref={(el) => childRefs.current[index] = el} /></div>}

@@ -133,7 +133,7 @@ const CL01:FC = () => {
                     
                     {ticks.map( (tick, index) => (<div key={index} className={`cl01w3 cl01svcs cl01svcs-${index}`}><CW07 content={ticks[index].content} tile={ticks[index].tile} disp={ticks[index].disp}/></div>))}
                     
-                    <div className="cl01w3 cl01robot">{status.isTablet === false ? <CT02 /> : "" }</div>
+                    <div className="cl01w3 cl01robot"><CT02 /></div>
                     <div className="cl01w3 cl01name"><CB01 {...namePlate} /></div>
                     <div className="cl01w3 cl01beat">
                         

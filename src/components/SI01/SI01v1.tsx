@@ -27,14 +27,14 @@ const SI01v1:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
         refs.win2txt.current = refs.win2.current?.querySelectorAll(".txt");
         refs.win1block.current = refs.win1.current?.querySelectorAll(".block");
         refs.win2block.current = refs.win2.current?.querySelectorAll(".block");
-        
+        timeline.clear(true);
         timeline.addLabel("initialize")
             .addLabel("loopStart");
-        if (status.isMobile || status.isTablet) {
+        // if (status.isMobile || status.isTablet) {
 
 
 
-        } else {
+        // } else {
             if (refs.win2txt.current && refs.win1txt.current && refs.win2block.current && refs.win1block.current) {
                 
                 timeline.set(refs.win1txt.current,{scaleX:0});
@@ -78,10 +78,10 @@ const SI01v1:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
                 applyTimelineCallbacks(timeline,timelineCallbacks);
 
             }
-        }
+        // }
 
 
-    },[status]);
+    });
     return (
         <div className="si01w0">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 71" ref={refs.win1} className="si01win1">

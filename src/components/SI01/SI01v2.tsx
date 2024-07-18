@@ -27,14 +27,10 @@ const SI01v2:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
     useGSAP( () => {
         const platters = refs.all.current?.querySelectorAll(".platters > g");
         const l = refs.top.current?.getTotalLength();
-
+        timeline.clear(true);
         timeline.addLabel("initialize")
             .addLabel("loopStart");
-        if (status.isMobile || status.isTablet) {
-
-
-
-        } else {
+        
             if (platters && l) {
                 timeline.set(refs.top.current, {strokeDasharray:l})
                     .set(refs.bot.current, {strokeDasharray:l});
@@ -59,7 +55,6 @@ const SI01v2:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
                 timeline.addPause("iconState");
                 timeline.addLabel("afterIconState",">0.1");
                 
-                applyTimelineCallbacks(timeline,timelineCallbacks);
 
                 // no stagger option, repeating dots
                 // timeline.to(refs.bot.current,{duration:2});
@@ -75,9 +70,12 @@ const SI01v2:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
 
                 // stagger down option
                 timeline.to(platters,{y:200,stagger:{amount:0.5},duration:0.50},">0.1");
+
+                applyTimelineCallbacks(timeline,timelineCallbacks);
+
             }
-        }
-    },[status]);
+        
+    });
     return (
     
         <div className="si01w0">

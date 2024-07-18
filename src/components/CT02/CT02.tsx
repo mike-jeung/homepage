@@ -1,9 +1,11 @@
-import React, { FC, useRef, useState } from "react";
+import React, { FC, useContext, useRef, useState } from "react";
 import "./CT02.scss";
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
+import { StatusContext } from "../../App";
 
 const CT02:FC = () => {
+    const status = useContext(StatusContext);
     const [paused, setPaused] = useState<boolean>(false);
     const refs = {
             "bub": useRef<HTMLDivElement>(null),
@@ -69,106 +71,110 @@ const CT02:FC = () => {
         timeline3 = useRef<gsap.core.Timeline>(gsap.timeline({repeat:-1}));
 
     useGSAP( () => {
-        const t0 = timeline0.current,
-            t1 = timeline1.current,
-            t2 = timeline2.current,
-            t3 = timeline3.current;
+        if (status.bp === "mobile") {
 
-            t1.add(gsap.fromTo(refs.g1.current,{rotate:0,transformOrigin:"50% 50%"},{rotate:360,duration:300,ease:"none"}),0);
-        // L1 edges
-        for (let i = 1; i <= 8; i++) {
-            let target = refs["v" + i].current;
-            let l = target.getTotalLength();
-            let dur = 1,
-                start = 0;
-            t0.set(target, {strokeDasharray:l});
-            let anim = gsap.fromTo(target, {strokeDashoffset:l, strokeDasharray:l, ease:"power4.out"}, {duration:dur, strokeDashoffset:0});
-            t0.add(anim,start);
-        }
-        // L1 nodes
-        for (let i = 1; i <= 8; i++) {
-            let node = refs["n" + i].current;
-            //t0.set(node,{scale:0,opacity:0});
-            let nodeAnim = gsap.fromTo(node, {scale:0,transformOrigin:"50% 50%"},{scale:1,duration:0.5});
-            t0.add(nodeAnim, 1);
-        }
-        // L2 edges
-        for (let i = 1; i <= 8; i++) {
-            for (let j = 1; j <= 2; j++) {
-                let target = refs[`v${i}_${j}`].current;
+        } else {
+            const t0 = timeline0.current,
+                t1 = timeline1.current,
+                t2 = timeline2.current,
+                t3 = timeline3.current;
+
+                t1.add(gsap.fromTo(refs.g1.current,{rotate:0,transformOrigin:"50% 50%"},{rotate:360,duration:300,ease:"none"}),0);
+            // L1 edges
+            for (let i = 1; i <= 8; i++) {
+                let target = refs["v" + i].current;
                 let l = target.getTotalLength();
-                let dur = 1;
+                let dur = 1,
+                    start = 0;
                 t0.set(target, {strokeDasharray:l});
                 let anim = gsap.fromTo(target, {strokeDashoffset:l, strokeDasharray:l, ease:"power4.out"}, {duration:dur, strokeDashoffset:0});
-                t0.add(anim,1.5);
+                t0.add(anim,start);
             }
+            // L1 nodes
+            for (let i = 1; i <= 8; i++) {
+                let node = refs["n" + i].current;
+                //t0.set(node,{scale:0,opacity:0});
+                let nodeAnim = gsap.fromTo(node, {scale:0,transformOrigin:"50% 50%"},{scale:1,duration:0.5});
+                t0.add(nodeAnim, 1);
+            }
+            // L2 edges
+            for (let i = 1; i <= 8; i++) {
+                for (let j = 1; j <= 2; j++) {
+                    let target = refs[`v${i}_${j}`].current;
+                    let l = target.getTotalLength();
+                    let dur = 1;
+                    t0.set(target, {strokeDasharray:l});
+                    let anim = gsap.fromTo(target, {strokeDashoffset:l, strokeDasharray:l, ease:"power4.out"}, {duration:dur, strokeDashoffset:0});
+                    t0.add(anim,1.5);
+                }
+            }
+            // Outer ring
+            t0.add(gsap.fromTo(refs.o_r.current,{scale:0,transformOrigin:"50% 50%"},{scale:1,duration:1.25,ease:"none"}),1.5);
+            // L2 nodes
+            for (let i = 1; i <= 8; i++) {
+                let node = refs[`n${i}_1`].current;
+                let nodeAnim = gsap.fromTo(node, {scale:0,transformOrigin:"50% 50%"},{scale:1,duration:0.25});
+                t0.add(nodeAnim, 2.5);
+            }
+
+            // initial arm position
+            t2.add(gsap.fromTo(refs.arm_lt.current,{transformOrigin:"92.32% 50%",rotate:0},{rotate:-60,duration:0.5,ease:"none"}),0);
+            t2.add(gsap.fromTo(refs.arm_lt_fore.current,{transformOrigin:"85.27% 50%",rotate:0},{rotate:90,duration:0.5,ease:"none"}),0);
+            t2.add(gsap.fromTo(refs.arm_rt.current,{transformOrigin:"7.68% 50%",rotate:0},{rotate:60,duration:0.5,ease:"none"}),0);
+            t2.add(gsap.fromTo(refs.arm_rt_fore.current,{transformOrigin:"14.73% 50%",rotate:0},{rotate:-90,duration:0.5,ease:"none"}),0);
+            t2.addPause();
+
+            // eureka
+            t2.addLabel("start","0.5");
+            t2.to(refs.arm_lt.current,{rotate:30,duration:0.5},0.5);
+            t2.to(refs.arm_lt_fore.current,{rotate:25,duration:0.5},0.5);
+            t2.to(refs.arm_rt.current,{rotate:-30,duration:0.5},0.5);
+            t2.to(refs.arm_rt_fore.current,{rotate:-25,duration:0.5},0.5);
+            // talky talky
+            t2.to(refs.mouth.current,{scaleY:3,duration:0.2},0.5);
+            t2.to(refs.mouth.current,{scaleY:1,duration:0.2},0.7);
+            t2.to(refs.mouth.current,{scaleY:3,duration:0.2},0.9);
+            t2.to(refs.mouth.current,{scaleY:1,duration:0.2},1.1);
+            t2.to(refs.mouth.current,{scaleY:3,duration:0.2},1.3);
+            t2.to(refs.mouth.current,{scaleY:1,duration:0.2},1.5);
+            
+            t2.set(refs.head.current,{transformOrigin:"center"},0);
+            t2.to(refs.head.current,{rotation:-1,duration:0.2},0.5);
+            t2.to(refs.head.current,{rotation:1,duration:0.2},0.7);
+            t2.to(refs.head.current,{rotation:-1,duration:0.2},0.9);
+            t2.to(refs.head.current,{rotation:1,duration:0.2},1.1);
+            t2.to(refs.head.current,{rotation:-1,duration:0.2},1.3);
+            t2.to(refs.head.current,{rotation:0,duration:0.2},1.5);
+            // bubble
+            t2.to(refs.bub.current,{top:"7%",opacity:1,duration:0.5, ease:"none"},0.5);
+            t2.to(refs.bub.current,{top:"0%",duration:3, ease:"none"},1);
+            t2.to(refs.bub.current,{opacity:0,duration:0.25},3.5);
+
+            t2.to(refs.arm_lt.current,{rotate:-60,duration:0.5},1);
+            t2.to(refs.arm_lt_fore.current,{rotate:90,duration:0.5},1);
+            t2.to(refs.arm_rt.current,{rotate:60,duration:0.5},1);
+            t2.to(refs.arm_rt_fore.current,{rotate:-90,duration:0.5},1);
+
+            
+            for (let i = 1; i <= 5;i++) {
+                t3.set(refs["l"+i].current,{duration:3,fill:"#00ff06",ease:"none"},0);
+                t3.set(refs["l"+i].current,{duration:3,fill:"#000000",ease:"none"},3);
+            }
+
+            for (let i = 1; i <= 5;i++) {
+                t3.add(gsap.to(refs["l"+i].current,{duration:0.5,fill:"#00ff06",ease:"none"}),3 + (i * 0.5));
+            }
+            t3.eventCallback("onRepeat", () => {
+                t2.play("start");
+            });
+            /*
+
+                533 - 470
+    92.32%
+    forearm 482.5 - 408.83, w = 86.4
+    85.27%
+            */
         }
-        // Outer ring
-        t0.add(gsap.fromTo(refs.o_r.current,{scale:0,transformOrigin:"50% 50%"},{scale:1,duration:1.25,ease:"none"}),1.5);
-        // L2 nodes
-        for (let i = 1; i <= 8; i++) {
-            let node = refs[`n${i}_1`].current;
-            let nodeAnim = gsap.fromTo(node, {scale:0,transformOrigin:"50% 50%"},{scale:1,duration:0.25});
-            t0.add(nodeAnim, 2.5);
-        }
-
-        // initial arm position
-        t2.add(gsap.fromTo(refs.arm_lt.current,{transformOrigin:"92.32% 50%",rotate:0},{rotate:-60,duration:0.5,ease:"none"}),0);
-        t2.add(gsap.fromTo(refs.arm_lt_fore.current,{transformOrigin:"85.27% 50%",rotate:0},{rotate:90,duration:0.5,ease:"none"}),0);
-        t2.add(gsap.fromTo(refs.arm_rt.current,{transformOrigin:"7.68% 50%",rotate:0},{rotate:60,duration:0.5,ease:"none"}),0);
-        t2.add(gsap.fromTo(refs.arm_rt_fore.current,{transformOrigin:"14.73% 50%",rotate:0},{rotate:-90,duration:0.5,ease:"none"}),0);
-        t2.addPause();
-
-        // eureka
-        t2.addLabel("start","0.5");
-        t2.to(refs.arm_lt.current,{rotate:30,duration:0.5},0.5);
-        t2.to(refs.arm_lt_fore.current,{rotate:25,duration:0.5},0.5);
-        t2.to(refs.arm_rt.current,{rotate:-30,duration:0.5},0.5);
-        t2.to(refs.arm_rt_fore.current,{rotate:-25,duration:0.5},0.5);
-        // talky talky
-        t2.to(refs.mouth.current,{scaleY:3,duration:0.2},0.5);
-        t2.to(refs.mouth.current,{scaleY:1,duration:0.2},0.7);
-        t2.to(refs.mouth.current,{scaleY:3,duration:0.2},0.9);
-        t2.to(refs.mouth.current,{scaleY:1,duration:0.2},1.1);
-        t2.to(refs.mouth.current,{scaleY:3,duration:0.2},1.3);
-        t2.to(refs.mouth.current,{scaleY:1,duration:0.2},1.5);
-        
-        t2.set(refs.head.current,{transformOrigin:"center"},0);
-        t2.to(refs.head.current,{rotation:-1,duration:0.2},0.5);
-        t2.to(refs.head.current,{rotation:1,duration:0.2},0.7);
-        t2.to(refs.head.current,{rotation:-1,duration:0.2},0.9);
-        t2.to(refs.head.current,{rotation:1,duration:0.2},1.1);
-        t2.to(refs.head.current,{rotation:-1,duration:0.2},1.3);
-        t2.to(refs.head.current,{rotation:0,duration:0.2},1.5);
-        // bubble
-        t2.to(refs.bub.current,{top:"7%",opacity:1,duration:0.5, ease:"none"},0.5);
-        t2.to(refs.bub.current,{top:"0%",duration:3, ease:"none"},1);
-        t2.to(refs.bub.current,{opacity:0,duration:0.25},3.5);
-
-        t2.to(refs.arm_lt.current,{rotate:-60,duration:0.5},1);
-        t2.to(refs.arm_lt_fore.current,{rotate:90,duration:0.5},1);
-        t2.to(refs.arm_rt.current,{rotate:60,duration:0.5},1);
-        t2.to(refs.arm_rt_fore.current,{rotate:-90,duration:0.5},1);
-
-        
-        for (let i = 1; i <= 5;i++) {
-            t3.set(refs["l"+i].current,{duration:3,fill:"#00ff06",ease:"none"},0);
-            t3.set(refs["l"+i].current,{duration:3,fill:"#000000",ease:"none"},3);
-        }
-
-        for (let i = 1; i <= 5;i++) {
-            t3.add(gsap.to(refs["l"+i].current,{duration:0.5,fill:"#00ff06",ease:"none"}),3 + (i * 0.5));
-        }
-        t3.eventCallback("onRepeat", () => {
-            t2.play("start");
-        });
-        /*
-
-            533 - 470
-92.32%
-forearm 482.5 - 408.83, w = 86.4
-85.27%
-        */
     });
     const pauseAnimation = () => {
         if (paused) {

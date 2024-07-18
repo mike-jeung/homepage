@@ -37,15 +37,18 @@ const componentMap:Record<number,FC<any>> = {
 }
 const SI01 = forwardRef( ({v = 0, timelineArgs = {}, timelineCallbacks = []}:SI01Props,ref) => {
     //console.log("timelineCallbacks",v,timelineCallbacks)
-    const variation = "si01v" + v;
+
+    const [isTimelineReady, setIsTimelineReady] = useState<boolean>(false);
     const timeline = useRef<gsap.core.Timeline | null>(null);
     const isPlaying = useRef(true);
-    const [isTimelineReady, setIsTimelineReady] = useState<boolean>(false);
+
     const callbacks = timelineCallbacks;
     const VariationComponent = useMemo( 
         () => {            
             return componentMap[v];
-        }, [v]);
+    }, [v]);
+    const variation = "si01v" + v;
+
 
     const play = (position:(string | number) = 0) => {
         timeline.current?.play(position);
@@ -69,12 +72,12 @@ const SI01 = forwardRef( ({v = 0, timelineArgs = {}, timelineCallbacks = []}:SI0
         } 
     }
     useEffect( () => {
-        console.log(" ********************************************* SI01 mounted", variation)
+        console.log(` ********************************************* ${variation} mounted`);
         timeline.current = gsap.timeline(timelineArgs);
         setIsTimelineReady(true);
 
         return () => {
-            console.log(' =============================================== SI01 unmount', variation);
+            console.log(` ********************************************* ${variation} UNmounted`);
             timeline.current?.kill();
         };
     },[]);

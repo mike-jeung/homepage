@@ -8,6 +8,8 @@ interface Status {
     appHeight?: number;
     isMobile?: boolean;
     isTablet?: boolean;
+    bp?: string;
+    bpChanged?: boolean;
 }
 const StatusContext = createContext<Status>({});
 const App: FC = () => {
@@ -18,25 +20,52 @@ const App: FC = () => {
         appHeight:0,
         isMobile: true,
         isTablet: true,
+        bp:"",
+        bpChanged: false
     });
-    console.log("status",status)
     useEffect( () => {
         const handleResize = debounce(() => {
             const w = appRef.current?.clientWidth || 0,
                 h = appRef.current?.clientHeight || 0,
                 isMobile = w <= SETTINGS.breakpoints.mobile ? true : false,
-                isTablet = w <= SETTINGS.breakpoints.tablet ? true : false;
-            
-            console.log("w,h,tab,mob:",w,h,isTablet,isMobile)
-            
-            setStatus({
-                appWidth: w,
-                appHeight: h,
-                isMobile: isMobile,
-                isTablet: isTablet
+                isTablet = w <= SETTINGS.breakpoints.tablet ? true : false,
+                bp = isMobile || isTablet ? "mobile" : "desktop";            
+            setStatus( (oldStatus) => {
+                let bpChanged = false,
+                    changes = 0;
+                if (oldStatus.appWidth !== w) {changes++}
+                if (oldStatus.appHeight !== h) {changes++}
+                if (oldStatus.isMobile !== isMobile) {changes++}
+                if (oldStatus.isTablet !== isTablet) {changes++}
+                if (oldStatus.bp !== bp) {
+                    changes++;
+                    bpChanged = true;
+                }
+                if (changes > 0) {
+                    console.log("handleResize",{
+                        appWidth: w,
+                        appHeight: h,
+                        isMobile: isMobile,
+                        isTablet: isTablet,
+                        bp: bp,
+                        bpChanged: bpChanged
+                    })
+                    return {
+                        appWidth: w,
+                        appHeight: h,
+                        isMobile: isMobile,
+                        isTablet: isTablet,
+                        bp: bp,
+                        bpChanged: bpChanged
+                    }
+                } else {
+                    console.log("handleResize",oldStatus)
+                    return oldStatus;
+                }
             });
         },150);
         window.addEventListener("resize",handleResize);
+        handleResize();
         return () => window.removeEventListener("resize",handleResize);
     },[]);
     return (
