@@ -55,7 +55,7 @@ const CL01:FC = () => {
                 cmp:CB01
             },
             tile: {
-                args:{v:4},
+                args:{v:4,shrink:0.35},
                 cmp:SI01
             },
             disp:"fullbleed",

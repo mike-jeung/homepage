@@ -9,7 +9,7 @@ const PROMPT = {
 const SETTINGS = {
     'breakpoints': {
         'mobile': 669,
-        'tablet': 780
+        'tablet': 920
     }
 }
 export { SETTINGS, PROMPT, URL };

@@ -1,10 +1,12 @@
-import React, { FC, useContext, useRef, useState } from "react";
+import React, { FC, useContext, useEffect, useRef, useState } from "react";
 import "./CT02.scss";
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { StatusContext } from "../../App";
+import useContextRef from "../../hooks/useContextRef";
 
 const CT02:FC = () => {
+    // const status = useContextRef(StatusContext);
     const status = useContext(StatusContext);
     const [paused, setPaused] = useState<boolean>(false);
     const refs = {
@@ -71,14 +73,25 @@ const CT02:FC = () => {
         timeline3 = useRef<gsap.core.Timeline>(gsap.timeline({repeat:-1}));
 
     useGSAP( () => {
+        console.log("========== ct02 useGSAP status",status)
         if (status.bp === "mobile") {
-
-        } else {
+            timeline0.current.clear(true);
+            timeline1.current.clear(true);
+            timeline2.current.clear(true);
+            timeline3.current.clear(true);
+        } else if(status.bp === "desktop") {
             const t0 = timeline0.current,
                 t1 = timeline1.current,
                 t2 = timeline2.current,
                 t3 = timeline3.current;
-
+                t1.repeat(-1);
+                t3.repeat(-1);
+                t0.play(0);
+                t1.play(0);
+                t2.play(0);
+                t3.play(0);
+                
+                console.log(t2)
                 t1.add(gsap.fromTo(refs.g1.current,{rotate:0,transformOrigin:"50% 50%"},{rotate:360,duration:300,ease:"none"}),0);
             // L1 edges
             for (let i = 1; i <= 8; i++) {
@@ -109,7 +122,8 @@ const CT02:FC = () => {
                 }
             }
             // Outer ring
-            t0.add(gsap.fromTo(refs.o_r.current,{scale:0,transformOrigin:"50% 50%"},{scale:1,duration:1.25,ease:"none"}),1.5);
+            t0.fromTo(refs.o_r.current,{scale:0,transformOrigin:"50% 50%"},{scale:1,duration:1.25,ease:"none"},1.5);
+            
             // L2 nodes
             for (let i = 1; i <= 8; i++) {
                 let node = refs[`n${i}_1`].current;
@@ -123,6 +137,11 @@ const CT02:FC = () => {
             t2.add(gsap.fromTo(refs.arm_rt.current,{transformOrigin:"7.68% 50%",rotate:0},{rotate:60,duration:0.5,ease:"none"}),0);
             t2.add(gsap.fromTo(refs.arm_rt_fore.current,{transformOrigin:"14.73% 50%",rotate:0},{rotate:-90,duration:0.5,ease:"none"}),0);
             t2.addPause();
+
+            // initial mouth and bubble positions
+            t2.set(refs.bub.current,{top:"7%",opacity:0});
+            t2.set(refs.mouth.current,{scaleY:1});
+
 
             // eureka
             t2.addLabel("start","0.5");
@@ -167,6 +186,10 @@ const CT02:FC = () => {
             t3.eventCallback("onRepeat", () => {
                 t2.play("start");
             });
+            // timeline0.current.play();
+            // timeline1.current.play();
+            // timeline2.current.play();
+            // timeline3.current.play();
             /*
 
                 533 - 470
@@ -175,7 +198,7 @@ const CT02:FC = () => {
     85.27%
             */
         }
-    });
+    },{ dependencies:[status.bp] });
     const pauseAnimation = () => {
         if (paused) {
             timeline0.current.play();

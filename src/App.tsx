@@ -1,5 +1,5 @@
 import React, { createContext, FC, ReactHTMLElement, useEffect, useRef, useState } from 'react';
-import { debounce } from "./helpers";
+import debounce from "./helpers/debounce";
 import { SETTINGS } from "./constants";
 import Home from './pages/Home/Home';
 
@@ -41,15 +41,16 @@ const App: FC = () => {
                     changes++;
                     bpChanged = true;
                 }
+                console.log("*+=+*+=+*+= handleResize",`Changes: ${changes}`,{
+                    appWidth: w,
+                    appHeight: h,
+                    isMobile: isMobile,
+                    isTablet: isTablet,
+                    bp: bp,
+                    bpChanged: bpChanged
+                })
                 if (changes > 0) {
-                    console.log("handleResize",{
-                        appWidth: w,
-                        appHeight: h,
-                        isMobile: isMobile,
-                        isTablet: isTablet,
-                        bp: bp,
-                        bpChanged: bpChanged
-                    })
+                    
                     return {
                         appWidth: w,
                         appHeight: h,

@@ -7,7 +7,7 @@ import SI01v2 from "./SI01v2";
 import SI01v3 from "./SI01v3";
 import SI01v4 from "./SI01v4";
 import SI01v5 from "./SI01v5";
-import { TimelineCallback } from "../../helpers";
+import { TimelineCallback } from "../../helpers/applyTimelineCallbacks";
 
 interface SI01Props {
     v?:number;
@@ -36,17 +36,17 @@ const componentMap:Record<number,FC<any>> = {
     5:SI01v5,
 }
 const SI01 = forwardRef( ({v = 0, timelineArgs = {}, timelineCallbacks = []}:SI01Props,ref) => {
-    //console.log("timelineCallbacks",v,timelineCallbacks)
 
     const [isTimelineReady, setIsTimelineReady] = useState<boolean>(false);
     const timeline = useRef<gsap.core.Timeline | null>(null);
     const isPlaying = useRef(true);
 
-    const callbacks = timelineCallbacks;
-    const VariationComponent = useMemo( 
-        () => {            
-            return componentMap[v];
-    }, [v]);
+    // const callbacks = timelineCallbacks;
+    // const VariationComponent = useMemo( 
+    //     () => {            
+    //         return componentMap[v];
+    // }, [v]);
+    const VariationComponent = componentMap[v];
     const variation = "si01v" + v;
 
 
@@ -81,7 +81,7 @@ const SI01 = forwardRef( ({v = 0, timelineArgs = {}, timelineCallbacks = []}:SI0
             timeline.current?.kill();
         };
     },[]);
-
+    
     useImperativeHandle(ref, () => ({
         play,
         pause,
@@ -92,7 +92,7 @@ const SI01 = forwardRef( ({v = 0, timelineArgs = {}, timelineCallbacks = []}:SI0
 
     return (
         <section className={`si01 ${variation}`}>
-            {isTimelineReady && <VariationComponent timeline={timeline.current} timelineCallbacks={callbacks} />}
+            {isTimelineReady && <VariationComponent timeline={timeline.current} timelineCallbacks={timelineCallbacks} />}
         </section>
     );
 });

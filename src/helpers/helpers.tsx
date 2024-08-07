@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { Meta, StoryFn, StoryObj } from '@storybook/react';
-
+import { SETTINGS } from "../constants";
 interface StoryParams {
     description: string;
 }
@@ -10,6 +10,19 @@ interface TimelineCallback {
     callbackType?:string;
     callback:() => void;
 }
+const getBreakpoint = ():string => {
+    let bp = "";
+    const el = document.querySelector(".app") as HTMLDivElement;
+    if (el) {
+        const w = el.offsetWidth;
+        if ( w > SETTINGS.breakpoints.tablet ) {
+            bp = "desktop";
+        } else {
+            bp = "mobile";
+        }
+    }
+    return bp;
+};
 const createStory = <T extends unknown>(Component:FC<T>, args: T, params:StoryParams): StoryFn<T> => {
     const Template: StoryFn<T> = (args) => <Component {...args} />;
     const story = Template.bind({});
@@ -58,5 +71,6 @@ export {
     applyTimelineCallbacks,
     createStory,
     debounce,
+    getBreakpoint,
     TimelineCallback
 }

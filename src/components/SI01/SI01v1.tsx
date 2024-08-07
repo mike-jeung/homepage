@@ -2,7 +2,7 @@ import React, { FC, useContext, useEffect, useRef } from "react";
 import { useGSAP } from '@gsap/react';
 import "./style/SI01v1.scss";
 import { SI01ChildProps } from "./SI01";
-import { applyTimelineCallbacks } from "../../helpers";
+import applyTimelineCallbacks from "../../helpers/applyTimelineCallbacks";
 import { StatusContext } from "../../App";
 
 const SI01v1:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {

@@ -2,7 +2,7 @@ import React, { Component, FC, ReactNode, useCallback, useContext, useEffect, us
 import "./CW06.scss";
 import gsap from 'gsap';
 import { StatusContext } from "../../App";
-import { TimelineCallback } from "../../helpers";
+import { TimelineCallback } from "../../helpers/applyTimelineCallbacks";
 import { SI01TimelineControls } from "../SI01/SI01";
 interface CW06Props {
     cards: CardData[];
@@ -87,14 +87,21 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
         isAnimating.current = val;
     }  
     useEffect( () => {
-
-        
-        
         if (status.bp === "mobile") {
             // console.log("cw06 mobile")
-
-
-
+            for (let i = 0; i < cardCount; i++) {
+                cardRef = cardRefs.current[i];
+                
+                if (cardRef !== null && cardPos) {
+                    gsap.set(cardRef,{
+                        left:"auto",
+                        top:"auto",
+                        height: "auto",
+                        minWidth:"100%",
+                        maxWidth:"100%"
+                    });
+                }
+            }
         } else {
             const position:Map<number,CW06CardPosition> = new Map,
                 container = containerRef.current;
@@ -199,6 +206,14 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
                         minWidth:unitW + "px",
                         maxWidth:unitW + "px"
                     });
+
+                    // initializeCardPositions({
+                    //     left:cardPosition?.left,
+                    //     top:0,
+                    //     height: unitH,
+                    //     minWidth:unitW + "px",
+                    //     maxWidth:unitW + "px"
+                    // });
                     gsap.set(cardContentWrap,{top: cardPosition?.wrapTop + "%"});
     
                     openTimelines.current[i] = gsap.timeline({paused:true});
@@ -284,7 +299,38 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
             };
         }
     },[status]);
-
+    const childCheckpoint = useCallback( (index:number) => {
+        const childRef = childRefs.current[index];
+        if (childRef.getTimeline) {
+            const timeline = childRef.getTimeline();
+            const count = timeline.repeat();
+            if (childRef.play && childRef.pause && childRef.resume) {
+                if (initialRun.current[index]) {
+                    if (count > animationCycles.current[index]) {
+                        childRef.play("afterIconState");
+                        animationCycles.current[index]++;
+                    } else {
+                        childRef.pause("afterIconState");
+                        initialRun.current[index] = false;
+                        animationCycles.current[index] = 0;
+                    }
+                } else {
+                    if (hoverIndex.current === index) {
+                        childRef.play("afterIconState");
+                    }
+                }
+            }
+        }
+    },[]);
+    const childCompletion = useCallback( (index:number) => {
+        const childRef = childRefs.current[index];
+        if (initialRun.current[index]) initialRun.current[index] = false;
+        if (mouseStatus.current === "mouseenter") {
+            if (childRef.play) {
+                childRef.play("loopStart");
+            }
+        } 
+    },[]);
     const handleClick  = (e:React.MouseEvent<HTMLAnchorElement, MouseEvent>,index:number,action:string) => {
         e.preventDefault();
 
@@ -331,38 +377,34 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
             }
         }
     };
-    const childCheckpoint = useCallback( (index:number) => {
-        const childRef = childRefs.current[index];
-        if (childRef.getTimeline) {
-            const timeline = childRef.getTimeline();
-            const count = timeline.repeat();
-            if (childRef.play && childRef.pause && childRef.resume) {
-                if (initialRun.current[index]) {
-                    if (count > animationCycles.current[index]) {
-                        childRef.play("afterIconState");
-                        animationCycles.current[index]++;
-                    } else {
-                        childRef.pause("afterIconState");
-                        initialRun.current[index] = false;
-                        animationCycles.current[index] = 0;
-                    }
-                } else {
-                    if (hoverIndex.current === index) {
-                        childRef.play("afterIconState");
-                    }
-                }
+    const initialize = () => {
+        for (let i = 0; i < cardCount; i++) {
+            const card = cards[i];
+            initialRun.current[i] = true;
+            animationCycles.current[i] = 0;
+            // send function(s) to child component timelines
+            if (card.graphicArgs) {
+                card.graphicArgs["timelineCallbacks"] = initializeTimelineCallbacks(i);
             }
         }
-    },[]);
-    const childCompletion = useCallback( (index:number) => {
-        const childRef = childRefs.current[index];
-        if (initialRun.current[index]) initialRun.current[index] = false;
-        if (mouseStatus.current === "mouseenter") {
-            if (childRef.play) {
-                childRef.play("loopStart");
-            }
-        } 
-    },[]);
+    };
+    const initializeCardPositions = () => {
+
+    };
+    const initializeTimelineCallbacks = (i:number):TimelineCallback[] => {
+        const ar:TimelineCallback[] = [];
+        ar.push({
+            callbackType:"onComplete",
+            callback: childCompletion,
+            params:[i]
+        } as TimelineCallback);
+        ar.push({
+            position:"iconState",
+            callback: childCheckpoint,
+            params:[i]
+        } as TimelineCallback);
+        return ar;
+    };
     const pauseCardAnim = (pause = 0) => {
         let childRef:SI01TimelineControls;
 
@@ -378,26 +420,12 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
             pauseAll.current = false;
         }
     };
-    // some initialization
-    for (let i = 0; i < cardCount; i++) {
-        const card = cards[i];
-        initialRun.current[i] = true;
-        animationCycles.current[i] = 0;
-        // send function(s) to child component timelines
-        if (card.graphicArgs) {
-            card.graphicArgs["timelineCallbacks"] = [] as TimelineCallback[];
-            card.graphicArgs["timelineCallbacks"].push({
-                callbackType:"onComplete",
-                callback: childCompletion,
-                params:[i]
-            } as TimelineCallback);
-            card.graphicArgs["timelineCallbacks"].push({
-                position:"iconState",
-                callback: childCheckpoint,
-                params:[i]
-            } as TimelineCallback);
-        }
-    }
+    const resetCards = () => {
+
+    };
+    
+    initialize();
+    
     return (
         <section className="cw06 cw06v0">
             <div className="cw06w0">

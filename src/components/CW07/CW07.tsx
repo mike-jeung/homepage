@@ -1,9 +1,13 @@
-import React, { FC, ReactElement, ReactNode, useCallback, useEffect, useRef } from "react";
+import React, { FC, ReactElement, ReactNode, useCallback, useContext, useEffect, useMemo, useRef } from "react";
 import "./CW07.scss";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { TimelineCallback } from "../../helpers";
 import { SI01TimelineControls as CW07Tile } from "../SI01/SI01"; 
+import { StatusContext } from "../../App";
+
+import { TimelineCallback } from "../../helpers/applyTimelineCallbacks";
+// import useContextRef from "../../hooks/useContextRef";
+
 interface CW07TileArgs {
     repeat?:number;
     
@@ -21,6 +25,8 @@ const CW07:FC<CW07Props> = ({tile,content,disp}) => {
 
     // this timeline controls cw07 animations of content and tile
     const timeline = useRef<gsap.core.Timeline | null>(gsap.timeline({paused:true}));
+    // const status = useContextRef(StatusContext);
+    const status = useContext(StatusContext);
 
     const childIsPlaying = useRef<boolean>(true),
         initialRun = useRef<boolean>(true),
@@ -45,8 +51,10 @@ const CW07:FC<CW07Props> = ({tile,content,disp}) => {
     //         }
     //     }
     // }
+    
+    // continue playing after icon state
     const childCheckpoint = useCallback( () => {
-        if (mouseStatus.current === "mouseenter") {
+        if (mouseStatus.current === "mouseenter" && status.bp !== "mobile") {
             if (refs.child && refs.child.current) {
                 refs.child.current.play && refs.child.current.play("afterIconState");
             }
@@ -55,13 +63,13 @@ const CW07:FC<CW07Props> = ({tile,content,disp}) => {
         }
     },[])
     const childCompletion = useCallback( () => {
-        if (mouseStatus.current === "mouseenter") {
+        if (mouseStatus.current === "mouseenter" && status.bp !== "mobile") {
             if (refs.child && refs.child.current) {
                 refs.child.current.play && refs.child.current.play("loopStart");
             }
-        } 
+        }
+        
     }, []);
-
     // send function(s) to child component timelines
     if (tile && tile.args) {
         tile.args["timelineCallbacks"] = [] as TimelineCallback[];
@@ -76,17 +84,18 @@ const CW07:FC<CW07Props> = ({tile,content,disp}) => {
     }
 
     const shrinkTiles = () => {
-        if (timeline.current) {
-            timeline.current.play();
+        if (timeline.current && status.bp !== "mobile") {
+            timeline.current.play("start");
             initialRun.current = false;
         }
     };
     const animStatus = (label:string) => {
+        // console.log("animstatus",label,bp,status,refs.child.current?.getTimeline())
         if (timeline.current) {
             if (timeline.current.reversed()) {
                 if (label === "start") {
                     //console.log("backwards end",label)
-                    if (mouseStatus.current === "mouseenter") {
+                    if (mouseStatus.current === "mouseenter" && status.bp !== "mobile") {
                         if (refs.child && refs.child.current) {
                             refs.child.current.play && refs.child.current.play("iconState");
                         }
@@ -95,7 +104,7 @@ const CW07:FC<CW07Props> = ({tile,content,disp}) => {
             } else {
                 if (label === "end") {
                     //console.log("forwards end",label)
-                    if (mouseStatus.current === "mouseenter") {
+                    if (mouseStatus.current === "mouseenter" && status.bp !== "mobile") {
                         if (refs.child && refs.child.current) {
                             refs.child.current.play && refs.child.current.play();
                         }
@@ -104,17 +113,28 @@ const CW07:FC<CW07Props> = ({tile,content,disp}) => {
             }
         }
     };
+    
     useEffect( () => {
-        console.log("cw07 mounted")
+        console.log("cw07 mounted",tile)
         // timeline.current = gsap.timeline({paused:true});
-        timeline.current?.addLabel("start")
+        const s = tile?.args && tile.args.shrink ? tile.args.shrink : 0.5;
+
+
+        // timeline.current?.clear(true);
+        // timeline.current?.pause();
+        timeline.current?.addLabel("start",0)
+            // .set(refs.content.current,{top:"50%",opacity:0})
             .addPause("start")
             .call(animStatus,["start"])
-            .fromTo(refs.tile.current,{scale:1},{scale:0.5,duration:0.12,ease:"power1.out"},">")
+            .fromTo(refs.tile.current,{scale:1},{scale:s,duration:0.12,ease:"power1.out"},">")
             .to(refs.tile.current,{y:"-35px",duration:0.25})
-            .to(refs.content.current,{opacity:1,top:"32%",duration:0.25},"<")
+            .fromTo(refs.content.current,{opacity:0,top:"50%"},{opacity:1,top:"32%",duration:0.25},"<")
             .call(animStatus,["end"])
             .addPause("end");
+        
+            if (status.bp !== "desktop" && initialRun.current === true) {
+                initialRun.current = false;
+            }
         return (() => {
             console.log("cw07 UNmounted")
 
@@ -123,15 +143,18 @@ const CW07:FC<CW07Props> = ({tile,content,disp}) => {
             } 
         })
     },[]);
+    useEffect( () => {
+        console.log("cw07 bp changed",status)
+    },[status.bp])
     const mouseEvent = (e) => {
-        //console.log(e);
+        console.log("mouseEvent");
         mouseStatus.current = e.type;
-
         if (!initialRun.current) {
-            if (mouseStatus.current === "mouseenter") {
-                timeline.current?.reverse();
-            } else if (mouseStatus.current === "mouseleave") {
-                timeline.current?.play()
+            console.log("initialRun",initialRun.current)
+            if (mouseStatus.current === "mouseenter" && status.bp !== "mobile") {
+                timeline.current?.reverse("end");
+            } else if (mouseStatus.current === "mouseleave" && status.bp !== "mobile") {
+                timeline.current?.play("start")
                 if (refs.child && refs.child.current) {
                     refs.child.current.pause && refs.child.current.pause("iconState");
                 }

@@ -2,7 +2,7 @@ import React, { FC, useContext, useEffect, useRef } from "react";
 import { useGSAP } from '@gsap/react';
 import "./style/SI01v2.scss";
 import { SI01ChildProps } from "./SI01";
-import { applyTimelineCallbacks } from "../../helpers";
+import applyTimelineCallbacks from "../../helpers/applyTimelineCallbacks";
 import { StatusContext } from "../../App";
 
 const SI01v2:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
@@ -23,7 +23,7 @@ const SI01v2:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
     // timeline = useRef<gsap.core.Timeline>(gsap.timeline({
     //     //repeat:-1
     // }));
-
+    
     useGSAP( () => {
         const platters = refs.all.current?.querySelectorAll(".platters > g");
         const l = refs.top.current?.getTotalLength();

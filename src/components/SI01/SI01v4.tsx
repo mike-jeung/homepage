@@ -2,7 +2,7 @@ import React, { FC, useContext, useEffect, useRef } from "react";
 import { useGSAP } from '@gsap/react';
 import "./style/SI01v4.scss";
 import { SI01ChildProps } from "./SI01";
-import { applyTimelineCallbacks } from "../../helpers";
+import applyTimelineCallbacks from "../../helpers/applyTimelineCallbacks";
 import { StatusContext } from "../../App";
 
 const SI01v4:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
@@ -21,7 +21,7 @@ const SI01v4:FC<SI01ChildProps> = ({timeline, timelineCallbacks = []}) => {
         "base":useRef<SVGPathElement | null>(null),
     };
     // const timeline = useRef<gsap.core.Timeline>(gsap.timeline());
-
+    
     useGSAP( () => {
         timeline.clear(true);
         timeline.addLabel("initialize")
