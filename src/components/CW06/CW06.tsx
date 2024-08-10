@@ -82,11 +82,15 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
         unselectedCardTop = 0,
         w4Ht = 0,                               // height of content component that was passed in (closed)
         wContentHt = 0;                         // height of content component that was passed in (open)
-
-    const setIsAnimating = (val:boolean) => {
+    function resetCards():void {
+        setCardPos(new Map());
+        setFeatureCardIdx(null);
+    }
+    function setIsAnimating(val:boolean):void {
         isAnimating.current = val;
     }  
     useEffect( () => {
+        resetCards();
         if (status.bp === "mobile") {
             // console.log("cw06 mobile")
             for (let i = 0; i < cardCount; i++) {
@@ -286,7 +290,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
             // cleanup
             return () => {
                 for (let i = 0; i < containerTimelinesAr.current.length; i++) {
-                    // console.log("cw06 cleanup",i)
+
                     containerTimelinesAr.current[i][0].kill();
                     containerTimelinesAr.current[i][1].kill();
                     containerTimelinesAr.current[i] = [];
@@ -298,7 +302,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
                 openTimelines.current = [];
             };
         }
-    },[status]);
+    },[status.bp]);
     const childCheckpoint = useCallback( (index:number) => {
         const childRef = childRefs.current[index];
         if (childRef.getTimeline) {
@@ -419,9 +423,6 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
         } else {
             pauseAll.current = false;
         }
-    };
-    const resetCards = () => {
-
     };
     
     initialize();

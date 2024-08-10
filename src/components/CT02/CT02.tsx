@@ -73,7 +73,7 @@ const CT02:FC = () => {
         timeline3 = useRef<gsap.core.Timeline>(gsap.timeline({repeat:-1}));
 
     useGSAP( () => {
-        console.log("========== ct02 useGSAP status",status)
+        // console.log("========== ct02 useGSAP status",status)
         if (status.bp === "mobile") {
             timeline0.current.clear(true);
             timeline1.current.clear(true);
@@ -91,7 +91,7 @@ const CT02:FC = () => {
                 t2.play(0);
                 t3.play(0);
                 
-                console.log(t2)
+                // console.log(t2)
                 t1.add(gsap.fromTo(refs.g1.current,{rotate:0,transformOrigin:"50% 50%"},{rotate:360,duration:300,ease:"none"}),0);
             // L1 edges
             for (let i = 1; i <= 8; i++) {
@@ -123,7 +123,7 @@ const CT02:FC = () => {
             }
             // Outer ring
             t0.fromTo(refs.o_r.current,{scale:0,transformOrigin:"50% 50%"},{scale:1,duration:1.25,ease:"none"},1.5);
-            
+
             // L2 nodes
             for (let i = 1; i <= 8; i++) {
                 let node = refs[`n${i}_1`].current;

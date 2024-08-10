@@ -2,6 +2,7 @@ import React, { createContext, FC, ReactHTMLElement, useEffect, useRef, useState
 import debounce from "./helpers/debounce";
 import { SETTINGS } from "./constants";
 import Home from './pages/Home/Home';
+import getBreakpoint from './helpers/getBreakpoint';
 
 interface Status {
     appWidth?: number;
@@ -14,22 +15,23 @@ interface Status {
 const StatusContext = createContext<Status>({});
 const App: FC = () => {
     const appRef = useRef<HTMLDivElement>(null);
-
+    const bp = getBreakpoint();
     const [status, setStatus] = useState<Status>({
         appWidth:0,
         appHeight:0,
-        isMobile: true,
-        isTablet: true,
-        bp:"",
+        isMobile: bp === "mobile" ? true : false,
+        isTablet: bp === "mobile" ? true : false,
+        bp:bp,
         bpChanged: false
     });
     useEffect( () => {
         const handleResize = debounce(() => {
-            const w = appRef.current?.clientWidth || 0,
+            const //w = appRef.current?.clientWidth || 0,
+                w = window.innerWidth,
                 h = appRef.current?.clientHeight || 0,
                 isMobile = w <= SETTINGS.breakpoints.mobile ? true : false,
                 isTablet = w <= SETTINGS.breakpoints.tablet ? true : false,
-                bp = isMobile || isTablet ? "mobile" : "desktop";            
+                bp = w > SETTINGS.breakpoints.tablet ? "desktop" : "mobile";            
             setStatus( (oldStatus) => {
                 let bpChanged = false,
                     changes = 0;
@@ -60,7 +62,7 @@ const App: FC = () => {
                         bpChanged: bpChanged
                     }
                 } else {
-                    console.log("handleResize",oldStatus)
+                    // console.log("handleResize",oldStatus)
                     return oldStatus;
                 }
             });

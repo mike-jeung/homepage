@@ -72,12 +72,12 @@ const SI01 = forwardRef( ({v = 0, timelineArgs = {}, timelineCallbacks = []}:SI0
         } 
     }
     useEffect( () => {
-        console.log(` ********************************************* ${variation} mounted`);
+        // console.log(` ********************************************* ${variation} mounted`);
         timeline.current = gsap.timeline(timelineArgs);
         setIsTimelineReady(true);
 
         return () => {
-            console.log(` ********************************************* ${variation} UNmounted`);
+            // console.log(` ********************************************* ${variation} UNmounted`);
             timeline.current?.kill();
         };
     },[]);

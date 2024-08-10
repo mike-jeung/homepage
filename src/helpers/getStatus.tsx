@@ -1,6 +1,6 @@
 import { SETTINGS } from "../constants";
 
-const getBreakpoint = ():string => {
+const getStatus = ():string => {
     let bp = "";
     const w = window.innerWidth;
     if (w) {
@@ -12,4 +12,4 @@ const getBreakpoint = ():string => {
     }
     return bp;
 };
-export default getBreakpoint;
+export default getStatus;

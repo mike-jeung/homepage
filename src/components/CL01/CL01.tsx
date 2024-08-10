@@ -15,7 +15,6 @@ import { StatusContext } from "../../App";
 const CL01:FC = () => {
 
     const status = useContext(StatusContext);
-    console.log(status)
     const ticks = [
         {
             content: {
