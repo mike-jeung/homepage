@@ -1,6 +1,7 @@
 import React, { Component, FC, ReactNode, useCallback, useContext, useEffect, useRef, useState } from "react";
 import "./CW06.scss";
 import gsap from 'gsap';
+import { SETTINGS } from "../../constants";
 import { StatusContext } from "../../App";
 import { TimelineCallback } from "../../helpers/applyTimelineCallbacks";
 import { SI01TimelineControls } from "../SI01/SI01";
@@ -59,7 +60,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
         gapW = 15,                              // pixel gap between each card
         heightFactor = 0.38,                    // multiply this by container width for default container height
         innerTopFactor = 0.45;                    
-        
+    
     let cardContent:HTMLDivElement | null | undefined,
         cardContentGraphic:Element | null,
         cardContentWrap:Element | null,         // wrapping container of the card content for getting style info
@@ -82,6 +83,9 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
         unselectedCardTop = 0,
         w4Ht = 0,                               // height of content component that was passed in (closed)
         wContentHt = 0;                         // height of content component that was passed in (open)
+
+    let mm = gsap.matchMedia();
+
     function resetCards():void {
         setCardPos(new Map());
         setFeatureCardIdx(null);
@@ -91,217 +95,229 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
     }  
     useEffect( () => {
         resetCards();
-        if (status.bp === "mobile") {
-            // console.log("cw06 mobile")
-            for (let i = 0; i < cardCount; i++) {
-                cardRef = cardRefs.current[i];
-                
-                if (cardRef !== null && cardPos) {
-                    gsap.set(cardRef,{
-                        left:"auto",
-                        top:"auto",
-                        height: "auto",
-                        minWidth:"100%",
-                        maxWidth:"100%"
-                    });
-                }
-            }
-        } else {
-            const position:Map<number,CW06CardPosition> = new Map,
-                container = containerRef.current;
-            setCardCount(cards.length);
-            // console.log("cw06 mounted",cards.length)
-            //if (!hasInitialPosition) {
-                // calculate sizing/positioning
-                if (container) {
-                    containerW = container.clientWidth;
-                    containerH = containerW * heightFactor;
-                    unitW = (containerW - (gapW * (cols - 1))) / cols;
-                    unitW2ndRow = cols > 1 ? (containerW - (gapW * (cols - 2))) / (cols - 1) : containerW;
-                    unitH = containerH;
-                    unitH2ndRow = containerW * cardShrinkFactor;
-                    deltaHt = unitH - unitH2ndRow;
-
-                    for (let i = 0; i < cards.length; i++) {
-                        cardContent = cardRefs.current[i]?.querySelector(".cw06content");
-                        position.set(i,{
-                            left:(unitW + gapW) * col,
-                            top:0,
-                            topR2:0,
-                            width:unitW,
-                            widthR2:unitW2ndRow,
-                            height:unitH,
-                            heightR2:unitH2ndRow,
-                            contentH: cardContent ? cardContent.clientHeight : 0,
-                            wrapTop:innerTopFactor * 100,
-                        });
-                        col = col === cols - 1 ? 0 : col + 1;
-                    }
-                    setCardPos( position );
-                    setHasInitialPosition(true);
-                }
-            //}
-
-            if (container) {
-                containerStyles = window.getComputedStyle(container);
-                pbClosed = parseInt(containerStyles.paddingBottom) + "px";
-            }
-            
-                
-            for (let i = 0; i < cardCount; i++) {
-                cardRef = cardRefs.current[i];
-                cardPosition = position.get(i);
-                
-                if (cardRef !== null && cardPos) {
-                    // customize the bottom padding to accommodate the content, cw06w4 + w06content
-                    cardContentWrap = cardRef.querySelector(".cw06w3");
-                    cardContentGraphic = cardRef.querySelector(".cw06img");
-                    cardContentPadding = 0;
-                    cardContentHt = 0;
-                    if (cardContentWrap !== null) {
-
-                        cardContentPadding = parseInt(window.getComputedStyle(cardContentWrap).getPropertyValue("padding-top")) + parseInt(window.getComputedStyle(cardContentWrap).getPropertyValue("padding-bottom"));
-
-                        cardContentHt = (cardRef.querySelector(".cw06w4")?.clientHeight || 0) + (cardRef.querySelector(".cw06content")?.clientHeight || 0);
-
-                    }
-                    // calculate bottom padding of container
-                    pb = cardContentHt + cardContentPadding > unitH ? cardContentHt + cardContentPadding + unitH2ndRow + gapW + "px" : unitH + unitH2ndRow + gapW + "px";
         
-                    unselectedCardTop = cardContentHt + cardContentPadding > unitH ? cardContentHt + cardContentPadding : unitH;
-                
-                    // container expansion
-                    containerTimelinesAr.current[i] = [];
-                    containerTimelinesAr.current[i][0] = gsap.timeline({paused:true});
-                    containerTimelinesAr.current[i][0].to(container,{
-                        paddingBottom:pb,
-                        duration: animDuration,
-                        ease:"none"
-                    })
-                    .eventCallback("onStart", () => {
-                        setIsAnimating(true);
-                    })
-                    .eventCallback("onComplete", () => {
-                        setIsAnimating(false);
-                    });
-
-                    // container contraction
+            
+        mm.add(
+            `(max-width: ${SETTINGS.breakpoints.tablet}px)`, () => {
+                for (let i = 0; i < cardCount; i++) {
+                    cardRef = cardRefs.current[i];
                     
-                    containerTimelinesAr.current[i][1] = gsap.timeline({paused:true});
-                    containerTimelinesAr.current[i][1].to(container,{
-                        paddingBottom:pbClosed,
-                        duration: animDuration,
-                        delay: animDelay,
-                        ease:"none"},
-                    )
-                    .eventCallback("onStart", () => {
-                        setTimeout(setFeatureCardIdx.bind(null,null),animDelay * 1000);
-                        setIsAnimating(true);
-                    })
-                    .eventCallback("onComplete", () => {
-                        setIsAnimating(false);
-                    });
+                    if (cardRef !== null && cardPos) {
+                        gsap.set(cardRef,{
+                            left:"auto",
+                            top:"auto",
+                            height: "auto",
+                            minWidth:"100%",
+                            maxWidth:"100%"
+                        });
+                    }
+                }
+            }
+        );
 
-                    // Set initial positions
-                    gsap.set(cardRef,{
-                        left:cardPosition?.left,
-                        top:0,
-                        height: unitH,
-                        minWidth:unitW + "px",
-                        maxWidth:unitW + "px"
-                    });
 
-                    // initializeCardPositions({
-                    //     left:cardPosition?.left,
-                    //     top:0,
-                    //     height: unitH,
-                    //     minWidth:unitW + "px",
-                    //     maxWidth:unitW + "px"
-                    // });
-                    gsap.set(cardContentWrap,{top: cardPosition?.wrapTop + "%"});
-    
-                    openTimelines.current[i] = gsap.timeline({paused:true});
-                    
-                    if (position && cardRefs) {
 
-                        // unpicked card animation
+        mm.add(
+            `(min-width: ${SETTINGS.breakpoints.tablet + 1}px)`, () => {
+                const position:Map<number,CW06CardPosition> = new Map,
+                container = containerRef.current;
+                setCardCount(cards.length);
+                // console.log("cw06 mounted",cards.length)
+                //if (!hasInitialPosition) {
+                    // calculate sizing/positioning
+                    if (container) {
+                        containerW = container.clientWidth;
+                        containerH = containerW * heightFactor;
+                        unitW = (containerW - (gapW * (cols - 1))) / cols;
+                        unitW2ndRow = cols > 1 ? (containerW - (gapW * (cols - 2))) / (cols - 1) : containerW;
+                        unitH = containerH;
+                        unitH2ndRow = containerW * cardShrinkFactor;
+                        deltaHt = unitH - unitH2ndRow;
 
-                        for (let j = 0; j < cardCount; j++) {
-                            openTimelines.current[i].set(cardRefs.current[j],{
-                                left:position.get(j)?.left,
+                        for (let i = 0; i < cards.length; i++) {
+                            cardContent = cardRefs.current[i]?.querySelector(".cw06content");
+                            position.set(i,{
+                                left:(unitW + gapW) * col,
                                 top:0,
-                                height: unitH,
-                                minWidth:unitW + "px",
-                                maxWidth:unitW + "px"
-                            },0);
-                            
-                            if (j !== i) {
-                                const unpickedCardRef = cardRefs.current[j];
-                                const unpickedCardPos = position.get(j);
-                                const unpickedCardInnerWrap = unpickedCardRef?.querySelector(".cw06w3");
-                                const unpickedCardImg = unpickedCardRef?.querySelector(".cw06img");
-                                if (unpickedCardRef && unpickedCardPos) {
-                                    // Move to 2nd row
-                                    openTimelines.current[i].to(unpickedCardRef,{
-                                        left:unpickedCardPos.left,
-                                        // top: unpickedCardRef.offsetHeight + 15 + deltaHt,
-                                        top: unselectedCardTop + gapW,
-                                        minWidth:unitW + "px",
-                                        maxWidth:unitW + "px",
-                                        paddingBottom: "22%",
-                                        height: unitH2ndRow,
-                                        minHeight:0,
-                                        duration: animDuration,
-                                        ease:"none",
-                                    },0);
-                                    unpickedCardInnerWrap && openTimelines.current[i].to(unpickedCardInnerWrap,{top:0,duration:0.25},0);
-                                    unpickedCardImg && openTimelines.current[i].to(unpickedCardImg,{opacity:0,duration:0.05},0);
+                                topR2:0,
+                                width:unitW,
+                                widthR2:unitW2ndRow,
+                                height:unitH,
+                                heightR2:unitH2ndRow,
+                                contentH: cardContent ? cardContent.clientHeight : 0,
+                                wrapTop:innerTopFactor * 100,
+                            });
+                            col = col === cols - 1 ? 0 : col + 1;
+                        }
+                        setCardPos( position );
+                        setHasInitialPosition(true);
+                    }
+                //}
+
+                if (container) {
+                    containerStyles = window.getComputedStyle(container);
+                    pbClosed = parseInt(containerStyles.paddingBottom) + "px";
+                }
+                
+                    
+                for (let i = 0; i < cardCount; i++) {
+                    cardRef = cardRefs.current[i];
+                    cardPosition = position.get(i);
+                    
+                    if (cardRef !== null && cardPos) {
+                        // customize the bottom padding to accommodate the content, cw06w4 + w06content
+                        cardContentWrap = cardRef.querySelector(".cw06w3");
+                        cardContentGraphic = cardRef.querySelector(".cw06img");
+                        cardContentPadding = 0;
+                        cardContentHt = 0;
+                        if (cardContentWrap !== null) {
+
+                            cardContentPadding = parseInt(window.getComputedStyle(cardContentWrap).getPropertyValue("padding-top")) + parseInt(window.getComputedStyle(cardContentWrap).getPropertyValue("padding-bottom"));
+
+                            cardContentHt = (cardRef.querySelector(".cw06w4")?.clientHeight || 0) + (cardRef.querySelector(".cw06content")?.clientHeight || 0);
+
+                        }
+                        // calculate bottom padding of container
+                        pb = cardContentHt + cardContentPadding > unitH ? cardContentHt + cardContentPadding + unitH2ndRow + gapW + "px" : unitH + unitH2ndRow + gapW + "px";
+            
+                        unselectedCardTop = cardContentHt + cardContentPadding > unitH ? cardContentHt + cardContentPadding : unitH;
+                    
+                        // container expansion
+                        containerTimelinesAr.current[i] = [];
+                        containerTimelinesAr.current[i][0] = gsap.timeline({paused:true});
+                        containerTimelinesAr.current[i][0].to(container,{
+                            paddingBottom:pb,
+                            duration: animDuration,
+                            ease:"none"
+                        })
+                        .eventCallback("onStart", () => {
+                            setIsAnimating(true);
+                        })
+                        .eventCallback("onComplete", () => {
+                            setIsAnimating(false);
+                        });
+
+                        // container contraction
+                        
+                        containerTimelinesAr.current[i][1] = gsap.timeline({paused:true});
+                        containerTimelinesAr.current[i][1].to(container,{
+                            paddingBottom:pbClosed,
+                            duration: animDuration,
+                            delay: animDelay,
+                            ease:"none"},
+                        )
+                        .eventCallback("onStart", () => {
+                            setTimeout(setFeatureCardIdx.bind(null,null),animDelay * 1000);
+                            setIsAnimating(true);
+                        })
+                        .eventCallback("onComplete", () => {
+                            setIsAnimating(false);
+                        });
+
+                        // Set initial positions
+                        gsap.set(cardRef,{
+                            left:cardPosition?.left,
+                            top:0,
+                            height: unitH,
+                            minWidth:unitW + "px",
+                            maxWidth:unitW + "px"
+                        });
+
+                        // initializeCardPositions({
+                        //     left:cardPosition?.left,
+                        //     top:0,
+                        //     height: unitH,
+                        //     minWidth:unitW + "px",
+                        //     maxWidth:unitW + "px"
+                        // });
+                        gsap.set(cardContentWrap,{top: cardPosition?.wrapTop + "%"});
+        
+                        openTimelines.current[i] = gsap.timeline({paused:true});
+                        
+                        if (position && cardRefs) {
+
+                            // unpicked card animation
+
+                            for (let j = 0; j < cardCount; j++) {
+                                openTimelines.current[i].set(cardRefs.current[j],{
+                                    left:position.get(j)?.left,
+                                    top:0,
+                                    height: unitH,
+                                    minWidth:unitW + "px",
+                                    maxWidth:unitW + "px"
+                                },0);
+                                
+                                if (j !== i) {
+                                    const unpickedCardRef = cardRefs.current[j];
+                                    const unpickedCardPos = position.get(j);
+                                    const unpickedCardInnerWrap = unpickedCardRef?.querySelector(".cw06w3");
+                                    const unpickedCardImg = unpickedCardRef?.querySelector(".cw06img");
+                                    if (unpickedCardRef && unpickedCardPos) {
+                                        // Move to 2nd row
+                                        openTimelines.current[i].to(unpickedCardRef,{
+                                            left:unpickedCardPos.left,
+                                            // top: unpickedCardRef.offsetHeight + 15 + deltaHt,
+                                            top: unselectedCardTop + gapW,
+                                            minWidth:unitW + "px",
+                                            maxWidth:unitW + "px",
+                                            paddingBottom: "22%",
+                                            height: unitH2ndRow,
+                                            minHeight:0,
+                                            duration: animDuration,
+                                            ease:"none",
+                                        },0);
+                                        unpickedCardInnerWrap && openTimelines.current[i].to(unpickedCardInnerWrap,{top:0,duration:0.25},0);
+                                        unpickedCardImg && openTimelines.current[i].to(unpickedCardImg,{opacity:0,duration:0.05},0);
+                                    }
                                 }
                             }
+                            // expand picked card
+                            openTimelines.current[i].to(cardRef,{
+                                left:0,
+                                top:cardPosition?.top,
+                                minWidth:containerW + "px",
+                                maxWidth:containerW + "px",
+                                duration: animDuration,
+                                ease:"circ.inOut"
+                            },animDuration)
+                            .to(cardRef,{
+                                //height: unitH + deltaHt,
+                                height: cardContentHt + cardContentPadding,
+                                duration: animDuration/2,
+                                delay:animDuration/1.9,
+                                ease:"none"
+                            },0)
+                            .to(cardContentWrap,{
+                                top: 0,
+                                duration: 0.25,
+                            },0)
+                            .to(cardContentGraphic,{
+                                opacity: 0,
+                                duration: 0.15,
+                            },0);
                         }
-                        // expand picked card
-                        openTimelines.current[i].to(cardRef,{
-                            left:0,
-                            top:cardPosition?.top,
-                            minWidth:containerW + "px",
-                            maxWidth:containerW + "px",
-                            duration: animDuration,
-                            ease:"circ.inOut"
-                        },animDuration)
-                        .to(cardRef,{
-                            //height: unitH + deltaHt,
-                            height: cardContentHt + cardContentPadding,
-                            duration: animDuration/2,
-                            delay:animDuration/1.9,
-                            ease:"none"
-                        },0)
-                        .to(cardContentWrap,{
-                            top: 0,
-                            duration: 0.25,
-                        },0)
-                        .to(cardContentGraphic,{
-                            opacity: 0,
-                            duration: 0.15,
-                        },0);
                     }
-                }
-                
-            }
-            // cleanup
-            return () => {
-                for (let i = 0; i < containerTimelinesAr.current.length; i++) {
-
-                    containerTimelinesAr.current[i][0].kill();
-                    containerTimelinesAr.current[i][1].kill();
-                    containerTimelinesAr.current[i] = [];
-                }
-                for (let i = 0; i < openTimelines.current.length; i++) {
                     
-                    openTimelines.current[i].kill();
                 }
-                openTimelines.current = [];
-            };
-        }
+
+            }
+        );
+            
+        // cleanup
+        return () => {
+            for (let i = 0; i < containerTimelinesAr.current.length; i++) {
+
+                containerTimelinesAr.current[i][0].kill();
+                containerTimelinesAr.current[i][1].kill();
+                containerTimelinesAr.current[i] = [];
+            }
+            for (let i = 0; i < openTimelines.current.length; i++) {
+                
+                openTimelines.current[i].kill();
+            }
+            openTimelines.current = [];
+        };
+        
     },[status.bp]);
     const childCheckpoint = useCallback( (index:number) => {
         const childRef = childRefs.current[index];
@@ -373,11 +389,11 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
             const childTimeline = childRef.getTimeline();
             if (mouseStatus.current === "mouseenter") {
                 hoverIndex.current = index;
-                if (!pauseAll.current) {childTimeline.resume();}
+                if (childTimeline && !pauseAll.current) {childTimeline.resume();}
                 initialRun.current[index] = false;                
             } else if (mouseStatus.current === "mouseleave") {
                 hoverIndex.current = undefined;
-                childTimeline.pause();
+                if (childTimeline) childTimeline.pause();
             }
         }
     };
