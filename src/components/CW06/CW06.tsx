@@ -40,6 +40,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
         [hasInitialPosition, setHasInitialPosition] = useState<boolean>(false);
 
     const cardRefs = useRef<(HTMLDivElement | null)[]>([]),
+        childContentRefs = useRef<any[]>([]),
         childRefs = useRef<SI01TimelineControls[]>([]),
         containerRef = useRef<HTMLDivElement | null>(null), // cw06w1
         containerTimelinesAr = useRef<gsap.core.Timeline[][]>([]),
@@ -86,6 +87,19 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
 
     let mm = gsap.matchMedia();
 
+    function resetCardContent(i?:number) {
+        if (i !== undefined) {
+            if (childContentRefs.current[i] && typeof childContentRefs.current[i].resetContent === 'function') {
+                childContentRefs.current[i].resetContent()
+            }
+        } else {
+            childContentRefs.current.forEach( (r) => {
+                if (r && typeof r.resetContent === 'function') {
+                    r.resetContent();
+                }
+            });
+        }
+    };
     function resetCards():void {
         setCardPos(new Map());
         setFeatureCardIdx(null);
@@ -95,7 +109,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
     }  
     useEffect( () => {
         resetCards();
-        
+        resetCardContent();
             
         mm.add(
             `(max-width: ${SETTINGS.breakpoints.tablet}px)`, () => {
@@ -109,6 +123,11 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
                             height: "auto",
                             minWidth:"100%",
                             maxWidth:"100%"
+                        });
+                    }
+                    if (containerRef.current) {
+                        gsap.set(containerRef.current,{
+                            clearProps:"all"
                         });
                     }
                 }
@@ -351,7 +370,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
             }
         } 
     },[]);
-    const handleClick  = (e:React.MouseEvent<HTMLAnchorElement, MouseEvent>,index:number,action:string) => {
+    const handleClick = (e:React.MouseEvent<HTMLAnchorElement, MouseEvent>,index:number,action:string) => {
         e.preventDefault();
 
         if (status.isMobile || status.isTablet) {
@@ -364,6 +383,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
                     // close current card
                     openTimelines.current[featureCardIdx].reverse();
                     containerTimelinesAr.current[featureCardIdx][1].play(0);
+                    resetCardContent(featureCardIdx);
                     // open new card
                     setTimeout(() => {
                         setFeatureCardIdx(index);
@@ -378,11 +398,12 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
             } else if (action === "close") {
                 openTimelines.current[index].reverse();
                 containerTimelinesAr.current[index][1].play(0);
+                resetCardContent(index);
                 pauseCardAnim();
             }
         }
     };
-    const handleMouseEvent = (e:React.MouseEvent<HTMLDivElement, MouseEvent>,index:number) => {
+    const handleMouseEvent = (e:React.MouseEvent<HTMLDivElement, MouseEvent>,index:number):void => {
         mouseStatus.current = e.type;
         const childRef = childRefs.current[index];
         if (childRef && childRef.getTimeline) {
@@ -397,7 +418,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
             }
         }
     };
-    const initialize = () => {
+    const initialize = ():void => {
         for (let i = 0; i < cardCount; i++) {
             const card = cards[i];
             initialRun.current[i] = true;
@@ -407,9 +428,6 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
                 card.graphicArgs["timelineCallbacks"] = initializeTimelineCallbacks(i);
             }
         }
-    };
-    const initializeCardPositions = () => {
-
     };
     const initializeTimelineCallbacks = (i:number):TimelineCallback[] => {
         const ar:TimelineCallback[] = [];
@@ -425,7 +443,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
         } as TimelineCallback);
         return ar;
     };
-    const pauseCardAnim = (pause = 0) => {
+    const pauseCardAnim = (pause = 0):void => {
         let childRef:SI01TimelineControls;
 
         if (pause === 1) {
@@ -457,7 +475,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
                                         <a href="#" className="cw06open" onClick={(e) => handleClick(e,index,"open")}>More </a>
                                         <a href="#" className="cw06close" onClick={(e) => handleClick(e,index,"close")}></a>
                                     </div>
-                                    {card.demoCpt && <div className="cw06content"><card.demoCpt /></div>}
+                                    {card.demoCpt && <div className="cw06content"><card.demoCpt ref={(r) => {childContentRefs.current[index] = r}} /></div>}
                                 </div>
                             </div>
                         );

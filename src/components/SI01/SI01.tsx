@@ -1,4 +1,4 @@
-import React, { FC, forwardRef, lazy, Suspense, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
+import React, { FC, forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import gsap from "gsap";
 import "./style/SI01.scss";
 import SI01v0 from "./SI01v0";

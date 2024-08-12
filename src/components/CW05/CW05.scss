@@ -28,11 +28,12 @@
         border-radius: $innerFormBorderRadius;
     }
     .cw05chat .cw05user {
-        background-color: rgba(255,255,255,0.7);
-        color: #666;
+        background-color: rgba(255,255,255,0.5);
+        color: #999;
     }
     .cw05chat .cw05agent {
         background-color: rgba(255, 255, 255, 0.9);
+        color: #333;
     }
     textarea[name=userInput] {
         width: 100%;
@@ -40,7 +41,7 @@
         resize: none;
         padding: 0.75em 1em;
         border:0;
-        background-color: $formFieldBG;
+        background-color: $formFieldBG3;
         border-radius: $formBorderRadius;
         opacity: 0.75;
         &:hover {

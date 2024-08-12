@@ -1,11 +1,13 @@
-import React, { FC, ReactElement, ReactEventHandler, useEffect, useState } from "react";
+import React, { FC, forwardRef, ReactElement, ReactEventHandler, useEffect, useImperativeHandle, useState } from "react";
 import "./CW05.scss";
 import { ErrorItem, LogItem, ResponseBucket, svcGetAssistant } from "../../services/data";
 interface FormData {
     userInput?: string
 }
 
-const CW05:FC = () => {
+// const CW05:FC = () => {
+const CW05 = forwardRef( ({},ref) => {
+
 
     const [formData,setFormData] = useState<FormData>({
         userInput: ""
@@ -75,7 +77,14 @@ const CW05:FC = () => {
             }
         }
     }
-
+    const resetContent = ():void => {
+        setFormData({userInput:""});
+        setMsgLog(undefined);
+        setResponseItem(undefined)
+    }
+    useImperativeHandle(ref, () => ({
+        resetContent
+    }));
     return (
         <section className="cw05 cw05w0">
             <div className="cw05w0">
@@ -100,6 +109,6 @@ const CW05:FC = () => {
             </div>
         </section>
     );
-};
+});
 
 export default CW05;

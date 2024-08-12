@@ -1,7 +1,6 @@
-import React, { FC, ReactElement, ReactNode, useCallback, useContext, useEffect, useMemo, useRef } from "react";
+import React, { FC, useContext, useEffect, useRef } from "react";
 import "./CW07.scss";
 import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 import { SI01TimelineControls as CW07Tile } from "../SI01/SI01"; 
 import { StatusContext } from "../../App";
 import { SETTINGS } from "../../constants";
