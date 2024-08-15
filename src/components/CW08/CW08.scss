@@ -1,0 +1,27 @@
+@import "../../variables.scss";
+
+.cw08 {
+    h2 {
+        padding-right:40px;
+        margin-bottom: 0;
+    }
+    .cw08w0 {
+        position: relative;
+    }
+    .cw08w1 {
+        max-height: 0;
+        overflow: hidden;
+        &.cw08-active {
+            max-height: 1000px;
+        }
+        transition: max-height 0.3s ease-in-out;
+        & > * {
+            margin-top: 0.5em;
+        }
+    }
+    .icnbtn {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+}

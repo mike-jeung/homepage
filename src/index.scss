@@ -43,12 +43,12 @@ button.icnbtn {
         background-repeat: no-repeat;
         background-size: 100%;
         background-position: 50% 50%;
-        transform: rotate(180deg);
+        transform: rotate(0deg);
 
         
     }
     &.icn-arrow-down {
-        transform: rotate(0);
+        transform: rotate(180deg);
     }
 
 }

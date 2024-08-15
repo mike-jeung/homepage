@@ -9,6 +9,7 @@ import CW04 from "../CW04/CW04";
 import CW05 from "../CW05/CW05";
 import CW06, { CardData } from "../CW06/CW06";
 import CW07 from "../CW07/CW07";
+import CW08 from "../CW08/CW08";
 import SI01 from "../SI01/SI01";
 import { StatusContext } from "../../App";
 
@@ -143,7 +144,7 @@ const CL01:FC = () => {
                 </div>
                 <div className="cl01w1 cl01contact">
                     <div>
-                        <CW04 title="Contact" />
+                        <CW08 title="Contact" content={<CW04 />} />
                     </div>
                 </div>
             </div>
