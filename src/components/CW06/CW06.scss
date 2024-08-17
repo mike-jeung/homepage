@@ -54,6 +54,12 @@
         opacity: 0;
         transition: opacity 1s;
     }
+    .cw06mobi {
+        display: none;
+    }
+    .cw06content .cw06close {
+        display: none;
+    }
     .cw06active {
         .cw06w3 {
             padding-top:$bentoStdPad;
@@ -76,6 +82,9 @@
         .cw06open {
             display: none;
         }
+    }
+    .cw06content .cw06close {
+        display: none;
     }
     .cw06open {
         font-size: 1.2rem;
@@ -177,6 +186,40 @@
                     padding-bottom: 0;
                 }
             }
+        }
+        .cw06mobi {
+            display: block;
+        }
+        .cw06content {
+            transition: opacity 0.25s;
+        }
+        .cw06active .cw06content {
+            border-radius: 0 !important;
+            opacity:1;
+            position: fixed;
+            z-index: 99;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.8) !important;
+            padding: $padMobile;
+            overflow-y:auto;
+            display: flex;
+            align-items: center;
+        }
+        .cw06active .cw06content > div {
+            border-radius: $bentoBorderRadius;
+            background: #FFF;
+            padding: $bentoMobPad;
+            margin: auto;
+            position: relative;
+        }
+        .cw06content .cw06close {
+            display: block;
+            z-index:99;
+            top: $bentoMobPad;
+            right: $bentoMobPad;
         }
     }
 }

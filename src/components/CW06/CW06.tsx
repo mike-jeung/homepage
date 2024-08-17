@@ -5,6 +5,7 @@ import { SETTINGS } from "../../constants";
 import { StatusContext } from "../../App";
 import { TimelineCallback } from "../../helpers/applyTimelineCallbacks";
 import { SI01TimelineControls } from "../SI01/SI01";
+import CB03 from "../CB03/CB03";
 interface CW06Props {
     cards: CardData[];
     cols?: number;
@@ -37,7 +38,8 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
     const [cardCount, setCardCount] = useState(cards.length),
         [cardPos, setCardPos] = useState<Map<number, CW06CardPosition>>(new Map()),
         [featureCardIdx, setFeatureCardIdx] = useState<number | null>(null),
-        [hasInitialPosition, setHasInitialPosition] = useState<boolean>(false);
+        [hasInitialPosition, setHasInitialPosition] = useState<boolean>(false),
+        [modalOpen, setModalOpen] = useState(false);
 
     const cardRefs = useRef<(HTMLDivElement | null)[]>([]),
         childContentRefs = useRef<any[]>([]),
@@ -110,6 +112,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
     useEffect( () => {
         resetCards();
         resetCardContent();
+        setModalOpen(false);
             
         mm.add(
             `(max-width: ${SETTINGS.breakpoints.tablet}px)`, () => {
@@ -372,11 +375,16 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
     },[]);
     const handleClick = (e:React.MouseEvent<HTMLAnchorElement, MouseEvent>,index:number,action:string) => {
         e.preventDefault();
-
+        // no interruptions
+        if (isAnimating.current) return;
         if (status.isMobile || status.isTablet) {
-
+            if (action === "open") {
+                setFeatureCardIdx(index);
+            } else if (action === "close") {
+                resetCardContent(index);
+                setFeatureCardIdx(null);
+            }
         } else {
-            if (isAnimating.current) return 0; // no interruptions
             if (action === "open") {
                 pauseCardAnim(1);
                 if (featureCardIdx !== null) {
@@ -472,10 +480,16 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
                                 <div className="cw06w3">
                                     <div className="cw06w4">{card.textCpt && <card.textCpt {...card.textArgs} />}</div>
                                     <div className="cw06w5">
-                                        <a href="#" className="cw06open" onClick={(e) => handleClick(e,index,"open")}>More </a>
+                                        {card.demoCpt &&<a href="#" className="cw06open" onClick={(e) => handleClick(e,index,"open")}>More </a>}
                                         <a href="#" className="cw06close" onClick={(e) => handleClick(e,index,"close")}></a>
                                     </div>
-                                    {card.demoCpt && <div className="cw06content"><card.demoCpt ref={(r) => {childContentRefs.current[index] = r}} /></div>}
+                                    {card.demoCpt && <div className="cw06content">
+                                        <div>
+                                            <a href="#" className="cw06close" onClick={(e) => handleClick(e,index,"close")}></a>
+                                            {card.textCpt && <div className="cw06mobi"><card.textCpt {...card.textArgs} /></div>}
+                                            <card.demoCpt ref={(r) => {childContentRefs.current[index] = r}} />
+                                        </div>
+                                    </div>}
                                 </div>
                             </div>
                         );
