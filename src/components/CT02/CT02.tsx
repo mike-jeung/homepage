@@ -1,8 +1,9 @@
-import React, { FC, useContext, useEffect, useRef, useState } from "react";
+import React, { FC, ReactNode, useContext, useEffect, useRef, useState } from "react";
 import "./CT02.scss";
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { StatusContext } from "../../App";
+import { ErrorItem, QuoteItem, svcGetQuote } from "../../services/data";
 import useContextRef from "../../hooks/useContextRef";
 
 const CT02:FC = () => {
@@ -10,6 +11,7 @@ const CT02:FC = () => {
     const status = useContext(StatusContext);
     const [paused, setPaused] = useState<boolean>(false);
     const refs = {
+            "quote":useRef<ReactNode>(""),
             "bub": useRef<HTMLDivElement>(null),
             "g1": useRef<SVGGElement | null>(null),
             "n1": useRef<SVGCircleElement | null>(null),
@@ -72,6 +74,17 @@ const CT02:FC = () => {
         timeline2 = useRef<gsap.core.Timeline>(gsap.timeline()),
         timeline3 = useRef<gsap.core.Timeline>(gsap.timeline({repeat:-1}));
 
+    async function updateQuote():Promise<void> {
+        const quote = await svcGetQuote();
+        console.log(quote)
+        if (quote.success) {
+            const q = quote.response as QuoteItem;
+            refs.quote.current = (<div><p>{q.quote}</p><span>&mdash;{q.author}</span></div>);
+        } else {
+            refs.quote.current = (<div>I didn't hear from the server. I don't know what to say.</div>);
+        }
+        
+    }
     useGSAP( () => {
         // console.log("========== ct02 useGSAP status",status)
         if (status.bp === "mobile") {
@@ -185,17 +198,17 @@ const CT02:FC = () => {
             }
             t3.eventCallback("onRepeat", () => {
                 t2.play("start");
+                updateQuote();
             });
             // timeline0.current.play();
             // timeline1.current.play();
             // timeline2.current.play();
             // timeline3.current.play();
             /*
-
                 533 - 470
-    92.32%
-    forearm 482.5 - 408.83, w = 86.4
-    85.27%
+                92.32%
+                forearm 482.5 - 408.83, w = 86.4
+                85.27%
             */
         }
     },{ dependencies:[status.bp] });
@@ -217,9 +230,10 @@ const CT02:FC = () => {
     return (
         <section className="ct02 ct02v0">
             <div className="ct02w0" onClick={pauseAnimation}>
-                <div className="speech-bubble" ref={refs.bub}><svg className="bubble" viewBox="0 0 374 327.92">
-                    <path className="inner" d="M201.41 255.92H34.87C18.95 255.92 6 242.97 6 227.05V34.87C6 18.95 18.95 6 34.87 6h304.25c15.92 0 28.87 12.95 28.87 28.87v192.18c0 15.92-12.95 28.87-28.87 28.87h-79.63l-57.22 57.65-.87-57.65Z" /><path d="M339.13 12C351.74 12 362 22.26 362 34.87v192.18c0 12.61-10.26 22.87-22.87 22.87h-82.12l-3.52 3.55-45.42 45.76-.57-37.49-.18-11.82H34.87c-12.61 0-22.87-10.26-22.87-22.87V34.87C12 22.26 22.26 12 34.87 12h304.25m.01-12H34.87C15.61 0 0 15.61 0 34.87v192.18c0 19.26 15.61 34.87 34.87 34.87H195.5l1 66 65.5-66h77.13c19.26 0 34.87-15.61 34.87-34.87V34.87C374 15.61 358.39 0 339.13 0Z" />
-                </svg></div>
+                <div className="speech-bubble" ref={refs.bub}>
+                    <svg className="bubble" viewBox="0 0 374 327.92"><path className="inner" d="M201.41 255.92H34.87C18.95 255.92 6 242.97 6 227.05V34.87C6 18.95 18.95 6 34.87 6h304.25c15.92 0 28.87 12.95 28.87 28.87v192.18c0 15.92-12.95 28.87-28.87 28.87h-79.63l-57.22 57.65-.87-57.65Z" /><path d="M339.13 12C351.74 12 362 22.26 362 34.87v192.18c0 12.61-10.26 22.87-22.87 22.87h-82.12l-3.52 3.55-45.42 45.76-.57-37.49-.18-11.82H34.87c-12.61 0-22.87-10.26-22.87-22.87V34.87C12 22.26 22.26 12 34.87 12h304.25m.01-12H34.87C15.61 0 0 15.61 0 34.87v192.18c0 19.26 15.61 34.87 34.87 34.87H195.5l1 66 65.5-66h77.13c19.26 0 34.87-15.61 34.87-34.87V34.87C374 15.61 358.39 0 339.13 0Z" /></svg>
+                    <div className="speech">{refs.quote.current}</div>
+                </div>
                 <svg viewBox="0 0 866.49 866.2">
                     <defs>
                         <linearGradient id="ct02-g0" x1="0" y1="1" x2="0" y2="0" gradientUnits="objectBoundingBox">
