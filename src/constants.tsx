@@ -13,4 +13,12 @@ const SETTINGS = {
         'tablet': 920
     }
 }
-export { SETTINGS, PROMPT, URL };
+const STRINGS = {
+    'default_quote': "The server won't talk to me. I don't know what to say."
+}
+export { 
+    PROMPT,
+    SETTINGS,
+    STRINGS,
+    URL
+};

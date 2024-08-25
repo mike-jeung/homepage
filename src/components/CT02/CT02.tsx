@@ -4,14 +4,15 @@ import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { StatusContext } from "../../App";
 import { ErrorItem, QuoteItem, svcGetQuote } from "../../services/data";
+import { STRINGS } from "../../constants";
 import useContextRef from "../../hooks/useContextRef";
 
 const CT02:FC = () => {
     // const status = useContextRef(StatusContext);
     const status = useContext(StatusContext);
+    const [quoteNode,setQuoteNode] = useState<ReactNode>("");
     const [paused, setPaused] = useState<boolean>(false);
     const refs = {
-            "quote":useRef<ReactNode>(""),
             "bub": useRef<HTMLDivElement>(null),
             "g1": useRef<SVGGElement | null>(null),
             "n1": useRef<SVGCircleElement | null>(null),
@@ -79,9 +80,9 @@ const CT02:FC = () => {
         console.log(quote)
         if (quote.success) {
             const q = quote.response as QuoteItem;
-            refs.quote.current = (<div><p>{q.quote}</p><span>&mdash;{q.author}</span></div>);
+            setQuoteNode(<div><p>{q.quote}</p><span>&mdash;{q.author}</span></div>);
         } else {
-            refs.quote.current = (<div>I didn't hear from the server. I don't know what to say.</div>);
+            setQuoteNode(<div>{STRINGS.default_quote}</div>);
         }
         
     }
@@ -152,7 +153,7 @@ const CT02:FC = () => {
             t2.addPause();
 
             // initial mouth and bubble positions
-            t2.set(refs.bub.current,{top:"7%",opacity:0});
+            t2.set(refs.bub.current,{bottom:"66%",opacity:0});
             t2.set(refs.mouth.current,{scaleY:1});
 
 
@@ -178,8 +179,8 @@ const CT02:FC = () => {
             t2.to(refs.head.current,{rotation:-1,duration:0.2},1.3);
             t2.to(refs.head.current,{rotation:0,duration:0.2},1.5);
             // bubble
-            t2.to(refs.bub.current,{top:"7%",opacity:1,duration:0.5, ease:"none"},0.5);
-            t2.to(refs.bub.current,{top:"0%",duration:3, ease:"none"},1);
+            t2.to(refs.bub.current,{bottom:"66%",opacity:1,duration:0.5, ease:"none"},0.5);
+            t2.to(refs.bub.current,{bottom:"72%",duration:3, ease:"none"},1);
             t2.to(refs.bub.current,{opacity:0,duration:0.25},3.5);
 
             t2.to(refs.arm_lt.current,{rotate:-60,duration:0.5},1);
@@ -231,8 +232,14 @@ const CT02:FC = () => {
         <section className="ct02 ct02v0">
             <div className="ct02w0" onClick={pauseAnimation}>
                 <div className="speech-bubble" ref={refs.bub}>
-                    <svg className="bubble" viewBox="0 0 374 327.92"><path className="inner" d="M201.41 255.92H34.87C18.95 255.92 6 242.97 6 227.05V34.87C6 18.95 18.95 6 34.87 6h304.25c15.92 0 28.87 12.95 28.87 28.87v192.18c0 15.92-12.95 28.87-28.87 28.87h-79.63l-57.22 57.65-.87-57.65Z" /><path d="M339.13 12C351.74 12 362 22.26 362 34.87v192.18c0 12.61-10.26 22.87-22.87 22.87h-82.12l-3.52 3.55-45.42 45.76-.57-37.49-.18-11.82H34.87c-12.61 0-22.87-10.26-22.87-22.87V34.87C12 22.26 22.26 12 34.87 12h304.25m.01-12H34.87C15.61 0 0 15.61 0 34.87v192.18c0 19.26 15.61 34.87 34.87 34.87H195.5l1 66 65.5-66h77.13c19.26 0 34.87-15.61 34.87-34.87V34.87C374 15.61 358.39 0 339.13 0Z" /></svg>
-                    <div className="speech">{refs.quote.current}</div>
+                    {
+                        /* <svg className="bubble" viewBox="0 0 374 327.92"><path className="inner" d="M201.41 255.92H34.87C18.95 255.92 6 242.97 6 227.05V34.87C6 18.95 18.95 6 34.87 6h304.25c15.92 0 28.87 12.95 28.87 28.87v192.18c0 15.92-12.95 28.87-28.87 28.87h-79.63l-57.22 57.65-.87-57.65Z" /><path d="M339.13 12C351.74 12 362 22.26 362 34.87v192.18c0 12.61-10.26 22.87-22.87 22.87h-82.12l-3.52 3.55-45.42 45.76-.57-37.49-.18-11.82H34.87c-12.61 0-22.87-10.26-22.87-22.87V34.87C12 22.26 22.26 12 34.87 12h304.25m.01-12H34.87C15.61 0 0 15.61 0 34.87v192.18c0 19.26 15.61 34.87 34.87 34.87H195.5l1 66 65.5-66h77.13c19.26 0 34.87-15.61 34.87-34.87V34.87C374 15.61 358.39 0 339.13 0Z" /></svg>
+                    */}
+                    <div className="bubble">
+                        <div className="speech">{quoteNode}</div>
+                        <svg className="bubble-arrow" viewBox="0 0 22 18"><path d="M19.85 1.62 3.02 12.63 4.51 1.62"/></svg>
+                    </div>
+                    
                 </div>
                 <svg viewBox="0 0 866.49 866.2">
                     <defs>

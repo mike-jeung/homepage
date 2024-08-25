@@ -20,7 +20,7 @@ $strokeWidthXl: 9;
     width: 100%;
 
     .ct02w0 {
-        text-align: center;
+        //text-align: center;
         position: relative;
     }
     svg {
@@ -125,14 +125,16 @@ $strokeWidthXl: 9;
     }
     .speech-bubble {
         position: absolute;
-        width: 35%;
+        width: 75%;
         height: auto;
         left: 0;
         right: 0;
-        top: 8%;
-        bottom:auto;
+        // top: 8%;
+        top: auto;
+        bottom: 66%;
         margin: 0 auto;
         opacity: 0;
+        display: flex;
     }
     .bubble {
         width: 100%;
@@ -145,14 +147,37 @@ $strokeWidthXl: 9;
         }
     }
     .speech-bubble .speech {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
+        position: relative;
         margin: auto;
+        line-height: 1.2;
+        font-size: 1.2rem;
+        color: #666;
+        background-color: #fff;
+        padding: 6px 8px;
+        border-radius: 8px;
+        border: 3px solid #666;
     }
-    
+    .speech-bubble .speech p {
+        margin: 0;
+    }
+    .speech-bubble .speech span {
+        display: block;
+        text-align: right;
+    }
+    .speech-bubble .bubble .bubble-arrow {
+        position: absolute;
+        width:22px;
+        height:18px;
+        bottom: -13px;
+        right: 20%;
+    }
+    .speech-bubble .bubble .bubble-arrow path {
+        fill:#fff;
+        stroke:#666;
+        stroke-miterlimit:10;
+        stroke-width:3px;
+    }
+
 }
 @media (max-width: $bp_tablet) {
     .ct02 {

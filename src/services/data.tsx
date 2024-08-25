@@ -56,7 +56,7 @@ const svcGetQuote = async () => {
                 'Content-Type': 'application/json'
             }
         });
-        console.log("data",data.ok)
+        //console.log("data",data.ok)
         if (!data.ok) {
             throw new Error("Network response was not ok.");
         }
@@ -71,7 +71,7 @@ const svcGetQuote = async () => {
         }
         return {success:true,response:quote};
     } catch (err) {
-        console.log("catch")
+        //console.log("catch")
         const error: ErrorItem = {};
         if (err instanceof Error) {
             error.error = err;
