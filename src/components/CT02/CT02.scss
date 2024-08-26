@@ -23,6 +23,18 @@ $strokeWidthXl: 9;
         //text-align: center;
         position: relative;
     }
+    .ct02w1 {
+        position: absolute;
+        right: -12px;
+        bottom: -12px;
+        opacity: 0.3;
+        button {
+            cursor:pointer;
+        }
+        &:hover {
+            opacity: 0.6;
+        }
+    }
     svg {
         overflow: visible;
         // max-width: 240px;
@@ -150,7 +162,7 @@ $strokeWidthXl: 9;
         position: relative;
         margin: auto;
         line-height: 1.2;
-        font-size: 1.2rem;
+        font-size: 0.75em;
         color: #666;
         background-color: #fff;
         padding: 6px 8px;
@@ -177,7 +189,18 @@ $strokeWidthXl: 9;
         stroke-miterlimit:10;
         stroke-width:3px;
     }
-
+    .ct02play {
+        background:svg-url($iconPause);
+        padding: 0;
+        margin: 0;
+        border: 0;
+        width:20px;
+        height: 20px;
+        background-size: contain;
+    }
+    .ct02play.ct02pause {
+        background:svg-url($iconPlay);
+    }
 }
 @media (max-width: $bp_tablet) {
     .ct02 {

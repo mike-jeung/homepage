@@ -1,18 +1,13 @@
 import React, { FC, useEffect, useState } from "react";
 import "./CW04.scss";
+import { ContactMessage, svcSendMsg } from "../../services/data";
 
-interface FormData {
-    name: string;
-    email: string;
-    city: string;
-    message: string;
-}
 interface CW04Props {
     title?: string;
     intro?: string;
 }
 const CW04:FC<CW04Props> = ({title,intro}) => {
-    const [formData, setFormData] = useState<FormData>({
+    const [formData, setFormData] = useState<ContactMessage>({
             name:"",
             email:"",
             city:"",
@@ -23,7 +18,7 @@ const CW04:FC<CW04Props> = ({title,intro}) => {
     const handleChange = (e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>):void => {
         const { name, value } = e.target;
         setFormData( (prevData) => {
-            const newData:FormData = {
+            const newData:ContactMessage = {
                 ...prevData,
                 [name]:value
             }

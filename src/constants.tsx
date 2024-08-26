@@ -14,7 +14,7 @@ const SETTINGS = {
     }
 }
 const STRINGS = {
-    'default_quote': "The server won't talk to me. I don't know what to say."
+    'default_quote': "The server didn't respond. I don't know what to say."
 }
 export { 
     PROMPT,

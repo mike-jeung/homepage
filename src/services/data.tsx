@@ -18,6 +18,12 @@ interface ResponseBucket {
     success: boolean;
     response: LogItem | ErrorItem;
 }
+interface ContactMessage {
+    name: string;
+    email: string;
+    city: string;
+    message: string;
+}
 
 const svcGetAssistant = async (log:LogItem[]):Promise<ResponseBucket> => {
     try {
@@ -81,11 +87,16 @@ const svcGetQuote = async () => {
         return {success:false,response:error};
     }
 }
-export { 
+const svcSendMsg = async (data) => {
+
+}
+export {
+    ContactMessage,
     ErrorItem,
     LogItem,
     QuoteItem,
     ResponseBucket,
     svcGetAssistant,
-    svcGetQuote
+    svcGetQuote,
+    svcSendMsg
 };

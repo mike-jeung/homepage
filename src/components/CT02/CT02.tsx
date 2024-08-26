@@ -13,6 +13,7 @@ const CT02:FC = () => {
     const [quoteNode,setQuoteNode] = useState<ReactNode>("");
     const [paused, setPaused] = useState<boolean>(false);
     const refs = {
+            "first": useRef<boolean>(true),
             "bub": useRef<HTMLDivElement>(null),
             "g1": useRef<SVGGElement | null>(null),
             "n1": useRef<SVGCircleElement | null>(null),
@@ -77,7 +78,6 @@ const CT02:FC = () => {
 
     async function updateQuote():Promise<void> {
         const quote = await svcGetQuote();
-        console.log(quote)
         if (quote.success) {
             const q = quote.response as QuoteItem;
             setQuoteNode(<div><p>{q.quote}</p><span>&mdash;{q.author}</span></div>);
@@ -87,13 +87,13 @@ const CT02:FC = () => {
         
     }
     useGSAP( () => {
-        // console.log("========== ct02 useGSAP status",status)
         if (status.bp === "mobile") {
             timeline0.current.clear(true);
             timeline1.current.clear(true);
             timeline2.current.clear(true);
             timeline3.current.clear(true);
         } else if(status.bp === "desktop") {
+            refs.first.current = true;
             const t0 = timeline0.current,
                 t1 = timeline1.current,
                 t2 = timeline2.current,
@@ -103,9 +103,7 @@ const CT02:FC = () => {
                 t0.play(0);
                 t1.play(0);
                 t2.play(0);
-                t3.play(0);
-                
-                // console.log(t2)
+                t3.play(0);                
                 t1.add(gsap.fromTo(refs.g1.current,{rotate:0,transformOrigin:"50% 50%"},{rotate:360,duration:300,ease:"none"}),0);
             // L1 edges
             for (let i = 1; i <= 8; i++) {
@@ -180,8 +178,8 @@ const CT02:FC = () => {
             t2.to(refs.head.current,{rotation:0,duration:0.2},1.5);
             // bubble
             t2.to(refs.bub.current,{bottom:"66%",opacity:1,duration:0.5, ease:"none"},0.5);
-            t2.to(refs.bub.current,{bottom:"72%",duration:3, ease:"none"},1);
-            t2.to(refs.bub.current,{opacity:0,duration:0.25},3.5);
+            t2.to(refs.bub.current,{bottom:"72%",duration:5, ease:"none"},1);
+            t2.to(refs.bub.current,{opacity:0,duration:0.25},5.5);
 
             t2.to(refs.arm_lt.current,{rotate:-60,duration:0.5},1);
             t2.to(refs.arm_lt_fore.current,{rotate:90,duration:0.5},1);
@@ -191,15 +189,18 @@ const CT02:FC = () => {
             
             for (let i = 1; i <= 5;i++) {
                 t3.set(refs["l"+i].current,{duration:3,fill:"#00ff06",ease:"none"},0);
-                t3.set(refs["l"+i].current,{duration:3,fill:"#000000",ease:"none"},3);
+                t3.set(refs["l"+i].current,{duration:3,fill:"#000000",ease:"none"},5);
             }
 
             for (let i = 1; i <= 5;i++) {
-                t3.add(gsap.to(refs["l"+i].current,{duration:0.5,fill:"#00ff06",ease:"none"}),3 + (i * 0.5));
+                t3.add(gsap.to(refs["l"+i].current,{duration:0.5,fill:"#00ff06",ease:"none"}),5 + (i * 0.5));
             }
             t3.eventCallback("onRepeat", () => {
                 t2.play("start");
                 updateQuote();
+                if (refs.first.current) {
+                    refs.first.current = false;
+                }
             });
             // timeline0.current.play();
             // timeline1.current.play();
@@ -217,7 +218,9 @@ const CT02:FC = () => {
         if (paused) {
             timeline0.current.play();
             timeline1.current.play();
-            timeline2.current.play();
+            if (!refs.first.current) {
+                timeline2.current.play();
+            }
             timeline3.current.play();
             setPaused(false);
         } else {
@@ -230,16 +233,12 @@ const CT02:FC = () => {
     };
     return (
         <section className="ct02 ct02v0">
-            <div className="ct02w0" onClick={pauseAnimation}>
+            <div className="ct02w0">
                 <div className="speech-bubble" ref={refs.bub}>
-                    {
-                        /* <svg className="bubble" viewBox="0 0 374 327.92"><path className="inner" d="M201.41 255.92H34.87C18.95 255.92 6 242.97 6 227.05V34.87C6 18.95 18.95 6 34.87 6h304.25c15.92 0 28.87 12.95 28.87 28.87v192.18c0 15.92-12.95 28.87-28.87 28.87h-79.63l-57.22 57.65-.87-57.65Z" /><path d="M339.13 12C351.74 12 362 22.26 362 34.87v192.18c0 12.61-10.26 22.87-22.87 22.87h-82.12l-3.52 3.55-45.42 45.76-.57-37.49-.18-11.82H34.87c-12.61 0-22.87-10.26-22.87-22.87V34.87C12 22.26 22.26 12 34.87 12h304.25m.01-12H34.87C15.61 0 0 15.61 0 34.87v192.18c0 19.26 15.61 34.87 34.87 34.87H195.5l1 66 65.5-66h77.13c19.26 0 34.87-15.61 34.87-34.87V34.87C374 15.61 358.39 0 339.13 0Z" /></svg>
-                    */}
                     <div className="bubble">
                         <div className="speech">{quoteNode}</div>
                         <svg className="bubble-arrow" viewBox="0 0 22 18"><path d="M19.85 1.62 3.02 12.63 4.51 1.62"/></svg>
                     </div>
-                    
                 </div>
                 <svg viewBox="0 0 866.49 866.2">
                     <defs>
@@ -403,6 +402,9 @@ const CT02:FC = () => {
                         </g>
                     </g>
                 </svg>
+            </div>
+            <div className="ct02w1">
+                <button className={`ct02play${paused ? " ct02pause" : ""}`} onClick={pauseAnimation}></button>
             </div>
         </section>
     );

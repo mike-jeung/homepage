@@ -43,14 +43,14 @@ const App: FC = () => {
                     changes++;
                     bpChanged = true;
                 }
-                console.log("*+=+*+=+*+= handleResize",`Changes: ${changes}`,{
-                    appWidth: w,
-                    appHeight: h,
-                    isMobile: isMobile,
-                    isTablet: isTablet,
-                    bp: bp,
-                    bpChanged: bpChanged
-                })
+                // console.log("*+=+*+=+*+= handleResize",`Changes: ${changes}`,{
+                //     appWidth: w,
+                //     appHeight: h,
+                //     isMobile: isMobile,
+                //     isTablet: isTablet,
+                //     bp: bp,
+                //     bpChanged: bpChanged
+                // })
                 if (changes > 0) {
                     
                     return {
@@ -62,7 +62,6 @@ const App: FC = () => {
                         bpChanged: bpChanged
                     }
                 } else {
-                    // console.log("handleResize",oldStatus)
                     return oldStatus;
                 }
             });
