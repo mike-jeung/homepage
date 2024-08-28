@@ -2,6 +2,15 @@
 
 .cw04 {
     position: relative;
+    padding: 0 3px;
+
+    .cw04error {
+        background: #fee;
+        border: 1px solid #C00;
+        padding: 0 0.75em;
+        border-radius: $formBorderRadius;
+        margin-bottom: 1em;
+    }
     form {
         margin: 0;
     }

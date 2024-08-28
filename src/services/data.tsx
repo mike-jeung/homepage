@@ -16,7 +16,7 @@ interface QuoteItem {
 }
 interface ResponseBucket {
     success: boolean;
-    response: LogItem | ErrorItem;
+    response: QuoteItem | LogItem | ErrorItem;
 }
 interface ContactMessage {
     name: string;
@@ -54,7 +54,7 @@ const svcGetAssistant = async (log:LogItem[]):Promise<ResponseBucket> => {
         return {success:false,response:error};
     }
 }
-const svcGetQuote = async () => {
+const svcGetQuote = async ():Promise<ResponseBucket> => {
     try {
         const data = await fetch(URL.quote, {
             method: 'GET',
@@ -87,8 +87,29 @@ const svcGetQuote = async () => {
         return {success:false,response:error};
     }
 }
-const svcSendMsg = async (data) => {
-
+const svcSendMsg = async (msg:ContactMessage) => {
+    try {
+        const data = await fetch(URL.contact, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(msg)
+        });
+        if (!data.ok) {
+            throw new Error("Network response was not ok.");
+        }
+        const response = await data.json();
+        return response;
+    } catch (err) {
+        const error: ErrorItem = {};
+        if (err instanceof Error) {
+            error.error = err;
+        } else {
+            error.other = err;
+        }
+        return {success:false,response:error};
+    }
 }
 export {
     ContactMessage,

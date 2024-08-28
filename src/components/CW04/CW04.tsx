@@ -13,7 +13,8 @@ const CW04:FC<CW04Props> = ({title,intro}) => {
             city:"",
             message:""
         }),
-        [isFormSent, setIsFormSet] = useState(false);
+        [isFormSent, setIsFormSent] = useState(false),
+        [isError, setIsError] = useState(false);
 
     const handleChange = (e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>):void => {
         const { name, value } = e.target;
@@ -25,19 +26,40 @@ const CW04:FC<CW04Props> = ({title,intro}) => {
             return newData;
         });
     }
-    const handleForm = (e:React.MouseEvent<HTMLButtonElement>):void => {
-        console.log(formData);
+    const handleForm = async (e:React.MouseEvent<HTMLButtonElement>):Promise<void> => {
         e.preventDefault();
+        const result = await svcSendMsg(formData);
+        if (result.success) {
+            setFormData( (prevData) => {
+                prevData.name = "";
+                prevData.email = "";
+                prevData.city = "";
+                prevData.message = "";
+                return prevData;
+            });
+            setIsFormSent(true);
+        } else {
+            setIsFormSent(false);
+            setIsError(true);
+        }
+
     };
     return (
         <section className="cw04 cw04v0">
             <div className="cw04w0">
                 {title && <h2>{title}</h2>}
                 {intro && <p>{intro}</p>}
+                { isError && (
+                    <div className="cw04w1 cw04error">
+                        <p>
+                            There was an error. Your message was not sent.
+                        </p>
+                    </div>
+                )}
                 { isFormSent ? (
                     <div className="cw04w1">
                         <p>
-                            Your message has been sent. I appreciate you taking the time to reach out to me. I will review your inquiry and respond within two business days.
+                            Thank you for your message. A response will be provided within two business days.
                         </p>
                     </div>
                 ) : (
