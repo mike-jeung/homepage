@@ -38,6 +38,7 @@ const CW04:FC<CW04Props> = ({title,intro}) => {
                 return prevData;
             });
             setIsFormSent(true);
+            setIsError(false);
         } else {
             setIsFormSent(false);
             setIsError(true);
