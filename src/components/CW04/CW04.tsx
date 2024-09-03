@@ -1,13 +1,26 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, ReactNode, useEffect, useState } from "react";
 import "./CW04.scss";
 import { ContactMessage, svcSendMsg } from "../../services/data";
+import { ERROR } from "../../constants";
 
 interface CW04Props {
     title?: string;
     intro?: string;
 }
+interface CW04FormData {
+    field: string;
+    error: number;
+}
+interface CW04FormBuild {
+    label: string;
+    name: string;
+    type: string;
+    desc?: string;
+    attr?:string[];
+}
 const CW04:FC<CW04Props> = ({title,intro}) => {
-    const [formData, setFormData] = useState<ContactMessage>({
+    const [errors,setErrors] = useState<string[]>([]),
+        [formData, setFormData] = useState<ContactMessage>({
             name:"",
             email:"",
             city:"",
@@ -15,7 +28,81 @@ const CW04:FC<CW04Props> = ({title,intro}) => {
         }),
         [isFormSent, setIsFormSent] = useState(false),
         [isError, setIsError] = useState(false);
+    const addError = (er:string):void => {
+        if (!er) return;
+        setErrors( (prev) => {
+            return [
+                ...prev,
+                er
+            ];
+        });
+    }
+    const formBuildData:CW04FormBuild[] = [
+        {
+            label:"Name",
+            name:"name",
+            type:"text",
+            attr:["required"]
+        },
+        {
+            label:"City",
+            name:"city",
+            type:"text"
+        },
+        {
+            label:"Email Address",
+            name:"email",
+            type:"email",
+            attr:["required","email"]
+        },
+        {
+            label:"Message",
+            name:"message",
+            type:"textarea",
+            attr:["required"]
+        },
+        {
+            label:"Submit",
+            name:"submit",
+            type:"button",
+        }
+    ];
+    const buildForm = (data:CW04FormBuild[],prefix?:string):ReactNode[] => {
+        let form:ReactNode[] = [],
+            line:ReactNode;
+        const pfx = prefix ? prefix : "form";
 
+        for (const item of data) {
+            if (item.type === "textarea") {
+                line = (<li className="cw04full" key={item.name}>
+                        <label htmlFor={`${pfx}${item.name}`}>{item.label}</label>
+                        <textarea id={`${pfx}${item.name}`} name={item.name} className={`cw04${item.name}`} value={formData[item.name]} onChange={handleChange}></textarea>
+                    </li>);
+            } else if (item.type === "button") {
+                line = (<li className="cw04full" key={item.name}>
+                        <button onClick={handleForm}>{item.name}</button>
+                    </li>);
+            } else if (item.type === "text" || item.type === "email") {
+                line = (<li className={`cw04${item.name}`} key={item.name}>
+                        <label htmlFor={`${pfx}${item.name}`}>{item.label}</label>
+                        <input id={`${pfx}${item.name}`} name={item.name} className="cw04field" type={item.type} value={formData[item.name]} onChange={handleChange} />
+                    </li>);
+            }
+            form.push(line);
+        }
+        return form;
+    }
+    const clearForm = ():void => {
+        setFormData( (prevData) => {
+            prevData.name = "";
+            prevData.email = "";
+            prevData.city = "";
+            prevData.message = "";
+            return prevData;
+        });
+        setErrors([]);
+        setIsFormSent(true);
+    }
     const handleChange = (e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>):void => {
         const { name, value } = e.target;
         setFormData( (prevData) => {
@@ -28,33 +115,53 @@ const CW04:FC<CW04Props> = ({title,intro}) => {
     }
     const handleForm = async (e:React.MouseEvent<HTMLButtonElement>):Promise<void> => {
         e.preventDefault();
-        const result = await svcSendMsg(formData);
-        if (result.success) {
-            setFormData( (prevData) => {
-                prevData.name = "";
-                prevData.email = "";
-                prevData.city = "";
-                prevData.message = "";
-                return prevData;
-            });
-            setIsFormSent(true);
-            setIsError(false);
-        } else {
-            setIsFormSent(false);
-            setIsError(true);
+        if (validateForm()) {
+            const result = await svcSendMsg(formData);
+            if (result.success) {
+                clearForm();
+            } else {
+                setIsFormSent(false);
+                addError(ERROR.general);
+            }
         }
-
     };
+    const validateForm = ():boolean => {
+        let re = /\S+@\S+\.\S+/; // simple email regex
+        let errors:string[] = [];
+        formBuildData.map( (m) => {
+            if (m.attr !== undefined) {
+                const value = formData[m.name];
+                for (const i in m.attr ) {
+                    if (m.attr[i] === "required") {
+                        if (!value) {
+                            errors.push(ERROR.required_missing.replace("$01$", m.label));
+                        }
+                    } else if (m.attr[i] === "email") {
+
+                        if (!re.test(value)) {
+                            errors.push(ERROR.invalid_email);
+                        }
+                    }
+                }
+            }
+        });
+        setErrors(errors);
+        if (errors.length < 1) {
+            return true;
+        }
+        return false;
+    }
     return (
         <section className="cw04 cw04v0">
             <div className="cw04w0">
                 {title && <h2>{title}</h2>}
                 {intro && <p>{intro}</p>}
-                { isError && (
+                { errors.length > 0 && (
                     <div className="cw04w1 cw04error">
-                        <p>
-                            There was an error. Your message was not sent.
-                        </p>
+                        <h3>Error</h3>
+                        <ul>
+                        {errors.map( (error,i) => <li key={i}>{error}</li>)}
+                        </ul>
                     </div>
                 )}
                 { isFormSent ? (
@@ -66,19 +173,7 @@ const CW04:FC<CW04Props> = ({title,intro}) => {
                 ) : (
                     <form>
                         <ul>
-                            <li><label htmlFor="contact-name">Name</label>
-                            <input placeholder="Your Name" id="contact-name" name="name" className="cw04field" type="text" value={formData.name} onChange={handleChange} /></li>
-
-                            <li><label htmlFor="contact-email">Email</label>
-                            <input placeholder="Your Email" id="contact-email" name="email" className="cw04field" type="text" value={formData.email} onChange={handleChange} /></li>
-
-                            <li className="cw04city"><label htmlFor="contact-city">City</label>
-                            <input placeholder="City" id="contact-city" name="city" className="cw04field" type="text" value={formData.city} onChange={handleChange} tabIndex={-1} /></li>
-
-                            <li className="cw04full"><label htmlFor="contact-msg">Message</label>
-                            <textarea placeholder="What would you like to build?" id="contact-msg" name="message" className="cw04msg" value={formData.message} onChange={handleChange}></textarea></li>
-
-                            <li className="cw04full"><button onClick={handleForm}>Submit</button></li>
+                            {buildForm(formBuildData,"contact")}
                         </ul>
                     </form>
                 )}

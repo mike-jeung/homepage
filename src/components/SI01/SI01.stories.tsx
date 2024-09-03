@@ -16,7 +16,7 @@ import "./style/SI01v3.scss";
 import "./style/SI01v4.scss";
 import "./style/SI01v5.scss";
 
-import { createStory } from "../../helpers";
+import createStory from "../../helpers/createStory";
 const meta: Meta<typeof SI01> = {
     title: "Icons/SI01",
     component: SI01,

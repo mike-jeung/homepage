@@ -2,14 +2,21 @@
 
 .cw04 {
     position: relative;
-    padding: 0 3px;
+    padding: 0;
 
     .cw04error {
-        background: #fee;
+        background: #fdc;
         border: 1px solid #C00;
-        padding: 0 0.75em;
+        padding: 0.75em;
         border-radius: $formBorderRadius;
         margin-bottom: 1em;
+        h3 {
+            margin-bottom: 0.25em;
+        }
+        p {
+            margin: 0;
+        }
+        
     }
     form {
         margin: 0;
@@ -35,10 +42,24 @@
             width: 100%;
             min-width:100%;
             max-width: 100%;
+            padding-top: 10px;
         }
         li.cw04city {
             position: absolute;
             left: -99999px;
+        }
+    }
+    .cw04error ul {
+        display: block;
+        list-style-type: disc;
+        li {
+            margin:0;
+            min-width: 0;
+            max-width: 100%;
+            width:auto;
+            padding: 0 0 0 0.25em;
+            margin: 0 0 0 1.25em;
+            font-size: 1.4rem;
         }
     }
     input,
@@ -47,13 +68,14 @@
         background: $formFieldBG;
         border-radius: $formBorderRadius;
         padding: 0.75em 1em;
-        opacity: 0.75;
+        opacity: 0.6;
         box-sizing: border-box;
+        outline: none;
         &:hover {
             opacity: 1;
         }
         &:focus {
-            outline: 3px solid $focusColor;
+            // outline: 3px solid $focusColor;
             opacity: 1;
         }
         width: 100%;
@@ -80,24 +102,39 @@
     }
     label {
         display: block;
-        font-size: 1rem;
-
-        position: absolute;
-        width: 1px;
-        height: 1px;
+        font-size: 1.2rem;
+        text-align: left;
+        text-transform: uppercase;
+        // position: absolute;
+        // width: 1px;
+        // height: 1px;
         padding: 0;
-        margin: -1px;
+        // margin: -1px;
+        margin: 0 0 5px 0;
         overflow: hidden;
-        clip: rect(0, 0, 0, 0);
+        // clip: rect(0, 0, 0, 0);
         border: 0;
+        color: #666;
     }
 }
 @media (max-width: $bp_tablet) {
     .cw04 {
+        .cw04error {
+            padding: $padMobile;
+        }
+        .cw04error h3 {
+            font-size: 1.2rem;
+        }
+        .cw04error ul li {
+            font-size: 1rem;
+        }
         ul li {
             width: 100%;
             min-width:100%;
             max-width: 100%;
+        }
+        label {
+            font-size: 0.8rem;
         }
     }
 }

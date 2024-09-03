@@ -110,7 +110,7 @@ const CL01:FC = () => {
                 v:4,
                 title:"Scoreboard",
                 caption:"PROJECT IN DEVELOPMENT",
-                description:"Figure skating scoring dashboard. Which judge scores you the lowest? The highest?",
+                description:"Figure skating scoring dashboard.",
             },
             textCpt: CB01,
             graphicCpt:SI01,
