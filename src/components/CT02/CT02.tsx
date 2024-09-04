@@ -9,9 +9,11 @@ import useContextRef from "../../hooks/useContextRef";
 
 const CT02:FC = () => {
     // const status = useContextRef(StatusContext);
+    const cycleLimit = 10;
     const status = useContext(StatusContext);
     const [quoteNode,setQuoteNode] = useState<ReactNode>("");
     const [paused, setPaused] = useState<boolean>(false);
+    const [cycle,setCycle] = useState<number>(0);
     const refs = {
             "first": useRef<boolean>(true),
             "bub": useRef<HTMLDivElement>(null),
@@ -84,8 +86,13 @@ const CT02:FC = () => {
         } else {
             setQuoteNode(<div>{STRINGS.default_quote}</div>);
         }
-        
     }
+    useEffect( () => {
+        // automatically pause animation after so many cicles
+        if (cycle > 0 && cycle % cycleLimit === 0) {
+            pauseAnimation();
+        }
+    },[cycle]);
     useGSAP( () => {
         if (status.bp === "mobile") {
             timeline0.current.clear(true);
@@ -191,6 +198,7 @@ const CT02:FC = () => {
                 t3.set(refs["l"+i].current,{duration:3,fill:"#00ff06",ease:"none"},0);
                 t3.set(refs["l"+i].current,{duration:3,fill:"#000000",ease:"none"},5);
             }
+            t3.addLabel("bubfade",5.5);
 
             for (let i = 1; i <= 5;i++) {
                 t3.add(gsap.to(refs["l"+i].current,{duration:0.5,fill:"#00ff06",ease:"none"}),5 + (i * 0.5));
@@ -202,6 +210,7 @@ const CT02:FC = () => {
                     refs.first.current = false;
                 }
             });
+            t3.call( () => { setCycle( (prev) => prev + 1 )}, [], "bubfade");
             // timeline0.current.play();
             // timeline1.current.play();
             // timeline2.current.play();
