@@ -16,6 +16,7 @@ const CT02:FC = () => {
     const [cycle,setCycle] = useState<number>(0);
     const refs = {
             "first": useRef<boolean>(true),
+            "statusBp": useRef<string | undefined>(status.bp),
             "bub": useRef<HTMLDivElement>(null),
             "g1": useRef<SVGGElement | null>(null),
             "n1": useRef<SVGCircleElement | null>(null),
@@ -94,6 +95,7 @@ const CT02:FC = () => {
         }
     },[cycle]);
     useGSAP( () => {
+        refs.statusBp.current = status.bp;
         if (status.bp === "mobile") {
             timeline0.current.clear(true);
             timeline1.current.clear(true);
@@ -107,10 +109,7 @@ const CT02:FC = () => {
                 t3 = timeline3.current;
                 t1.repeat(-1);
                 t3.repeat(-1);
-                t0.play(0);
-                t1.play(0);
-                t2.play(0);
-                t3.play(0);                
+                             
                 t1.add(gsap.fromTo(refs.g1.current,{rotate:0,transformOrigin:"50% 50%"},{rotate:360,duration:300,ease:"none"}),0);
             // L1 edges
             for (let i = 1; i <= 8; i++) {
@@ -204,10 +203,12 @@ const CT02:FC = () => {
                 t3.add(gsap.to(refs["l"+i].current,{duration:0.5,fill:"#00ff06",ease:"none"}),5 + (i * 0.5));
             }
             t3.eventCallback("onRepeat", () => {
-                t2.play("start");
-                updateQuote();
-                if (refs.first.current) {
-                    refs.first.current = false;
+                if (refs.statusBp.current !== "mobile") {
+                    t2.play("start");
+                    updateQuote();
+                    if (refs.first.current) {
+                        refs.first.current = false;
+                    }
                 }
             });
             t3.call( () => { setCycle( (prev) => prev + 1 )}, [], "bubfade");
@@ -221,6 +222,12 @@ const CT02:FC = () => {
                 forearm 482.5 - 408.83, w = 86.4
                 85.27%
             */
+
+            t0.play(0);
+            t1.play(0);
+            t2.play(0);
+            t3.play(0);
+            setPaused(false);
         }
     },{ dependencies:[status.bp] });
     const pauseAnimation = () => {
