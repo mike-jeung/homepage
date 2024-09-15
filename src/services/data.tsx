@@ -1,7 +1,10 @@
 import React from "react";
 import { URL } from "../constants";
 
-
+interface EmbeddingItem {
+    embedding: number[];
+    model?: string;
+}
 interface ErrorItem {
     error?: Error;
     other?: any;
@@ -16,15 +19,46 @@ interface QuoteItem {
 }
 interface ResponseBucket {
     success: boolean;
-    response: QuoteItem | LogItem | ErrorItem;
+    response: QuoteItem | LogItem | ErrorItem | EmbeddingItem;
 }
 interface ContactMessage {
     name: string;
     email: string;
-    city: string;
+    subject: string;
     message: string;
 }
-
+const svcGetEmbeddings = async (text:string):Promise<ResponseBucket> => {
+    console.log("svcgetembeddings")
+    try {
+        const data = await fetch(URL.embed, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify({text:text}),
+        });
+        if (!data.ok) {
+            throw( new Error("Network response was not ok."));
+        }
+        const p = await data.json();
+        const response = JSON.parse(p.response);
+        if (response.success == false) {
+            throw( new Error("There was a server error."));
+        }
+        const embedding:EmbeddingItem = {
+            embedding: response.embedding,
+        }
+        return {success:true,response:embedding};
+    } catch (err) {
+        const error: ErrorItem = {};
+        if (err instanceof Error) {
+            error.error = err;
+        } else {
+            error.other = err;
+        }
+        return {success:false,response:error};
+    }
+};
 const svcGetAssistant = async (log:LogItem[]):Promise<ResponseBucket> => {
     try {
         const data = await fetch(URL.api, {
@@ -118,6 +152,7 @@ export {
     QuoteItem,
     ResponseBucket,
     svcGetAssistant,
+    svcGetEmbeddings,
     svcGetQuote,
     svcSendMsg
 };

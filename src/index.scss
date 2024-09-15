@@ -64,6 +64,23 @@ button.icnbtn {
     white-space: nowrap;
     display: inline-block;
 }
+button:not(.icnbtn) {
+    border: 0;
+    border-radius: $formBorderRadius;
+    background: $focusColor;
+    color: $formBtnTxtColor;
+    margin: 0 auto;
+    padding: 0.5em 1em;
+    opacity: 0.8;
+    &:hover {
+        opacity: 1;
+    }
+    &:focus {
+        outline: none;
+        opacity: 1;
+        background: $focusColorDk;
+    }
+}
 a {
     text-decoration: none;
     &:hover {

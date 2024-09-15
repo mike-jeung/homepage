@@ -1,6 +1,12 @@
 import React, { createContext, FC, ReactHTMLElement, useEffect, useRef, useState } from 'react';
+import {
+    createBrowserRouter,
+    RouterProvider
+} from 'react-router-dom';
 import debounce from "./helpers/debounce";
 import { SETTINGS } from "./constants";
+import ChunkUtil from './pages/ChunkUtil/ChunkUtil';
+import Error404 from './pages/Error404/Error404';
 import Home from './pages/Home/Home';
 import getBreakpoint from './helpers/getBreakpoint';
 
@@ -13,6 +19,28 @@ interface Status {
     bpChanged?: boolean;
 }
 const StatusContext = createContext<Status>({});
+
+const router = createBrowserRouter([
+    {
+        path:"/",
+        children: [
+            {
+                index: true,
+                element: <Home />
+            },
+            {
+                path:"chunker",
+                element: <ChunkUtil />
+            },
+            {
+                path: "*",
+                element: <Error404 />
+            }
+        ],
+    },
+    
+]);
+
 const App: FC = () => {
     const appRef = useRef<HTMLDivElement>(null);
     const bp = getBreakpoint();
@@ -73,7 +101,7 @@ const App: FC = () => {
     return (
         <div className="app" ref={appRef}>
             <StatusContext.Provider value={status}>
-                <Home />
+                <RouterProvider router={router} />
             </StatusContext.Provider>
         </div>
     );

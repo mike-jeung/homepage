@@ -6,6 +6,7 @@ module.exports = {
   entry: './src/index.tsx',
   output: {
     filename: 'bundle.js',
+    publicPath: '/',
   },
   module: {
     rules: [
@@ -34,6 +35,7 @@ module.exports = {
     },
     hot: true,
     open: true,
+    historyApiFallback: true,
   },
 };
 /*

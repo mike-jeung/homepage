@@ -44,7 +44,7 @@
             max-width: 100%;
             padding-top: 10px;
         }
-        li.cw04city {
+        li.cw04subject {
             position: absolute;
             left: -99999px;
         }
@@ -80,22 +80,7 @@
         }
         width: 100%;
     }
-    button {
-        border: 0;
-        border-radius: $formBorderRadius;
-        background: $focusColor;
-        color: $formBtnTxtColor;
-        padding: 0.5em 1em;
-        opacity: 0.8;
-        &:hover {
-            opacity: 1;
-        }
-        &:focus {
-            outline: none;
-            opacity: 1;
-            background: $focusColorDk;
-        }
-    }
+   
     textarea {
         height: 15em;
         resize:none;

@@ -7,10 +7,6 @@ interface CW04Props {
     title?: string;
     intro?: string;
 }
-interface CW04FormData {
-    field: string;
-    error: number;
-}
 interface CW04FormBuild {
     label: string;
     name: string;
@@ -23,7 +19,7 @@ const CW04:FC<CW04Props> = ({title,intro}) => {
         [formData, setFormData] = useState<ContactMessage>({
             name:"",
             email:"",
-            city:"",
+            subject:"",
             message:""
         }),
         [isFormSent, setIsFormSent] = useState(false),
@@ -80,7 +76,7 @@ const CW04:FC<CW04Props> = ({title,intro}) => {
                     </li>);
             } else if (item.type === "button") {
                 line = (<li className="cw04full" key={item.name}>
-                        <button onClick={handleForm}>{item.name}</button>
+                        <button onClick={handleForm}>{item.label}</button>
                     </li>);
             } else if (item.type === "text" || item.type === "email") {
                 line = (<li className={`cw04${item.name}`} key={item.name}>
@@ -96,7 +92,7 @@ const CW04:FC<CW04Props> = ({title,intro}) => {
         setFormData( (prevData) => {
             prevData.name = "";
             prevData.email = "";
-            prevData.city = "";
+            prevData.subject = "";
             prevData.message = "";
             return prevData;
         });

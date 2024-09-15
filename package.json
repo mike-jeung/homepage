@@ -22,9 +22,11 @@
     "@types/react": "^18.2.67",
     "@types/react-dom": "^18.2.22",
     "gsap": "^3.12.5",
+    "openai": "^4.60.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router": "^6.22.3",
+    "react-router": "^6.26.2",
+    "react-router-dom": "^6.26.2",
     "styled-components": "^6.1.8",
     "typescript": "^5.4.3"
   },

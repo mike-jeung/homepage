@@ -1,0 +1,33 @@
+.u01 {
+    input {
+        display: block;
+        margin: 0 auto;
+    }
+    button {
+        display: block;
+    }
+    form {
+        margin: 0;
+        padding: 0;
+    }
+    form > ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+    form > ul > li {
+        margin: 0;
+        padding: 0;
+
+        &:last-child {
+            text-align: right;
+        }
+    }
+    .u01full {
+        text-align: center;
+    }
+}
