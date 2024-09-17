@@ -9,6 +9,10 @@ interface ErrorItem {
     error?: Error;
     other?: any;
 }
+interface InsertItem {
+    embedding: number[];
+    model?: string;
+}
 interface LogItem {
     role:string;
     content:string;
@@ -49,6 +53,53 @@ const svcGetEmbeddings = async (text:string):Promise<ResponseBucket> => {
             embedding: response.embedding,
         }
         return {success:true,response:embedding};
+    } catch (err) {
+        const error: ErrorItem = {};
+        if (err instanceof Error) {
+            error.error = err;
+        } else {
+            error.other = err;
+        }
+        return {success:false,response:error};
+    }
+};
+const svcGetEmbeddingsAndInsert = async (verse_num?:number, chapter_num?:number, body_id:number = 1, verse_text:string = "", chapter_text:string = "", chapter_title_text:string = "", work_title = "", work_author = "", work_translator = ""):Promise<ResponseBucket> => {
+    try {
+        // console.log({
+        //     verse_num: verse_num,
+        //     chapter_num: chapter_num,
+        //     body_id: body_id,
+        //     verse_text: verse_text,
+        //     chapter_text: chapter_text,
+        //     chapter_title_text: chapter_title_text
+        // });
+        const data = await fetch(URL.embed_insert, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify({
+                verse_num: verse_num,
+                chapter_num: chapter_num,
+                body_id: body_id,
+                verse_text: verse_text,
+                chapter_text: chapter_text,
+                chapter_title_text: chapter_title_text,
+                work_title: work_title,
+                work_author: work_author,
+                work_translator: work_translator
+            }),
+        });
+        if (!data.ok) {
+            throw( new Error("Network response was not ok."));
+        }
+        const p = await data.json();
+        const response = JSON.parse(p.response);
+        if (response.success == false) {
+            throw( new Error("There was a server error."));
+        }
+        return {success:true,response:response};
+        // return {success:true,response:{}}
     } catch (err) {
         const error: ErrorItem = {};
         if (err instanceof Error) {
@@ -153,6 +204,7 @@ export {
     ResponseBucket,
     svcGetAssistant,
     svcGetEmbeddings,
+    svcGetEmbeddingsAndInsert,
     svcGetQuote,
     svcSendMsg
 };

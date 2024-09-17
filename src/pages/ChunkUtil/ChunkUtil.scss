@@ -30,3 +30,11 @@ $maxW: $globalWidth2;
         margin: 0 0 1em 0;
     }
 }
+@media (max-width: $bp_tablet) {
+    .chunkutil {
+        .chunkutil-w0 {
+            margin-top: 0;
+            padding: $boxMobPadding;
+        }
+    }
+}
