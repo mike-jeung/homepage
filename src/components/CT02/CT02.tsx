@@ -420,7 +420,7 @@ const CT02:FC = () => {
                 </svg>
             </div>
             <div className="ct02w1">
-                <button className={`ct02play${paused ? " ct02pause" : ""}`} onClick={pauseAnimation}></button>
+                <button className={`icnbtn ct02play${paused ? " ct02pause" : ""}`} onClick={pauseAnimation}></button>
             </div>
         </section>
     );
