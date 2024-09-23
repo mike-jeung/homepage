@@ -1,6 +1,8 @@
 import React, { FC, forwardRef, ReactElement, ReactEventHandler, useEffect, useImperativeHandle, useState } from "react";
 import "./CW05.scss";
 import { ErrorItem, LogItem, ResponseBucket, svcGetAssistant } from "../../services/data";
+import { PROMPT } from "../../constants";
+import { constants } from "buffer";
 interface FormData {
     userInput?: string
 }
@@ -8,27 +10,30 @@ interface FormData {
 // const CW05:FC = () => {
 const CW05 = forwardRef( ({},ref) => {
 
-
     const [formData,setFormData] = useState<FormData>({
         userInput: ""
     });
-    const [msgLog, setMsgLog] = useState<LogItem[]>();
-    // const [msgLog, setMsgLog] = useState<LogItem[]>([
-    //     {"role":"system","content":PROMPT["system"]}
-    // ]);
+    const [convoStarted,setConvoStarted] = useState<boolean>(false);
+    // const [msgLog, setMsgLog] = useState<LogItem[]>();
+    const [msgLog, setMsgLog] = useState<LogItem[]>([
+        {"role":"system","content":PROMPT["system"]}
+    ]);
     const [responseItem, setResponseItem] = useState<LogItem>();
     useEffect( () => {
         if (responseItem !== undefined && responseItem.role && responseItem.content) {
             setMsgLog( prevLog => {
+                const last = prevLog.length - 1;
+                if (responseItem.context) {
+                    prevLog[last].content = "###CONTEXT:" + responseItem.context + " " + prevLog[last].content;
+                }
                 const newLog:LogItem[] = [
                     ...(prevLog || []),
-                    responseItem
+                    {role:responseItem.role,content:responseItem.content}
                 ];
                 return newLog;
             })
         }
     },[responseItem]);
-
     const clearForm = ():void => {
         setFormData( () => ({userInput:""}))
     }
@@ -53,12 +58,14 @@ const CW05 = forwardRef( ({},ref) => {
     }
     const handleSubmit = async ():Promise<void> => {
         if (formData.userInput) {
-            // create user message item
+            if (!convoStarted) {
+                setConvoStarted(true);
+            }
+            // create user message item and append it to end  of log
             const userMsg:LogItem = {
                 role:"user",
-                content:formData.userInput
+                content:`###REQUEST:${formData.userInput}`
             };
-            // append to end of log
             const newLog:LogItem[] = [
                 ...(msgLog || []),
                 userMsg
@@ -79,8 +86,11 @@ const CW05 = forwardRef( ({},ref) => {
     }
     const resetContent = ():void => {
         setFormData({userInput:""});
-        setMsgLog(undefined);
-        setResponseItem(undefined)
+        setMsgLog([
+            {"role":"system","content":PROMPT["system"]}
+        ]);
+        setResponseItem(undefined);
+        setConvoStarted(false);
     }
     useImperativeHandle(ref, () => ({
         resetContent
@@ -91,19 +101,25 @@ const CW05 = forwardRef( ({},ref) => {
                 <div className="cw05w1">
                     <div className="cw05chat">
                         <ul>
-                            { msgLog?.map( (logItem:LogItem, index) => {
-                                let name:string = "cw05";
-                                if (logItem.role === "assistant") {
+                            { msgLog.map( (logItem:LogItem, index) => {
+                                let name:string = "cw05",offset = 0;
+                                if (logItem.role === "system") {
+                                    return null;
+                                } else if (logItem.role === "assistant") {
+                                    offset = 0;
                                     name += "agent";
                                 } else if (logItem.role === "user") {
+                                    offset = 11;
                                     name += "user";
                                 }
-                                return <li key={index} className={name}>{logItem.content}</li>;
-                            }) }
+                                // extract request for rendering
+                                const content = logItem.content.substring(logItem.content.indexOf("###REQUEST:") + offset);
+                                return <li key={index} className={name}>{content}</li>;
+                            })}
                         </ul>
                     </div>
                     <form className="cw05input">
-                        <textarea name="userInput" value={formData.userInput} onChange={handleChange} placeholder="Enter your question." onKeyDown={handleKeyDown}></textarea>
+                        <textarea name="userInput" value={formData.userInput} onChange={handleChange} placeholder="Please state the nature of your tactical situation" onKeyDown={handleKeyDown}></textarea>
                     </form>
                 </div>
             </div>

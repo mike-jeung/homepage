@@ -15,6 +15,7 @@ interface InsertItem {
 }
 interface LogItem {
     role:string;
+    context?:string;
     content:string;
 }
 interface QuoteItem {
@@ -32,7 +33,6 @@ interface ContactMessage {
     message: string;
 }
 const svcGetEmbeddings = async (text:string):Promise<ResponseBucket> => {
-    console.log("svcgetembeddings")
     try {
         const data = await fetch(URL.embed, {
             method: 'POST',
@@ -112,7 +112,7 @@ const svcGetEmbeddingsAndInsert = async (verse_num?:number, chapter_num?:number,
 };
 const svcGetAssistant = async (log:LogItem[]):Promise<ResponseBucket> => {
     try {
-        const data = await fetch(URL.api, {
+        const data = await fetch(URL.chat, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -124,9 +124,13 @@ const svcGetAssistant = async (log:LogItem[]):Promise<ResponseBucket> => {
         if (response.success == false) {
             throw( new Error("There was a server error."));
         }
+
+
+        console.log("response",response)
         const logItem:LogItem = {
             role: response.role,
-            content: response.content
+            content: response.content,
+            context: response.context
         }
         return {success:true,response:logItem};
     } catch (err) {

@@ -1,7 +1,7 @@
 import React from "react";
 
 const URL = {
-    'api': 'http://localhost:5000/api',
+    'chat': 'http://localhost:5000/api/chat',
     'quote': 'http://localhost:5000/api/quote',
     'contact': 'http://localhost:5000/contact',
     'embed': 'http://localhost:5000/api/embed',
