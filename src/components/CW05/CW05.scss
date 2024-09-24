@@ -23,18 +23,53 @@
         list-style-type: none;
     }
     .cw05chat ul > li {
-        padding: 0.75em;
+        display: block;
+        padding: 0;
         margin: 0.5em 0 0 0;
-        border-radius: $innerFormBorderRadius;
+        position: relative;
+        div.cw05cont {
+            display: inline-block;
+            padding: 0.75em;
+            margin: 0;
+            border-radius: $innerFormBorderRadius;
+        }
     }
     .cw05chat .cw05user {
+        text-align: right;
+    }
+    .cw05chat .cw05user div.cw05cont {
         background-color: rgba(255,255,255,0.5);
         color: #999;
+        margin-right: 50px;
+        text-align: right;
     }
-    .cw05chat .cw05agent {
+    
+    .cw05chat .cw05agent div.cw05cont {
         background-color: rgba(255, 255, 255, 0.9);
         color: #333;
+        margin-left: 50px;
     }
+    .cw05ava {
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        border-radius: $innerFormBorderRadius;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .cw05agent .cw05ava {
+        background-color: rgba(255, 255, 255, 0.9);
+        left: 0;
+        background-image:svg-url($iconAI);
+    }
+    .cw05user .cw05ava {
+        background-color: rgba(255,255,255,0.5);
+        right: 0;
+        background-image:svg-url($iconUser);
+
+    }
+    
     textarea[name=userInput] {
         width: 100%;
         height: 5em;
@@ -58,7 +93,36 @@
         border-radius: $formBorderRadius;
         padding: 0.75em 1em;
     }
+    .cw05working {
+        text-align: center;
+        > div > span {
+            display: inline-block;
+            animation-name: scaling;
+            animation-duration: 2.2s;
+            animation-iteration-count: infinite;
+            transform: scale(1);
+        }
+        span.cw05b0 {
+            animation-delay: 0;
+        }
+        span.cw05b1 {
+            animation-delay: 0.48s;
+        }
+        span.cw05b2 {
+            animation-delay: 1.12s;
+        }
+    }
+    
 
+}
+@keyframes scaling {
+    0% {transform:scale(1);}
+    17% {transform:scale(2.75);}
+    34% {transform:scale(1);}
+    51% {transform:scale(1);}
+    68% {transform:scale(1);}
+    85% {transform:scale(1);}
+    100% {transform:scale(1);}
 }
 @media (max-width: $bp_tablet) {
     .cw06 {
@@ -71,8 +135,8 @@
             max-height: 20em;
         }
         .cw05chat ul > li {
-            padding: 0.5em;
-            margin: 0.25em 0 0 0;
+            // padding: 0.5em;
+            margin: 0.5em 0 0 0;
             border-radius: 8px;
         }
         .cw05chat ul > li:first-child {

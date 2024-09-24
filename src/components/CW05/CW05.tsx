@@ -19,6 +19,8 @@ const CW05 = forwardRef( ({},ref) => {
         {"role":"system","content":PROMPT["system"]}
     ]);
     const [responseItem, setResponseItem] = useState<LogItem>();
+    const [isWorking, setIsWorking] = useState<boolean>(false);
+    const [isFailure, setIsFailure] = useState<boolean>(false);
     useEffect( () => {
         if (responseItem !== undefined && responseItem.role && responseItem.content) {
             setMsgLog( prevLog => {
@@ -72,14 +74,19 @@ const CW05 = forwardRef( ({},ref) => {
             ];
             setMsgLog(newLog);
             if (newLog !== undefined && newLog.length > 0) {
+                setIsWorking(true);
                 const response = await svcGetAssistant(newLog);
+                console.log("response",response)
                 if (response.success) {
+                    setIsFailure(false);
                     if ("role" in response.response && "content" in response.response) {
                         const newResponseItem:LogItem = response.response;
                         setResponseItem(newResponseItem);
+                        setIsWorking(false);
                     }                    
                 } else {
-
+                    setIsWorking(false);
+                    setIsFailure(true);
                 }
             }
         }
@@ -91,6 +98,8 @@ const CW05 = forwardRef( ({},ref) => {
         ]);
         setResponseItem(undefined);
         setConvoStarted(false);
+        setIsWorking(false);
+        setIsFailure(false);
     }
     useImperativeHandle(ref, () => ({
         resetContent
@@ -114,12 +123,13 @@ const CW05 = forwardRef( ({},ref) => {
                                 }
                                 // extract request for rendering
                                 const content = logItem.content.substring(logItem.content.indexOf("###REQUEST:") + offset);
-                                return <li key={index} className={name}>{content}</li>;
+                                return <li key={index} className={name}><div className="cw05ava"></div><div className="cw05cont">{content}</div></li>;
                             })}
+                            { isWorking ? <li className="cw05working"><div><span className="cw05b0">&#8226;</span><span className="cw05b1">&#8226;</span><span className="cw05b2">&#8226;</span></div></li> : <></> }
                         </ul>
                     </div>
                     <form className="cw05input">
-                        <textarea name="userInput" value={formData.userInput} onChange={handleChange} placeholder="Please state the nature of your tactical situation" onKeyDown={handleKeyDown}></textarea>
+                        <textarea name="userInput" value={formData.userInput} onChange={handleChange} placeholder="Please state the nature of your tactical situation" onKeyDown={handleKeyDown} disabled={isWorking}></textarea>
                     </form>
                 </div>
             </div>
