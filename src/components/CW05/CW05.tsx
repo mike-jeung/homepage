@@ -126,6 +126,7 @@ const CW05 = forwardRef( ({},ref) => {
                                 return <li key={index} className={name}><div className="cw05ava"></div><div className="cw05cont">{content}</div></li>;
                             })}
                             { isWorking ? <li className="cw05working"><div><span className="cw05b0">&#8226;</span><span className="cw05b1">&#8226;</span><span className="cw05b2">&#8226;</span></div></li> : <></> }
+                            { isFailure ? <li className="cw05fail"><div>There was a server error. Please try again later.</div></li> : <></>}
                         </ul>
                     </div>
                     <form className="cw05input">

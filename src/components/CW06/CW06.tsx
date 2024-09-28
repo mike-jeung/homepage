@@ -10,8 +10,15 @@ interface CW06Props {
     cards: CardData[];
     cols?: number;
 }
+interface CardArgs {
+    v:number;
+    title:string;
+    caption:string;
+    description:string;
+    [key:string]:any;
+}
 interface CardData {   
-    textArgs:{};
+    textArgs: CardArgs;
     textCpt:FC<any>;
     graphicScale?:string;
     graphicArgs?:Record<string,any>;
@@ -480,7 +487,7 @@ const CW06:FC<CW06Props> = ({cards, cols = 3}) => {
                                 <div className="cw06w3">
                                     <div className="cw06w4">{card.textCpt && <card.textCpt {...card.textArgs} />}</div>
                                     <div className="cw06w5">
-                                        {card.demoCpt &&<a href="#" className="cw06open" onClick={(e) => handleClick(e,index,"open")}>More </a>}
+                                        {card.demoCpt &&<a href="#" className="cw06open" onClick={(e) => handleClick(e,index,"open")} aria-label={`View ${card.textArgs.title} Demo`} title={`View ${card.textArgs.title} Demo`}>More </a>}
                                         <a href="#" className="cw06close" onClick={(e) => handleClick(e,index,"close")}></a>
                                     </div>
                                     {card.demoCpt && <div className="cw06content">

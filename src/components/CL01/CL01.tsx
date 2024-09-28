@@ -1,21 +1,49 @@
 import React, { FC, useContext } from "react";
 import "./CL01.scss";
 import CB01 from "../CB01/CB01";
-//import { CB01v0, CB01v1, CB01v2, CB01v4 } from "../CB01/CB01var";
-import { CB02v1 } from "../CB02/CB02var";
 import CT02 from "../CT02/CT02";
-import CW03 from "../CW03/CW03";
+import CW09 from "../CW09/CW09";
 import CW04 from "../CW04/CW04";
 import CW05 from "../CW05/CW05";
 import CW06, { CardData } from "../CW06/CW06";
 import CW07 from "../CW07/CW07";
 import CW08 from "../CW08/CW08";
 import SI01 from "../SI01/SI01";
+import SI02 from "../SI02/SI02";
 import { StatusContext } from "../../App";
 
 const CL01:FC = () => {
 
     const status = useContext(StatusContext);
+    const beats = [
+        {
+            args: {
+                v:0,
+                name: "Code",
+                inner:<SI02 v={0} />,
+            },
+            cmp:CW09
+        },
+        {
+            args: {
+                v:0,
+                name: "Resume",
+                inner:<SI02 v={2} />,
+            },
+            cmp:CW09
+        },
+        {
+            args: {
+                v:1,
+                name: "Contact",
+                inner:<SI02 v={1} />,
+                u: "mike",
+                d: "mikejeung.com"
+
+            },
+            cmp:CW09
+        }
+    ];
     const ticks = [
         {
             content: {
@@ -110,7 +138,7 @@ const CL01:FC = () => {
                 v:4,
                 title:"Scoreboard",
                 caption:"PROJECT IN DEVELOPMENT",
-                description:"Figure skating scoring dashboard.",
+                description:"Dashboard and analysis of figure skating competition scoring.",
             },
             textCpt: CB01,
             graphicCpt:SI01,
@@ -140,7 +168,9 @@ const CL01:FC = () => {
                     <div className="cl01w3 cl01robot"><CT02 /></div>
                     <div className="cl01w3 cl01name"><CB01 {...namePlate} /></div>
                     <div className="cl01w3 cl01beat">
-                        
+                        {beats.map( (beat, index) => (
+                            <beat.cmp key={index} {...beat.args} />
+                        ))}
                     </div>
                 </div>
                 <div className="cl01w1 cl01invis">

@@ -20,7 +20,7 @@ const CW08:FC<CW08Props> = (props) => {
             <div className="cw08w0">
                 {props.title ? (<>
                     <h2>{props.title}</h2>
-                    <button className="icnbtn" onClick={handleClick}>
+                    <button className="cw08revealer icnbtn" onClick={handleClick} title={`${paneActive ? "Hide":"Show"} content`}>
                         <span className={`icn${paneActive ? " icn-arrow-up":" icn-arrow-down"}`}>
                             <span className="sro">{paneActive ? "Hide" : "Show"} form</span>
                         </span>
