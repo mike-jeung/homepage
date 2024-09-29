@@ -6,17 +6,12 @@ interface CW09Props {
     inner?:ReactNode;
     name?: string;
     desc?: string;
-    u?:string;
-    d?:string;
+    href?: string;
     click?:(e?:any) => void;
 }
 
-const CW09:FC<CW09Props> = ({v = 0, inner = "", name = "", desc = "", u = "", d = "", click = null}) => {
+const CW09:FC<CW09Props> = ({v = 0, inner = "", name = "", desc = "", href = "#", click = null}) => {
     let component:ReactNode;
-
-
-
-
 
     const handleClick = (e) => {
         e.preventDefault();
@@ -40,11 +35,11 @@ const CW09:FC<CW09Props> = ({v = 0, inner = "", name = "", desc = "", u = "", d 
 
     if (v === 1) {
         component = (<div className="cw09 cw09v1">
-            <a href="#" aria-label={name} title={name} onClick={handleClick}>{inner}</a>
+            <a href={href} aria-label={name} title={name} onClick={handleClick}>{inner}</a>
         </div>);
     } else {
         component = (<div className="cw09 cw09v0">
-            <a href="#" aria-label={name} title={name}>{inner}</a>
+            <a href={href} aria-label={name} title={name}>{inner}</a>
         </div>);
     }
     return component;

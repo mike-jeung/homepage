@@ -21,6 +21,7 @@ const CL01:FC = () => {
                 v:0,
                 name: "Code",
                 inner:<SI02 v={0} />,
+                href: "https://github.com/mike-jeung/homepage"
             },
             cmp:CW09
         },
@@ -37,9 +38,7 @@ const CL01:FC = () => {
                 v:1,
                 name: "Contact",
                 inner:<SI02 v={1} />,
-                u: "mike",
-                d: "mikejeung.com"
-
+                href: "#contact"
             },
             cmp:CW09
         }
