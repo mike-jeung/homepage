@@ -11,6 +11,7 @@ import CW08 from "../CW08/CW08";
 import SI01 from "../SI01/SI01";
 import SI02 from "../SI02/SI02";
 import { StatusContext } from "../../App";
+import { URL } from "../../constants";
 
 const CL01:FC = () => {
 
@@ -21,7 +22,7 @@ const CL01:FC = () => {
                 v:0,
                 name: "Code",
                 inner:<SI02 v={0} />,
-                href: "https://github.com/mike-jeung/homepage"
+                href: URL.homepagecode
             },
             cmp:CW09
         },
@@ -30,6 +31,7 @@ const CL01:FC = () => {
                 v:0,
                 name: "Resume",
                 inner:<SI02 v={2} />,
+                href: URL.resume
             },
             cmp:CW09
         },

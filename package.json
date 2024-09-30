@@ -11,7 +11,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
-  "author": "",
+  "author": "Mike Jeung",
   "license": "ISC",
   "dependencies": {
     "@babel/preset-typescript": "^7.24.1",

@@ -23,6 +23,7 @@ const CW09:FC<CW09Props> = ({v = 0, inner = "", name = "", desc = "", href = "#"
                 if (!document.querySelector(".cl01contact .cw08 .cw08-active")) {
                     btn.click();
                 }
+                // scroll into view after the pane is revealed
                 window.setTimeout(() => {
                     btn.scrollIntoView({ behavior: "smooth", block: "start" });
                 },250);
