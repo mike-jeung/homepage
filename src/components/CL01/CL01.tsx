@@ -26,15 +26,15 @@ const CL01:FC = () => {
             },
             cmp:CW09
         },
-        {
-            args: {
-                v:0,
-                name: "Resume",
-                inner:<SI02 v={2} />,
-                href: URL.resume
-            },
-            cmp:CW09
-        },
+        // {
+        //     args: {
+        //         v:0,
+        //         name: "Resume",
+        //         inner:<SI02 v={2} />,
+        //         href: URL.resume
+        //     },
+        //     cmp:CW09
+        // },
         {
             args: {
                 v:1,
