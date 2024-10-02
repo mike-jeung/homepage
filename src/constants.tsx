@@ -1,11 +1,11 @@
 import React from "react";
 
 const URL = {
-    'chat': 'http://localhost:5000/api/chat',
-    'quote': 'http://localhost:5000/api/quote',
-    'contact': 'http://localhost:5000/contact',
-    'embed': 'http://localhost:5000/api/embed',
-    'embed_insert':'http://localhost:5000/api/embed-insert',
+    'chat': '/api/chat',
+    'quote': '/api/quote',
+    'contact': '/contact',
+    'embed': '/api/embed',
+    'embed_insert':'/api/embed-insert',
     'resume':"/downloads/MikeJeungWebDeveloperResume.pdf",
     'homepagecode':"https://github.com/mike-jeung/homepage"
 };

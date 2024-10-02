@@ -35,4 +35,6 @@ npm-debug.log
 
 *storybook.log
 
+dist
+
 public/downloads
