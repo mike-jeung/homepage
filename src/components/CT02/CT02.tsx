@@ -205,13 +205,16 @@ const CT02:FC = () => {
             t3.eventCallback("onRepeat", () => {
                 if (refs.statusBp.current !== "mobile") {
                     t2.play("start");
-                    updateQuote();
+                    
                     if (refs.first.current) {
                         refs.first.current = false;
                     }
                 }
             });
-            t3.call( () => { setCycle( (prev) => prev + 1 )}, [], "bubfade");
+            t3.call( () => { 
+                setCycle( (prev) => prev + 1 );
+                updateQuote();
+            }, [], "bubfade");
             // timeline0.current.play();
             // timeline1.current.play();
             // timeline2.current.play();
